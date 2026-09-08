@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>来来亭 整理券作成ツール</title>
+    <!-- Fonts & Tailwind -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/main.css?v=stepper-1">
+    <link rel="stylesheet" href="css/layout.css?v=mobile-ui-1">
+    <link rel="stylesheet" href="css/ticket.css?v=relative-controls-1">
+    <link rel="stylesheet" href="css/print.css?v=print-fix-v1">
+    <style id="dynamic-print-style"></style>
+</head>
+<body id="main-body">
+    <!-- MÀN HÌNH LOADING KHI IN -->
+    <div id="print-overlay" class="fixed inset-0 bg-black/95 z-[99999] hidden flex-col justify-center items-center text-white">
+        <svg class="animate-spin h-12 w-12 text-[#cbfb45] mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        <h2 class="text-2xl font-black text-[#cbfb45] mb-2" id="print_loading_title">印刷データを準備しています…</h2>
+        <p id="print_loading_desc" class="text-sm text-gray-400 mb-6 text-center max-w-md px-4">ブラウザが印刷またはPDF保存画面を開きます。このタブを閉じないでください。</p>
+        <button id="force-close-overlay" class="px-6 py-2 bg-gray-800 border border-gray-600 rounded-full text-xs font-bold hover:bg-gray-700 transition-colors"><span id="force_close_text">戻る（停止した場合）</span></button>
+    </div>
+
+    <div id="app-wrapper">
+        <div id="app-container">
+            <!-- HEADER -->
+            <div id="preview-header" class="px-4 py-3 md:px-6 md:py-4 bg-[#111] md:bg-gray-900/90 flex justify-between items-center z-10 border-b border-[#222] md:border-none shadow-md">
+                <div class="md:hidden flex items-center justify-between w-full">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-6 h-6 text-gray-300 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <button id="mobile-lang-toggle-btn" type="button" class="mobile-lang-button" aria-label="言語を切り替える（現在：日本語）">
+                            <span id="mobile-lang-icon" class="lang-icon lang-jp"></span>
+                            <span id="mobile-lang-label">JP</span>
+                        </button>
+                    </div>
+                    <button id="mobile-print-btn" class="bg-[#cbfb45] text-black font-bold text-xs px-6 py-2 rounded shadow-[0_0_10px_rgba(203,251,69,0.3)] active:scale-95 transition-transform"><span id="mobile_print_text">印刷 / PDF保存</span></button>
+                </div>
+                <h1 class="hidden md:flex text-lg text-white font-medium items-center shrink-0">
+                    <svg class="w-5 h-5 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span id="preview_title">プレビュー</span>
+                </h1>
+                <div class="hidden md:flex items-center gap-2">
+                    <span id="header-core-size" class="text-xs bg-gray-700 text-yellow-400 font-bold px-2 py-1 rounded border border-gray-600"><span id="core_size_label_header">コア</span>: 4.4x7.9cm</span>
+                    <button id="lang-toggle-btn" type="button" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded px-2 py-1.5 flex items-center justify-center transition-colors shadow-sm"><span id="current-lang-icon" class="lang-icon lang-jp"></span></button>
+                    <button id="toggle-panel-btn" type="button" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded border border-gray-600 transition-colors flex items-center shadow-sm shrink-0"><span id="text_collapse" class="text-xs font-semibold">全画面表示</span></button>
+                </div>
+            </div>
+
+            <!-- KHU VỰC VÉ CHÍNH -->
+            <div id="preview-area">
+                <div class="preview-scale-wrapper custom-scrollbar">
+                    <div class="preview-scale shadow-2xl ring-1 ring-gray-700 bg-white" id="ticket-preview-wrapper">
+                        <div class="ticket-wrapper" id="master-ticket">
+                            <div class="ticket-core" id="master-ticket-inner">
+                                <div class="ticket-bg-layer"></div>
+                                <div class="marquee-border"></div>
+                                <div class="marquee-dots">
+                                    <svg width="100%" height="100%" style="overflow: visible" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" class="svg-dot big-dot" /><rect x="0" y="0" width="100%" height="100%" pathLength="100" class="svg-dot small-dot" /></svg>
+                                </div>
+                                <div class="ticket-content">
+                                    <img src="assets/images/mascot.png" id="mascot-preview" alt="マスコット画像" class="mascot-img">
+                                    <div class="number-frame"><div class="queue-number" id="preview-number">1</div></div>
+                                    <div class="japanese-text" id="display-msg">現在、店内満席のため<br>順番にご案内いたします。<br>番号をお呼びするまで<br>お待ちください。</div>
+                                    <div class="branch-name" id="display-branch">安佐南相田店</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- BOTTOM NAVBAR (Menu cuộn ngang) -->
+            <div id="mobile-category-bar" class="md:hidden fixed bottom-0 left-0 right-0 h-[50px] bg-[#0a0a0a] flex overflow-x-auto whitespace-nowrap z-50 items-center hide-scroll px-2 shadow-[0_-4px_10px_rgba(0,0,0,0.5)]">
+                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-template"><span id="nav_template">テンプレート設計</span></button>
+                <button class="cat-btn active text-[#cbfb45] text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-[#cbfb45]" data-target="panel-1"><span id="nav_size">サイズ</span></button>
+                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-2"><span id="nav_border">枠線・装飾</span></button>
+                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-3"><span id="nav_number">番号枠</span></button>
+                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-4"><span id="nav_message">メッセージ</span></button>
+                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-5"><span id="nav_branch">店舗名</span></button>
+            </div>
+        </div>
+
+        <div id="resizer"><div class="resizer-handle"></div></div>
+
+        <!-- BẢNG ĐIỀU KHIỂN (Cả PC và Điện thoại) -->
+        <div id="controls-sidebar" class="custom-scrollbar">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-3 mb-4 hidden md:flex">
+                <h2 class="text-lg font-bold text-gray-200" id="control_panel_title">設定パネル</h2>
+            </div>
+            
+            <!-- TAB 0: THIẾT KẾ MẪU -->
+            <details id="panel-template" class="mobile-panel bg-gray-800 p-3 rounded-lg border border-[#cbfb45]/30 mb-3 cursor-pointer group" open>
+                <summary class="text-xs md:text-sm font-semibold text-gray-200 uppercase flex justify-between">
+                    <span id="template_design_title">テンプレート設計</span>
+                    <span class="text-gray-400 group-open:rotate-180">▼</span>
+                </summary>
+                <div class="mt-4 cursor-auto">
+                    <div class="min-h-[110px] flex items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-900/60 px-4 py-6 text-center">
+                        <p id="template_design_status" class="text-sm font-bold text-[#cbfb45]">開発中</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- TAB 1: KÍCH THƯỚC -->
+            <details id="panel-1" class="mobile-panel active-panel bg-gray-800 p-3 rounded-lg border border-gray-700 mb-3 cursor-pointer group" open>
+                <summary class="text-xs md:text-sm font-semibold text-gray-200 uppercase flex justify-between"><span id="sec1_title">1. サイズと背景</span><span class="text-gray-400 group-open:rotate-180">▼</span></summary>
+                <div class="mt-4 cursor-auto">
+                    <label class="tool-enable-row">
+                        <span id="toggle_bg_label">背景を表示</span>
+                        <input type="checkbox" id="background-tool-toggle" class="tool-enable-checkbox" checked>
+                        <span class="tool-enable-switch" aria-hidden="true"></span>
+                    </label>
+
+                    <div class="mb-3 grid grid-cols-2 gap-2 border-b border-gray-700 pb-3"><div><label class="block text-[10px] text-yellow-400 font-bold mb-1" id="core_w">コア幅 (mm)</label><input type="number" id="core-width-input" value="44.0" class="w-full bg-gray-700 text-xs text-white border border-gray-600 rounded p-1.5 text-center"></div><div><label class="block text-[10px] text-yellow-400 font-bold mb-1" id="core_h">コア高 (mm)</label><input type="number" id="core-height-input" value="79.0" class="w-full bg-gray-700 text-xs text-white border border-gray-600 rounded p-1.5 text-center"></div></div>
+                    <div class="mb-3 grid grid-cols-2 gap-2"><div><label class="block text-[10px] text-gray-400 mb-1" id="bg_color">背景色</label><input type="color" id="bg-color" value="#fcd116" class="w-full h-8 cursor-pointer rounded border border-gray-600 bg-gray-700"></div><div><label class="block text-[10px] text-gray-400 mb-1" id="bg_img">背景画像</label><input type="file" id="bg-upload" accept="image/*" class="sr-only"><label for="bg-upload" class="block w-full cursor-pointer rounded bg-gray-600 px-2 py-1.5 text-center text-[10px] font-semibold text-white hover:bg-gray-500"><span id="bg-upload-button">ファイルを選択</span></label><p id="bg-upload-name" class="mt-1 truncate text-[9px] text-gray-400">ファイルが選択されていません</p></div></div>
+                    <div class="mb-3 border-b border-gray-700 pb-3"><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="bg_opacity">不透明度</span><input type="number" id="bg-opacity-val" class="num-val-input"></label><input type="range" id="bg-opacity" min="-0.2" max="0.2" step="0.05" value="0" class="w-full"></div>
+                    <div class="grid grid-cols-2 gap-2 border-t border-gray-700 pt-3 mt-3"><div><label class="block text-[10px] text-gray-400 font-bold mb-1 flex justify-between"><span id="margin_x">左右余白</span><div><input type="number" id="cut-margin-x-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="cut-margin-x" min="-1" max="1" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 font-bold mb-1 flex justify-between"><span id="margin_y">上下余白</span><div><input type="number" id="cut-margin-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="cut-margin-y" min="-1" max="1" step="0.5" value="0" class="w-full"></div></div>
+                </div>
+            </details>
+
+            <!-- TAB 2: VIỀN VÀ MASCOT -->
+            <div id="panel-2" class="mobile-panel">
+                <div id="rairaitei-settings-wrapper" class="transition-all duration-300">
+                    <details class="bg-gray-800 p-3 rounded-lg border border-red-900/50 mb-3 cursor-pointer group" open><summary class="text-xs md:text-sm font-semibold text-red-400 uppercase flex justify-between"><span id="sec_border_title">枠線とLED</span> <span class="text-gray-400 group-open:rotate-180">▼</span></summary><div class="mt-4 cursor-auto border-t border-gray-700 pt-3">
+                    <label class="tool-enable-row">
+                        <span id="toggle_border_label">枠線とLEDを表示</span>
+                        <input type="checkbox" id="border-tool-toggle" class="tool-enable-checkbox" checked>
+                        <span class="tool-enable-switch" aria-hidden="true"></span>
+                    </label>
+<div class="grid grid-cols-2 gap-2 mb-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="border_w">枠の太さ</span><input type="number" id="border-width-val" class="num-val-input w-8"></label><input type="range" id="border-width" min="-1.5" max="1.5" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="dot_density">LED密度</span><input type="number" id="dot-density-val" class="num-val-input w-8"></label><input type="range" id="dot-density" min="-20" max="20" step="1" value="0" class="w-full"></div></div><div class="grid grid-cols-2 gap-2 mb-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="dot_1">LED大</span><input type="number" id="dot-size-1-val" class="num-val-input w-8"></label><input type="range" id="dot-size-1" min="-1.5" max="1.5" step="0.1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="dot_2">LED小</span><input type="number" id="dot-size-2-val" class="num-val-input w-8"></label><input type="range" id="dot-size-2" min="-1.2" max="1.2" step="0.1" value="0" class="w-full"></div></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="dot_offset">LED位置</span><input type="number" id="dot-offset-val" class="num-val-input w-8"></label><input type="range" id="dot-offset" min="-0.3" max="0.3" step="0.1" value="0" class="w-full"></div></div></details>
+                    <details class="bg-gray-800 p-3 rounded-lg border border-yellow-700/30 mb-3 cursor-pointer group" open><summary class="text-xs md:text-sm font-semibold text-yellow-300 uppercase flex justify-between"><span id="sec_mascot_title">シンボル (Mascot)</span> <span class="text-gray-400 group-open:rotate-180">▼</span></summary><div class="mt-4 cursor-auto border-t border-gray-700 pt-3">
+                    <label class="tool-enable-row">
+                        <span id="toggle_mascot_label">マスコットを表示</span>
+                        <input type="checkbox" id="mascot-tool-toggle" class="tool-enable-checkbox" checked>
+                        <span class="tool-enable-switch" aria-hidden="true"></span>
+                    </label>
+<div class="flex gap-2 mb-2"><label class="flex-1 bg-gray-700 hover:bg-gray-600 cursor-pointer p-1.5 rounded flex items-center justify-center"><input type="radio" name="mascot-type" value="default" checked class="choice-radio peer"><span class="text-[10px] text-gray-400 peer-checked:text-yellow-400" id="mascot_default">来来亭モデル</span></label><label class="flex-1 bg-gray-700 hover:bg-gray-600 cursor-pointer p-1.5 rounded flex items-center justify-center"><input type="radio" name="mascot-type" value="custom" class="choice-radio peer"><span class="text-[10px] text-gray-400 peer-checked:text-yellow-400" id="mascot_custom">画像アップロード</span></label></div><div id="custom-mascot-panel" class="hidden mt-2 border-b border-gray-700 pb-2 mb-2"><div class="flex items-center gap-2"><div class="w-2/3 min-w-0"><input type="file" id="mascot-upload" accept="image/png, image/jpeg" class="sr-only"><label for="mascot-upload" class="block w-full cursor-pointer rounded bg-gray-600 px-2 py-1.5 text-center text-[10px] font-semibold text-white hover:bg-gray-500"><span id="mascot-upload-button">ファイルを選択</span></label><p id="mascot-upload-name" class="mt-1 truncate text-[9px] text-gray-400">ファイルが選択されていません</p></div><label class="flex items-center cursor-pointer w-1/3"><input type="checkbox" id="remove-white-bg" checked class="form-checkbox h-3 w-3 bg-gray-700 text-yellow-500 rounded"><span class="ml-1 text-[10px] text-gray-400" id="bg_remove">背景削除 ⚠️</span></label></div></div><div class="grid grid-cols-2 gap-2 mt-3"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="mascot_size">サイズ</span><div><input type="number" id="mascot-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">%</span></div></label><input type="range" id="mascot-width" min="-39" max="39" step="1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_mascot">上下位置</span><div><input type="number" id="mascot-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="mascot-y" min="-20" max="20" step="0.5" value="0" class="w-full"></div></div></div></details>
+                </div>
+            </div>
+
+            <!-- TAB 3: SỐ THỨ TỰ -->
+            <details id="panel-3" class="mobile-panel bg-gray-800 p-3 rounded-lg border border-gray-700 mb-3 cursor-pointer group" open>
+                <summary class="text-xs md:text-sm font-semibold text-gray-200 uppercase flex justify-between"><span id="sec2_title">2. 整理番号と枠</span> <span class="text-gray-400 group-open:rotate-180">▼</span></summary>
+                <div class="mt-4 cursor-auto">
+                    <label class="tool-enable-row">
+                        <span id="toggle_number_label">番号と枠を表示</span>
+                        <input type="checkbox" id="number-tool-toggle" class="tool-enable-checkbox" checked>
+                        <span class="tool-enable-switch" aria-hidden="true"></span>
+                    </label>
+
+                    <select id="number-font-select" class="w-full bg-gray-700 text-xs text-white rounded p-1 mb-2"><option value="'Impact', sans-serif">Impact</option><option value="'Arial Black', sans-serif">Arial Black</option><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select>
+                    <div class="grid grid-cols-2 gap-2 mb-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="font_size_num">サイズ</span><div><input type="number" id="number-size-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">pt</span></div></label><input type="range" id="number-size" min="-90" max="90" step="1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="num_offset">番号位置</span><div><input type="number" id="number-offset-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="number-offset-y" min="-50" max="50" step="0.5" value="0" class="w-full"></div></div>
+                    <div class="grid grid-cols-2 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_w">枠の幅</span><div><input type="number" id="frame-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-width" min="-20" max="20" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_h">枠の高さ</span><div><input type="number" id="frame-height-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-height" min="-20" max="20" step="0.5" value="0" class="w-full"></div></div>
+                    <div class="mb-2"><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_frame">上下位置</span><div><input type="number" id="frame-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-y" min="-20" max="20" step="0.5" value="0" class="w-full"></div>
+                    <div class="grid grid-cols-3 gap-2 border-t border-gray-700 pt-2 mb-2"><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_color_num">文字色</label><input type="color" id="number-color" value="#e60012" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="bg_color_num">背景色</label><input type="color" id="number-bg-color" value="#ffffff" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="border_color_num">枠線色</label><input type="color" id="number-border-color" value="#e60012" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div></div>
+                    <div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="border_w_num">枠の太さ</span><div><input type="number" id="number-border-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="number-border-width" min="-1" max="1" step="0.1" value="0" class="w-full"></div>
+                </div>
+            </details>
+
+            <!-- TAB 4: LỜI NHẮN -->
+            <details id="panel-4" class="mobile-panel bg-gray-800 p-3 rounded-lg border border-gray-700 mb-3 cursor-pointer group" open>
+                <summary class="text-xs md:text-sm font-semibold text-gray-200 uppercase flex justify-between"><span id="sec3_title">3. メッセージ</span> <span class="text-gray-400 group-open:rotate-180">▼</span></summary>
+                <div class="mt-4 cursor-auto">
+                    <label class="tool-enable-row">
+                        <span id="toggle_message_label">メッセージを表示</span>
+                        <input type="checkbox" id="message-tool-toggle" class="tool-enable-checkbox" checked>
+                        <span class="tool-enable-switch" aria-hidden="true"></span>
+                    </label>
+
+                    <textarea id="msg-input" rows="4" class="w-full bg-gray-700 text-xs text-white rounded p-2 mb-2">現在、店内満席のため&#10;順番にご案内いたします。&#10;番号をお呼びするまで&#10;お待ちください。</textarea>
+                    <div class="grid grid-cols-2 gap-2 mb-2"><select id="msg-font" class="bg-gray-700 text-[10px] text-white rounded p-1"><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select><div class="flex gap-1"><select id="msg-weight" class="w-1/2 bg-gray-700 text-[10px] text-white rounded p-1"><option id="fw_normal_msg" value="400">標準</option><option id="fw_bold_msg" value="700" selected>太字</option><option id="fw_bolder_msg" value="900">極太</option></select><select id="msg-style" class="w-1/2 bg-gray-700 text-[10px] text-white rounded p-1"><option id="fs_normal_msg" value="normal" selected>標準</option><option id="fs_italic_msg" value="italic">斜体</option></select></div></div>
+                    <div class="grid grid-cols-2 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="font_size_msg">サイズ</span><div><input type="number" id="msg-size-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">pt</span></div></label><input type="range" id="msg-size" min="-5" max="5" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_msg">上下位置</span><div><input type="number" id="msg-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="msg-y" min="-6" max="6" step="0.5" value="0" class="w-full"></div></div>
+                    <div class="grid grid-cols-3 gap-2 border-t border-gray-700 pt-2"><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_color_msg">文字色</label><input type="color" id="msg-color" value="#111111" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_outline_c_msg">縁色</label><input type="color" id="msg-stroke-c" value="#ffffff" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 flex flex-col items-center"><span id="text_outline_w_msg">縁太さ</span><div class="flex items-center mt-1"><input type="number" id="msg-stroke-w-val" class="num-val-input w-8 text-center" style="font-size:10px;"><span class="text-yellow-400 text-[10px]">pt</span></div></label><input type="range" id="msg-stroke-w" min="-2" max="2" step="0.1" value="0" class="w-full mt-1"></div></div>
+                </div>
+            </details>
+
+            <!-- TAB 5: TÊN QUÁN -->
+            <details id="panel-5" class="mobile-panel bg-gray-800 p-3 rounded-lg border border-gray-700 mb-6 cursor-pointer group" open>
+                <summary class="text-xs md:text-sm font-semibold text-gray-200 uppercase flex justify-between"><span id="sec4_title">4. 店舗名 (下部)</span> <span class="text-gray-400 group-open:rotate-180">▼</span></summary>
+                <div class="mt-4 cursor-auto">
+                    <label class="tool-enable-row">
+                        <span id="toggle_branch_label">店舗名を表示</span>
+                        <input type="checkbox" id="branch-tool-toggle" class="tool-enable-checkbox" checked>
+                        <span class="tool-enable-switch" aria-hidden="true"></span>
+                    </label>
+
+                    <input type="text" id="branch-input" value="安佐南相田店" class="w-full bg-gray-700 text-sm text-white rounded p-2 mb-2">
+                    <div class="grid grid-cols-2 gap-2 mb-2"><select id="branch-font" class="bg-gray-700 text-[10px] text-white rounded p-1"><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select><div class="flex gap-1"><select id="branch-weight" class="w-1/2 bg-gray-700 text-[10px] text-white rounded p-1"><option id="fw_normal_branch" value="400">標準</option><option id="fw_bold_branch" value="700">太字</option><option id="fw_bolder_branch" value="900" selected>極太</option></select><select id="branch-style" class="w-1/2 bg-gray-700 text-[10px] text-white rounded p-1"><option id="fs_normal_branch" value="normal" selected>標準</option><option id="fs_italic_branch" value="italic">斜体</option></select></div></div>
+                    <div class="grid grid-cols-2 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="font_size_branch">サイズ</span><div><input type="number" id="branch-size-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">pt</span></div></label><input type="range" id="branch-size" min="-3" max="3" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_branch">上下位置</span><div><input type="number" id="branch-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="branch-y" min="-2.5" max="2.5" step="0.5" value="0" class="w-full"></div></div>
+                    <div class="grid grid-cols-3 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_w_branch">枠の幅</span><div><input type="number" id="branch-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">%</span></div></label><input type="range" id="branch-width" min="-10" max="10" step="1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pad_y_branch">上下余白</span><div><input type="number" id="branch-pad-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="branch-pad-y" min="-3" max="3" step="0.1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="radius_branch">角丸</span><div><input type="number" id="branch-radius-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="branch-radius" min="-3.2" max="3.2" step="0.1" value="0" class="w-full"></div></div>
+                    <div class="grid grid-cols-4 gap-1 border-t border-gray-700 pt-2"><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_color_branch">文字色</label><input type="color" id="branch-color" value="#ffffff" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="bg_color_branch">背景色</label><input type="color" id="branch-bg" value="#e60012" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_outline_c_branch">縁色</label><input type="color" id="branch-stroke-c" value="#000000" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 flex flex-col items-center"><span id="text_outline_w_branch">縁太さ</span><div class="flex items-center mt-1"><input type="number" id="branch-stroke-w-val" class="num-val-input w-8 text-center" style="font-size:10px;"><span class="text-yellow-400 text-[10px]">pt</span></div></label><input type="range" id="branch-stroke-w" min="-2" max="2" step="0.1" value="0" class="w-full mt-1"></div></div>
+                </div>
+            </details>
+
+            <!-- CHỈ DÀNH CHO PC -->
+            <button id="pc-open-export-btn" class="hidden md:flex w-full bg-[#cbfb45] hover:bg-[#b0df2b] text-gray-900 font-black py-3 px-4 rounded transition-transform transform active:scale-95 items-center justify-center mb-4"><span id="btn_print_pc">印刷 / PDF保存</span></button>
+            <button id="backup-btn" class="hidden md:flex w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded text-xs items-center justify-center mb-6"><span id="btn_backup">デザインを保存（HTML）</span></button>
+        </div>
+    </div> 
+
+    <!-- MÀN HÌNH POP-UP IN -->
+    <div id="export-modal" class="fixed inset-0 bg-black/80 z-[100] hidden flex-col justify-center items-center p-4 backdrop-blur-sm">
+        <div class="bg-indigo-900 border border-indigo-700 p-5 rounded-xl shadow-2xl w-full max-w-sm relative">
+            <button id="close-export-modal" class="absolute top-3 right-4 text-indigo-300 hover:text-white text-xl font-bold" aria-label="PDF出力設定を閉じる">✕</button>
+            <h3 class="text-base font-bold text-white mb-4 flex items-center border-b border-indigo-700 pb-3">
+                <svg class="w-5 h-5 mr-2 text-[#cbfb45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                <span id="export_modal_title">PDF出力設定</span>
+            </h3>
+            
+            <div class="flex gap-2 mb-3">
+                <label class="flex-1 text-xs bg-indigo-950 border border-indigo-600 rounded p-2 text-center cursor-pointer hover:bg-indigo-800 transition-colors"><input type="radio" name="print-mode" value="sequential" checked class="choice-radio peer"><span id="print_mode_sequential" class="text-indigo-300 peer-checked:text-[#cbfb45] peer-checked:font-bold">連番印刷</span></label>
+                <label class="flex-1 text-xs bg-indigo-950 border border-indigo-600 rounded p-2 text-center cursor-pointer hover:bg-indigo-800 transition-colors"><input type="radio" name="print-mode" value="custom" class="choice-radio peer"><span id="print_mode_custom" class="text-indigo-300 peer-checked:text-[#cbfb45] peer-checked:font-bold">指定番号</span></label>
+            </div>
+
+            <div class="mb-4">
+                <div id="mode-sequential-input">
+                    <label id="sequential_label" class="block text-[10px] text-indigo-200 mb-1">1番から次の番号まで:</label>
+                    <input type="number" id="print-quantity" value="30" min="1" class="w-full bg-indigo-950 text-white font-bold text-xl border border-indigo-600 rounded p-2 text-center outline-none focus:border-[#cbfb45]">
+                </div>
+                <div id="mode-custom-input" class="hidden">
+                    <label id="custom_label" class="block text-[10px] text-indigo-200 mb-1">番号を入力（例: 1-5; 8; 12-15）:</label>
+                    <input type="text" id="print-custom" placeholder="2; 5; 10-15" class="w-full bg-indigo-950 text-white font-bold text-sm border border-indigo-600 rounded p-2 text-center outline-none focus:border-[#cbfb45]">
+                </div>
+            </div>
+
+            <div class="bg-indigo-950/50 p-3 rounded border border-indigo-800/50 text-[11px] text-indigo-300 mb-5 grid grid-cols-2 gap-x-2 gap-y-2">
+                <span id="info_paper_label" class="text-gray-400">用紙サイズ:</span> <strong id="info-orientation" class="text-white text-right">...</strong>
+                <span id="info_size_label" class="text-gray-400">チケット1枚のサイズ:</span> <strong id="info-size" class="text-[#cbfb45] text-right">...</strong>
+                <span id="info_per_page_label" class="text-gray-400">1ページあたり:</span> <strong id="info-per-page" class="text-white text-right">...</strong>
+                <span id="info_total_label" class="text-gray-400">A4の合計ページ数:</span> <strong id="info-total-pages" class="text-white text-right">...</strong>
+            </div>
+            
+            <button id="generate-pdf-btn" class="w-full bg-[#cbfb45] hover:bg-[#b0df2b] text-gray-900 font-black py-3 px-4 rounded transition-transform transform active:scale-95 flex items-center justify-center text-sm">
+                <span id="generate_pdf_text">印刷 / 保存を確定</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="print-area" style="display: none;"></div>
+
+    <script src="js/i18n.js?v=direct-pdf-v1" defer></script>
+    <script src="js/layout-sync.js?v=qa-fix-1" defer></script>
+    <script src="js/image-editor.js?v=qa-fix-2" defer></script>
+    <script src="js/ui-events.js?v=qa-fix-2" defer></script>
+    <script src="js/controls.js?v=stepper-1" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
+    <script src="js/export.js?v=direct-print-v2" defer></script>
+</body>
+</html>
+

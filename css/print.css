@@ -1,0 +1,224 @@
+@media screen {
+    #print-area {
+        display: none !important;
+    }
+
+    /*
+      Chế độ dựng PDF trên iOS: đặt trang ngoài màn hình nhưng vẫn cho
+      html2canvas đo và chụp đúng kích thước A4.
+    */
+    body.pdf-exporting #print-area {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: -10000px !important;
+        width: var(--pdf-page-width, 210mm) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        pointer-events: none !important;
+    }
+
+    body.pdf-exporting .a4-print-page {
+        display: block !important;
+        width: var(--pdf-page-width, 210mm) !important;
+        min-width: var(--pdf-page-width, 210mm) !important;
+        max-width: var(--pdf-page-width, 210mm) !important;
+        height: var(--pdf-page-height, 297mm) !important;
+        min-height: var(--pdf-page-height, 297mm) !important;
+        max-height: var(--pdf-page-height, 297mm) !important;
+        margin: 0 !important;
+        padding: 5mm !important;
+        background: white !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    /*
+      Mỗi trang được nhân bản vào vùng chụp riêng tại tọa độ (0, 0).
+      Điều này tránh lỗi html2canvas làm méo các trang ở vị trí thứ 2, 4...
+      khi chúng nằm nối tiếp trong vùng ngoài màn hình.
+    */
+    body.pdf-exporting .pdf-capture-stage {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: -2147483647 !important;
+        width: var(--pdf-page-width, 210mm) !important;
+        height: var(--pdf-page-height, 297mm) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+
+    /*
+      Vùng chụp một vé duy nhất. Mọi vé đều được dựng tại cùng tọa độ
+      trước khi ghép vào PDF nên vị trí số, chữ và khung không bị trôi.
+    */
+    body.pdf-exporting .pdf-ticket-capture-stage {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: -2147483647 !important;
+        width: var(--print-ticket-width) !important;
+        height: var(--print-ticket-height) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+
+    body.pdf-exporting .pdf-ticket-capture-stage .ticket-wrapper {
+        width: var(--print-ticket-width) !important;
+        height: var(--print-ticket-height) !important;
+        margin: 0 !important;
+        transform: none !important;
+        box-sizing: border-box !important;
+    }
+
+    body.pdf-exporting .a4-print-grid {
+        display: grid !important;
+        grid-template-columns: repeat(
+            var(--print-cols),
+            var(--print-ticket-width)
+        ) !important;
+        grid-template-rows: repeat(
+            var(--print-rows),
+            var(--print-ticket-height)
+        ) !important;
+        gap: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        justify-content: center !important;
+        align-content: center !important;
+        box-sizing: border-box !important;
+    }
+}
+
+@page {
+    /* Chiều A4 dọc/ngang sẽ được đặt động trước khi gọi window.print(). */
+    margin: 0 !important;
+}
+
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    html,
+    body {
+        background-color: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        position: static !important;
+    }
+
+    #app-wrapper,
+    #print-overlay,
+    #export-modal,
+    .setting-panel,
+    .no-print {
+        display: none !important;
+    }
+
+    #print-area {
+        display: block !important;
+        position: static !important;
+        width: var(--print-page-width, 210mm) !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+      Safari iOS không phân trang ổn định với width/min-height = 100%.
+      Mỗi phần phải có kích thước A4 vật lý rõ ràng.
+    */
+    .a4-print-page {
+        display: block !important;
+        width: var(--print-page-width, 210mm) !important;
+        min-width: var(--print-page-width, 210mm) !important;
+        max-width: none !important;
+        height: var(--print-page-height, 297mm) !important;
+        min-height: var(--print-page-height, 297mm) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+
+        /*
+          Do not append a forced break after a page. Chromium can turn that
+          trailing break into an extra blank sheet because of print rounding.
+        */
+        page-break-before: auto !important;
+        break-before: auto !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    /*
+      Start every page after the first on a new sheet. Because the break is
+      before the next page, no rule remains after the final page.
+    */
+    .a4-print-page + .a4-print-page {
+        page-break-before: always !important;
+        break-before: page !important;
+    }
+
+    .a4-print-page:last-child,
+    #print-area {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+    }
+
+    #print-area::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    .a4-print-grid {
+        display: grid !important;
+        grid-template-columns: repeat(
+            var(--print-cols),
+            var(--print-ticket-width)
+        ) !important;
+        grid-template-rows: repeat(
+            var(--print-rows),
+            var(--print-ticket-height)
+        ) !important;
+        gap: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        justify-content: center !important;
+        align-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    .ticket-wrapper,
+    .ticket-core,
+    .ticket-content,
+    .marquee-border,
+    .marquee-dots {
+        /*
+          Không dùng max-width: 100% tại đây.
+          Safari iOS sẽ lấy viewport điện thoại làm chuẩn và cắt bớt vé.
+        */
+        max-width: none !important;
+        box-sizing: border-box !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}
