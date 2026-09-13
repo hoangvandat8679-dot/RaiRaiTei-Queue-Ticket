@@ -160,18 +160,25 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
                     pdf.addPage('a4', orientation);
                 }
 
-                pdf.setFont('helvetica', 'bold');
-                pdf.setFontSize(14);
-                pdf.text(
-                    window.t(
-                        page.side === 'front'
-                            ? 'print_side_front'
-                            : 'print_side_back'
-                    ),
-                    pageWidth / 2,
-                    12,
-                    { align: 'center' }
+                const sideTitle = window.t(
+                    page.side === 'front'
+                        ? 'print_side_front'
+                        : 'print_side_back'
                 );
+                const titleCanvas = renderDuplexSideTitleCanvas(sideTitle);
+
+                pdf.addImage(
+                    titleCanvas.toDataURL('image/png'),
+                    'PNG',
+                    5,
+                    6,
+                    printableWidth,
+                    10,
+                    undefined,
+                    'FAST'
+                );
+                titleCanvas.width = 1;
+                titleCanvas.height = 1;
 
                 for (let cellIndex = 0; cellIndex < page.cells.length; cellIndex++) {
                     const ticketNumber = page.cells[cellIndex];
@@ -332,6 +339,28 @@ function buildDuplexPrintPlan(ticketsToPrint, layout) {
     });
 
     return [...frontPages, ...backPages];
+}
+
+/*
+  jsPDF's core Helvetica font cannot encode Vietnamese or Japanese safely.
+  The side heading is drawn by the browser (Unicode-capable) then embedded
+  as a PNG, while the existing jsPDF ticket workflow stays untouched.
+*/
+function renderDuplexSideTitleCanvas(title) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1600;
+    canvas.height = 180;
+
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = '#111111';
+    context.font =
+        '700 58px Arial, "Noto Sans JP", "Helvetica Neue", sans-serif';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.fillText(title, canvas.width / 2, canvas.height / 2);
+
+    return canvas;
 }
 
 function createPrintTicketCellHTML(ticketInnerTemplate, ticketNumber) {
