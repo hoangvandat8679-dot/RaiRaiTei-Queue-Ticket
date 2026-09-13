@@ -45,14 +45,24 @@ async function waitForPrintImages(root) {
     await waitForPaintFrames(2);
 }
 
+/*
+  300 DPI trên mobile giúp chữ/số in sắc nét nhưng vẫn an toàn về bộ nhớ.
+  PC xuất PDF dùng 360 DPI. Tỷ lệ CSS chuẩn là 96 DPI.
+*/
+function getPdfRasterScale() {
+    return isMobilePrintDevice() ? 3.125 : 3.75;
+}
+
 async function renderVisibleTicketCanvas(
     ticketElement,
     fontEmbedCSS
 ) {
+    const pixelRatio = getPdfRasterScale();
+
     if (window.htmlToImage && window.htmlToImage.toCanvas) {
         return window.htmlToImage.toCanvas(ticketElement, {
             backgroundColor: '#ffffff',
-            pixelRatio: 2.5,
+            pixelRatio,
             cacheBust: false,
             skipAutoScale: true,
             fontEmbedCSS
@@ -61,7 +71,7 @@ async function renderVisibleTicketCanvas(
 
     if (window.html2canvas) {
         return window.html2canvas(ticketElement, {
-            scale: 2.5,
+            scale: pixelRatio,
             useCORS: true,
             allowTaint: false,
             backgroundColor: '#ffffff',
@@ -206,8 +216,8 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
                     );
 
                     pdf.addImage(
-                        canvas.toDataURL('image/jpeg', 0.98),
-                        'JPEG',
+                        canvas.toDataURL('image/png'),
+                        'PNG',
                         startX + column * ticketW,
                         startY + row * ticketH,
                         ticketW,
