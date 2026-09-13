@@ -265,8 +265,8 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
             );
 
             pdf.addImage(
-                canvas.toDataURL('image/jpeg', 0.98),
-                'JPEG',
+                canvas.toDataURL('image/png'),
+                'PNG',
                 startX + column * ticketW,
                 startY + row * ticketH,
                 ticketW,
