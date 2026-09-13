@@ -170,10 +170,10 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
                 pdf.addImage(
                     titleCanvas.toDataURL('image/png'),
                     'PNG',
-                    5,
-                    6,
-                    printableWidth,
-                    10,
+                    (pageWidth - 90) / 2,
+                    7,
+                    90,
+                    13.5,
                     undefined,
                     'FAST'
                 );
@@ -348,7 +348,8 @@ function buildDuplexPrintPlan(ticketsToPrint, layout) {
 */
 function renderDuplexSideTitleCanvas(title) {
     const canvas = document.createElement('canvas');
-    canvas.width = 1600;
+    // Tỉ lệ 20:3 được giữ nguyên khi chèn vào PDF, tránh kéo méo chữ.
+    canvas.width = 1200;
     canvas.height = 180;
 
     const context = canvas.getContext('2d');
