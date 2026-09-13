@@ -75,13 +75,20 @@ window.calculateAILayout = function() {
     }
 
     const w = coreW + (marginX * 2); const h = coreH + (marginY * 2);
+    const duplexToggle = document.getElementById('duplex-print-toggle');
+    const isDuplex = Boolean(duplexToggle && duplexToggle.checked);
+    /*
+      Chế độ hai mặt dành 18 mm cho tiêu đề MẶT TRƯỚC / MẶT SAU.
+      Cùng kích thước này được dùng trong iframe in PC và PDF mobile.
+    */
+    const duplexHeaderSpace = isDuplex ? 18 : 0;
 
     /*
       Vùng nội dung A4 chừa 5 mm ở mỗi cạnh.
       Trên iOS vùng này được dựng vào PDF thật, không giao cho Safari phân trang.
     */
-    const portraitW = 200; const portraitH = 287;
-    const landscapeW = 287; const landscapeH = 200;
+    const portraitW = 200; const portraitH = 287 - duplexHeaderSpace;
+    const landscapeW = 287; const landscapeH = 200 - duplexHeaderSpace;
     const colsP = Math.floor(portraitW / w); const rowsP = Math.floor(portraitH / h); const totalP = colsP * rowsP;
     const colsL = Math.floor(landscapeW / w); const rowsL = Math.floor(landscapeH / h); const totalL = colsL * rowsL;
     
@@ -102,8 +109,10 @@ window.calculateAILayout = function() {
                 : translate('paper_landscape');
         document.getElementById('info-per-page').textContent =
             `${window.layoutConfig.totalPerPage} ${ticketUnit}`;
+        const sidePages = Math.ceil(qty / window.layoutConfig.totalPerPage);
+        const printedPages = isDuplex ? sidePages * 2 : sidePages;
         document.getElementById('info-total-pages').textContent =
-            `${Math.ceil(qty / window.layoutConfig.totalPerPage)} ${pageUnit}`;
+            `${printedPages} ${pageUnit}`;
     } else {
         document.getElementById('info-orientation').textContent = '—';
         document.getElementById('info-per-page').textContent =
@@ -112,4 +121,11 @@ window.calculateAILayout = function() {
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => { window.calculateAILayout(); });
+document.addEventListener('DOMContentLoaded', () => {
+    window.calculateAILayout();
+
+    const duplexToggle = document.getElementById('duplex-print-toggle');
+    if (duplexToggle) {
+        duplexToggle.addEventListener('change', window.calculateAILayout);
+    }
+});
