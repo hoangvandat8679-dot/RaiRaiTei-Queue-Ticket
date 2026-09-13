@@ -46,11 +46,12 @@ async function waitForPrintImages(root) {
 }
 
 /*
-  300 DPI trên mobile giúp chữ/số in sắc nét nhưng vẫn an toàn về bộ nhớ.
-  PC xuất PDF dùng 360 DPI. Tỷ lệ CSS chuẩn là 96 DPI.
+  360 DPI dùng chung cho mobile và PC: nét hơn bản mobile cũ,
+  nhưng vẫn cân bằng dung lượng khi gửi PDF tới máy in combini.
+  Tỷ lệ CSS chuẩn là 96 DPI.
 */
 function getPdfRasterScale() {
-    return isMobilePrintDevice() ? 3.125 : 3.75;
+    return 3.75;
 }
 
 async function renderVisibleTicketCanvas(
