@@ -45,14 +45,25 @@ async function waitForPrintImages(root) {
     await waitForPaintFrames(2);
 }
 
+/*
+  360 DPI dùng chung cho mobile và PC: nét hơn bản mobile cũ,
+  nhưng vẫn cân bằng dung lượng khi gửi PDF tới máy in combini.
+  Tỷ lệ CSS chuẩn là 96 DPI.
+*/
+function getPdfRasterScale() {
+    return 3.75;
+}
+
 async function renderVisibleTicketCanvas(
     ticketElement,
     fontEmbedCSS
 ) {
+    const pixelRatio = getPdfRasterScale();
+
     if (window.htmlToImage && window.htmlToImage.toCanvas) {
         return window.htmlToImage.toCanvas(ticketElement, {
             backgroundColor: '#ffffff',
-            pixelRatio: 2.5,
+            pixelRatio,
             cacheBust: false,
             skipAutoScale: true,
             fontEmbedCSS
@@ -61,7 +72,7 @@ async function renderVisibleTicketCanvas(
 
     if (window.html2canvas) {
         return window.html2canvas(ticketElement, {
-            scale: 2.5,
+            scale: pixelRatio,
             useCORS: true,
             allowTaint: false,
             backgroundColor: '#ffffff',
@@ -91,11 +102,14 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
     const pageWidth = orientation === 'landscape' ? 297 : 210;
     const pageHeight = orientation === 'landscape' ? 210 : 297;
     const printableWidth = pageWidth - 10;
-    const printableHeight = pageHeight - 10;
+    const duplex = isDuplexPrintEnabled();
+    const duplexHeaderSpace = duplex ? 18 : 0;
+    const printableHeight = pageHeight - 10 - duplexHeaderSpace;
     const startX =
         5 + Math.max(0, (printableWidth - bestCols * ticketW) / 2);
     const startY =
-        5 + Math.max(0, (printableHeight - bestRows * ticketH) / 2);
+        5 + duplexHeaderSpace +
+        Math.max(0, (printableHeight - bestRows * ticketH) / 2);
     const masterTicket = document.getElementById('master-ticket');
     const previewNumber = document.getElementById('preview-number');
     const loadingTitle = document.getElementById('print_loading_title');
@@ -145,6 +159,82 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
         });
         let activePage = 0;
 
+        if (duplex) {
+            const pagePlan = buildDuplexPrintPlan(ticketsToPrint, layout);
+            let completedTickets = 0;
+            const totalCaptures = ticketsToPrint.length * 2;
+
+            for (let pageIndex = 0; pageIndex < pagePlan.length; pageIndex++) {
+                const page = pagePlan[pageIndex];
+
+                if (pageIndex > 0) {
+                    pdf.addPage('a4', orientation);
+                }
+
+                const sideTitle = window.t(
+                    page.side === 'front'
+                        ? 'print_side_front'
+                        : 'print_side_back'
+                );
+                const titleCanvas = renderDuplexSideTitleCanvas(sideTitle);
+
+                pdf.addImage(
+                    titleCanvas.toDataURL('image/png'),
+                    'PNG',
+                    (pageWidth - 90) / 2,
+                    7,
+                    90,
+                    13.5,
+                    undefined,
+                    'FAST'
+                );
+                titleCanvas.width = 1;
+                titleCanvas.height = 1;
+
+                for (let cellIndex = 0; cellIndex < page.cells.length; cellIndex++) {
+                    const ticketNumber = page.cells[cellIndex];
+                    if (ticketNumber === null) continue;
+
+                    const column = cellIndex % bestCols;
+                    const row = Math.floor(cellIndex / bestCols);
+                    previewNumber.textContent = String(ticketNumber);
+                    completedTickets++;
+
+                    if (loadingTitle) {
+                        loadingTitle.textContent = window.t(
+                            'progress_ticket',
+                            {
+                                current: completedTickets,
+                                total: totalCaptures
+                            }
+                        );
+                    }
+
+                    await waitForPaintFrames(2);
+                    const canvas = await renderVisibleTicketCanvas(
+                        masterTicket,
+                        fontEmbedCSS
+                    );
+
+                    pdf.addImage(
+                        canvas.toDataURL('image/png'),
+                        'PNG',
+                        startX + column * ticketW,
+                        startY + row * ticketH,
+                        ticketW,
+                        ticketH,
+                        undefined,
+                        'FAST'
+                    );
+
+                    canvas.width = 1;
+                    canvas.height = 1;
+                }
+            }
+
+            return pdf.output('blob');
+        }
+
         for (let index = 0; index < ticketsToPrint.length; index++) {
             const pageIndex = Math.floor(index / totalPerPage);
             const cellIndex = index % totalPerPage;
@@ -176,8 +266,8 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
             );
 
             pdf.addImage(
-                canvas.toDataURL('image/jpeg', 0.98),
-                'JPEG',
+                canvas.toDataURL('image/png'),
+                'PNG',
                 startX + column * ticketW,
                 startY + row * ticketH,
                 ticketW,
@@ -210,15 +300,125 @@ function isMobilePrintDevice() {
     );
 }
 
-function buildPrintPagesHTML(ticketsToPrint, layout) {
-    const {
-        totalPerPage
-    } = layout;
-    const totalPages = Math.ceil(
-        ticketsToPrint.length / totalPerPage
+
+function isDuplexPrintEnabled() {
+    const toggle = document.getElementById('duplex-print-toggle');
+    return Boolean(toggle && toggle.checked);
+}
+
+/*
+  Tạo kế hoạch trang mà không tác động tới dữ liệu vé gốc.
+  Mỗi trang được lấp đủ ô; các giá trị null trở thành ô tàng hình.
+*/
+function buildDuplexPrintPlan(ticketsToPrint, layout) {
+    const { bestCols, totalPerPage } = layout;
+    const sourcePages = [];
+
+    for (let start = 0; start < ticketsToPrint.length; start += totalPerPage) {
+        const cells = ticketsToPrint
+            .slice(start, start + totalPerPage)
+            .map((number) => Number(number));
+
+        while (cells.length < totalPerPage) {
+            cells.push(null);
+        }
+
+        sourcePages.push(cells);
+    }
+
+    const frontPages = sourcePages.map((cells) => ({
+        side: 'front',
+        cells: [...cells]
+    }));
+    const backPages = sourcePages.map((cells) => {
+        const mirroredCells = [];
+
+        for (let start = 0; start < cells.length; start += bestCols) {
+            /*
+              Các ô null được đặt trước khi đảo: hàng lẻ vẫn giữ đúng
+              số cột, vì vậy vị trí thực của vé sẽ khớp với mặt trước.
+            */
+            mirroredCells.push(
+                ...cells.slice(start, start + bestCols).reverse()
+            );
+        }
+
+        return {
+            side: 'back',
+            cells: mirroredCells
+        };
+    });
+
+    return [...frontPages, ...backPages];
+}
+
+/*
+  jsPDF's core Helvetica font cannot encode Vietnamese or Japanese safely.
+  The side heading is drawn by the browser (Unicode-capable) then embedded
+  as a PNG, while the existing jsPDF ticket workflow stays untouched.
+*/
+function renderDuplexSideTitleCanvas(title) {
+    const canvas = document.createElement('canvas');
+    // Tỉ lệ 20:3 được giữ nguyên khi chèn vào PDF, tránh kéo méo chữ.
+    canvas.width = 1200;
+    canvas.height = 180;
+
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = '#111111';
+    context.font =
+        '700 58px Arial, "Noto Sans JP", "Helvetica Neue", sans-serif';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.fillText(title, canvas.width / 2, canvas.height / 2);
+
+    return canvas;
+}
+
+function createPrintTicketCellHTML(ticketInnerTemplate, ticketNumber) {
+    if (ticketNumber === null) {
+        return '<div class="ticket-empty duplex-placeholder" aria-hidden="true"></div>';
+    }
+
+    const cellHTML = ticketInnerTemplate.replace(
+        /<div class="queue-number"[^>]*>.*?<\/div>/,
+        `<div class="queue-number">${ticketNumber}</div>`
     );
+
+    return `<div class="ticket-wrapper">${cellHTML}</div>`;
+}
+
+function buildPrintPagesHTML(ticketsToPrint, layout, duplex = false) {
+    const { totalPerPage } = layout;
     const ticketInnerTemplate =
         document.getElementById('master-ticket-inner').outerHTML;
+
+    if (duplex) {
+        return buildDuplexPrintPlan(ticketsToPrint, layout)
+            .map((page) => {
+                const title = window.t(
+                    page.side === 'front'
+                        ? 'print_side_front'
+                        : 'print_side_back'
+                );
+                const cells = page.cells
+                    .map((number) =>
+                        createPrintTicketCellHTML(
+                            ticketInnerTemplate,
+                            number
+                        )
+                    )
+                    .join('');
+
+                return '<section class="a4-print-page duplex-print-page">' +
+                    '<header class="print-side-title">' + title + '</header>' +
+                    '<div class="a4-print-grid">' + cells + '</div>' +
+                    '</section>';
+            })
+            .join('');
+    }
+
+    const totalPages = Math.ceil(ticketsToPrint.length / totalPerPage);
     let ticketIndex = 0;
     let printHTML = '';
 
@@ -229,14 +429,10 @@ function buildPrintPagesHTML(ticketsToPrint, layout) {
 
         for (let cellIndex = 0; cellIndex < totalPerPage; cellIndex++) {
             if (ticketIndex < ticketsToPrint.length) {
-                const currentNumber = ticketsToPrint[ticketIndex];
-                const cellHTML = ticketInnerTemplate.replace(
-                    /<div class="queue-number"[^>]*>.*?<\/div>/,
-                    `<div class="queue-number">${currentNumber}</div>`
+                printHTML += createPrintTicketCellHTML(
+                    ticketInnerTemplate,
+                    Number(ticketsToPrint[ticketIndex])
                 );
-
-                printHTML +=
-                    `<div class="ticket-wrapper">${cellHTML}</div>`;
                 ticketIndex++;
             } else {
                 printHTML += '<div class="ticket-empty"></div>';
@@ -309,9 +505,11 @@ async function printDesktopInIsolatedFrame(
     )
         .map((node) => node.outerHTML)
         .join('\n');
+    const duplex = isDuplexPrintEnabled();
     const printHTML = buildPrintPagesHTML(
         ticketsToPrint,
-        layout
+        layout,
+        duplex
     );
     const directPrintStyles = `
         @page {
@@ -368,6 +566,34 @@ async function printDesktopInIsolatedFrame(
         .a4-print-page:last-child {
             page-break-after: avoid !important;
             break-after: avoid !important;
+        }
+
+        .duplex-print-page {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 3mm !important;
+        }
+
+        .duplex-print-page .print-side-title {
+            display: flex !important;
+            flex: 0 0 15mm !important;
+            height: 15mm !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #111111 !important;
+            font-family: Arial, sans-serif !important;
+            font-size: 14pt !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.18em !important;
+        }
+
+        .duplex-print-page .a4-print-grid {
+            flex: 0 0 calc(100% - 18mm) !important;
+            height: calc(100% - 18mm) !important;
+        }
+
+        .duplex-placeholder {
+            visibility: hidden !important;
         }
 
         .a4-print-grid {

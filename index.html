@@ -96,9 +96,19 @@
                     <span class="text-gray-400 group-open:rotate-180">▼</span>
                 </summary>
                 <div class="mt-4 cursor-auto">
-                    <div class="min-h-[110px] flex items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-900/60 px-4 py-6 text-center">
-                        <p id="template_design_status" class="text-sm font-bold text-[#cbfb45]">開発中</p>
-                    </div>
+                    <section class="template-folder" aria-labelledby="seasonal_template_title">
+                        <p id="seasonal_template_title" class="template-folder-title">季節のテンプレート</p>
+                        <div class="template-grid">
+                            <button id="spring-template-btn" type="button" class="template-card template-card-spring" data-template="spring">
+                                <span class="template-card-preview" aria-hidden="true"></span>
+                                <span id="template_spring_name" class="template-card-name">春</span>
+                                <span id="template_spring_description" class="template-card-description">桜のデザイン</span>
+                            </button>
+                        </div>
+                    </section>
+                    <button id="standard-template-btn" type="button" class="template-reset-button" data-template="standard">
+                        <span id="template_standard_name">標準デザインに戻す</span>
+                    </button>
                 </div>
             </details>
 
@@ -149,7 +159,7 @@
                         <span class="tool-enable-switch" aria-hidden="true"></span>
                     </label>
 
-                    <select id="number-font-select" class="w-full bg-gray-700 text-xs text-white rounded p-1 mb-2"><option value="'Impact', sans-serif">Impact</option><option value="'Arial Black', sans-serif">Arial Black</option><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select>
+                    <select id="number-font-select" class="w-full bg-gray-700 text-xs text-white rounded p-1 mb-2"><option value="'Impact', sans-serif">Impact</option><option value="'Arial Black', sans-serif">Arial Black</option><option value="'Times New Roman', 'Noto Serif JP', serif">Times New Roman</option><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select>
                     <div class="grid grid-cols-2 gap-2 mb-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="font_size_num">サイズ</span><div><input type="number" id="number-size-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">pt</span></div></label><input type="range" id="number-size" min="-90" max="90" step="1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="num_offset">番号位置</span><div><input type="number" id="number-offset-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="number-offset-y" min="-50" max="50" step="0.5" value="0" class="w-full"></div></div>
                     <div class="grid grid-cols-2 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_w">枠の幅</span><div><input type="number" id="frame-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-width" min="-20" max="20" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_h">枠の高さ</span><div><input type="number" id="frame-height-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-height" min="-20" max="20" step="0.5" value="0" class="w-full"></div></div>
                     <div class="mb-2"><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_frame">上下位置</span><div><input type="number" id="frame-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-y" min="-20" max="20" step="0.5" value="0" class="w-full"></div>
@@ -224,6 +234,15 @@
                 </div>
             </div>
 
+
+            <label class="mb-4 flex cursor-pointer items-start gap-3 rounded border border-indigo-700 bg-indigo-950/60 p-3 text-left">
+                <input id="duplex-print-toggle" type="checkbox" checked class="mt-0.5 h-4 w-4 accent-[#cbfb45]">
+                <span class="min-w-0">
+                    <span id="duplex_print_label" class="block text-xs font-bold text-[#cbfb45]">In hai mặt khớp nhau</span>
+                    <span id="duplex_print_hint" class="mt-1 block text-[10px] leading-relaxed text-indigo-300">In toàn bộ mặt trước, rồi in mặt sau với thứ tự cột được đảo để khớp khi lật ngang.</span>
+                </span>
+            </label>
+
             <div class="bg-indigo-950/50 p-3 rounded border border-indigo-800/50 text-[11px] text-indigo-300 mb-5 grid grid-cols-2 gap-x-2 gap-y-2">
                 <span id="info_paper_label" class="text-gray-400">用紙サイズ:</span> <strong id="info-orientation" class="text-white text-right">...</strong>
                 <span id="info_size_label" class="text-gray-400">チケット1枚のサイズ:</span> <strong id="info-size" class="text-[#cbfb45] text-right">...</strong>
@@ -243,11 +262,12 @@
     <script src="js/layout-sync.js?v=qa-fix-1" defer></script>
     <script src="js/image-editor.js?v=qa-fix-2" defer></script>
     <script src="js/ui-events.js?v=qa-fix-2" defer></script>
-    <script src="js/controls.js?v=stepper-1" defer></script>
+    <script src="js/controls.js?v=templates-1" defer></script>
+    <script src="js/templates.js?v=spring-2" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
-    <script src="js/export.js?v=direct-print-v2" defer></script>
+    <script src="js/export.js?v=direct-print-v5" defer></script>
 </body>
 </html>
 

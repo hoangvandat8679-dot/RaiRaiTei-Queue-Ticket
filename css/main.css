@@ -244,3 +244,136 @@ input[type=range]::-webkit-slider-thumb { border: none; height: 12px; width: 12p
 input[type=range]:hover::-webkit-slider-thumb { background: #d1d5db; }
 input[type=range]:active::-webkit-slider-thumb { background: #cbfb45; transform: scale(1.1); }
 
+
+
+/* ============================================================ */
+/* MẪU THEO MÙA: MÙA XUÂN                                     */
+/* ============================================================ */
+.template-folder {
+    padding: 10px;
+    border: 1px solid rgba(244, 114, 182, 0.38);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(80, 34, 52, 0.42), rgba(31, 41, 55, 0.82));
+}
+.template-folder-title {
+    margin: 0 0 8px;
+    color: #fbcfe8;
+    font-size: 11px;
+    font-weight: 800;
+}
+.template-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+}
+.template-card,
+.template-reset-button {
+    width: 100%;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    color: #f3f4f6;
+    background: #1f2937;
+    text-align: left;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.template-card {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 9px;
+    padding: 7px;
+    cursor: pointer;
+}
+.template-card:hover,
+.template-card:focus-visible,
+.template-reset-button:hover,
+.template-reset-button:focus-visible,
+.template-card.is-selected,
+.template-reset-button.is-selected {
+    border-color: #f472b6;
+    box-shadow: 0 0 0 1px rgba(244, 114, 182, .35), 0 6px 16px rgba(244, 114, 182, .16);
+    outline: none;
+}
+.template-card:active,
+.template-reset-button:active {
+    transform: scale(.98);
+}
+.template-card-preview {
+    grid-row: 1 / span 2;
+    width: 46px;
+    height: 62px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,.38);
+    background: center / cover no-repeat url('../assets/images/templates/spring-background.png');
+}
+.template-card-name {
+    align-self: end;
+    color: #fce7f3;
+    font-size: 12px;
+    font-weight: 900;
+}
+.template-card-description {
+    align-self: start;
+    color: #d1d5db;
+    font-size: 9px;
+}
+.template-reset-button {
+    margin-top: 9px;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 700;
+}
+.ticket-core.spring-template {
+    background-color: #fff9f2;
+}
+.ticket-core.spring-template .ticket-bg-layer {
+    background-image: var(--bg-image, url('../assets/images/templates/spring-background.png'));
+    background-position: center;
+    background-size: 100% 100%;
+}
+.ticket-core.spring-template .marquee-border,
+.ticket-core.spring-template .marquee-dots {
+    display: none !important;
+}
+.ticket-core.spring-template .number-frame {
+    border: none !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    background-image: url('../assets/images/templates/spring-number-frame.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+}
+.ticket-core.spring-template .queue-number {
+    z-index: 1;
+    color: #ed5793;
+    font-weight: 700;
+}
+.ticket-core.spring-template .branch-name {
+    z-index: 2;
+    background-color: transparent !important;
+    background-image: url('../assets/images/templates/spring-branch-ribbon.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+    line-height: 1.1;
+}
+.ticket-core.spring-template::after {
+    content: "申し訳ございません";
+    position: absolute;
+    top: 4.2mm;
+    left: 50%;
+    z-index: 8;
+    transform: translateX(-50%);
+    color: #111;
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 4pt;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+}
+@media (max-width: 767px) {
+    .template-folder { padding: 8px; }
+    .template-card-preview { width: 42px; height: 57px; }
+}
