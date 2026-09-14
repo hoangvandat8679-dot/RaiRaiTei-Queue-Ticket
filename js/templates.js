@@ -39,6 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
         'dot-offset'
     ];
 
+    // Các chi tiết này là ảnh trang trí cố định của mẫu Mùa Xuân.
+    // Khóa chúng để không có điều khiển nào tạo cảm giác thay đổi được nhưng không có hiệu lực.
+    const springStaticArtControlIds = [
+        'number-bg-color',
+        'number-border-color',
+        'number-border-width',
+        'branch-bg',
+        'branch-radius'
+    ];
+
     const setInputValue = (id, value, eventName = 'input') => {
         const input = document.getElementById(id);
 
@@ -56,12 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
         toggle.dispatchEvent(new Event('change', { bubbles: true }));
     };
 
-    const setBorderControlsDisabled = (disabled) => {
-        borderControlIds.forEach((id) => {
-            const control = document.getElementById(id);
+    const setControlDisabled = (id, disabled) => {
+        const control = document.getElementById(id);
+        if (control) control.disabled = disabled;
 
-            if (control) control.disabled = disabled;
-        });
+        const valueControl = document.getElementById(`${id}-val`);
+        if (valueControl) {
+            valueControl.disabled = disabled;
+            valueControl.parentElement?.querySelectorAll('button').forEach((button) => {
+                button.disabled = disabled;
+            });
+        }
+    };
+
+    const setBorderControlsDisabled = (disabled) => {
+        borderControlIds.forEach((id) => setControlDisabled(id, disabled));
+    };
+
+    const setSpringStaticArtControlsDisabled = (disabled) => {
+        springStaticArtControlIds.forEach((id) => setControlDisabled(id, disabled));
     };
 
     const selectTemplate = (name) => {
@@ -113,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setToolState('message-tool-toggle', true);
         setToolState('branch-tool-toggle', true);
         setBorderControlsDisabled(true);
+        setSpringStaticArtControlsDisabled(true);
 
         selectTemplate('spring');
         window.calculateAILayout?.();
@@ -137,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setInputValue('number-font-select', "'Impact', sans-serif", 'change');
 
         setBorderControlsDisabled(false);
+        setSpringStaticArtControlsDisabled(false);
         setToolState('background-tool-toggle', true);
         setToolState('border-tool-toggle', true);
         setToolState('mascot-tool-toggle', true);
