@@ -92,9 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setInputValue('branch-color', '#ffffff');
         setInputValue('branch-bg', '#ec5a8b');
 
-        setInputValue('number-font-select', 'Times New Roman', 'change');
-        setInputValue('msg-font', 'Noto Sans JP', 'change');
-        setInputValue('branch-font', 'Noto Sans JP', 'change');
+        setInputValue('number-font-select', "'Times New Roman', 'Noto Serif JP', serif", 'change');
+        setInputValue('msg-font', "'Noto Sans JP', sans-serif", 'change');
+        setInputValue('branch-font', "'Noto Sans JP', sans-serif", 'change');
 
         const defaultMascot = document.querySelector(
             'input[name="mascot-type"][value="default"]'
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setInputValue('msg-color', '#111111');
         setInputValue('branch-color', '#ffffff');
         setInputValue('branch-bg', '#e60012');
-        setInputValue('number-font-select', 'Impact', 'change');
+        setInputValue('number-font-select', "'Impact', sans-serif", 'change');
 
         setBorderControlsDisabled(false);
         setToolState('background-tool-toggle', true);
