@@ -15,6 +15,8 @@ window.translations = {
         language_button_label: '言語を切り替える（現在：日本語）',
         preview_title: 'プレビュー',
         mobile_print_text: '印刷 / PDF保存',
+        history_undo_label: '元に戻す',
+        history_redo_label: 'やり直す',
         text_collapse: '全画面表示',
         control_panel_title: '設定パネル',
         core_size_label: '本体',
@@ -95,7 +97,14 @@ window.translations = {
         choose_file: 'ファイルを選択',
         no_file_selected: 'ファイルが選択されていません',
         btn_print_pc: '印刷 / PDF保存',
-        btn_backup: 'デザインを保存（HTML）',
+        btn_backup: 'デザインを保存（JSON）',
+        btn_restore: 'デザインを読み込む',
+        history_download_label: 'デザインを保存',
+        history_upload_label: 'デザインを読み込む',
+        history_clear_label: '履歴を消去',
+        nav_settings: '設定',
+        nav_saved: '保存済み',
+        settings_back_label: '戻る',
         print_loading_title: '印刷データを準備しています…',
         print_loading_desc: 'ブラウザが印刷またはPDF保存画面を開きます。このタブを閉じないでください。',
         force_close_text: '戻る（停止した場合）',
@@ -138,6 +147,8 @@ window.translations = {
         language_button_label: 'Đổi ngôn ngữ (hiện tại: Tiếng Việt)',
         preview_title: 'Xem trước',
         mobile_print_text: 'In / Lưu PDF',
+        history_undo_label: 'Hoàn tác',
+        history_redo_label: 'Làm lại',
         text_collapse: 'Toàn màn hình',
         control_panel_title: 'Bảng điều khiển',
         core_size_label: 'Lõi vé',
@@ -218,7 +229,14 @@ window.translations = {
         choose_file: 'Chọn tệp',
         no_file_selected: 'Chưa chọn tệp',
         btn_print_pc: 'In / Lưu PDF',
-        btn_backup: 'Lưu thiết kế (HTML)',
+        btn_backup: 'Lưu thiết kế (JSON)',
+        btn_restore: 'Tải thiết kế lên',
+        history_download_label: 'Lưu thiết kế',
+        history_upload_label: 'Tải thiết kế lên',
+        history_clear_label: 'Xóa lịch sử',
+        nav_settings: 'Thiết lập',
+        nav_saved: 'Đã lưu',
+        settings_back_label: 'Quay lại',
         print_loading_title: 'Đang chuẩn bị dữ liệu in…',
         print_loading_desc: 'Trình duyệt sẽ mở màn hình in hoặc lưu PDF. Vui lòng không đóng thẻ này.',
         force_close_text: 'Quay lại (nếu bị kẹt)',
@@ -372,6 +390,12 @@ window.applyTranslations = function() {
         'mascot-upload-button',
         'btn_print_pc',
         'btn_backup',
+        'btn_restore',
+        'history_download_label',
+        'history_upload_label',
+        'history_clear_label',
+        'nav_settings',
+        'nav_saved',
         'print_loading_title',
         'print_loading_desc',
         'force_close_text',
@@ -445,12 +469,36 @@ window.applyTranslations = function() {
         }
     });
 
+    [
+        ['pc-top-print-btn', 'mobile_print_text'],
+        ['mobile-print-btn', 'mobile_print_text'],
+        ['history-undo', 'history_undo_label'],
+        ['history-redo', 'history_redo_label']
+    ].forEach(([id, key]) => {
+        const button = document.getElementById(id);
+
+        if (button) {
+            const label = window.t(key);
+            button.setAttribute('aria-label', label);
+            button.title = label;
+        }
+    });
+
     const closeButton = document.getElementById('close-export-modal');
     if (closeButton) {
         closeButton.setAttribute(
             'aria-label',
             window.t('close_export_label')
         );
+    }
+
+    const settingsBackButton =
+        document.getElementById('settings-back-btn');
+    if (settingsBackButton) {
+        const backLabel = window.t('settings_back_label');
+
+        settingsBackButton.setAttribute('aria-label', backLabel);
+        settingsBackButton.title = backLabel;
     }
 
     window.refreshTranslatedFileNames();
