@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
         'bg-opacity': 1,
         'cut-margin-x': 0,
         'cut-margin-y': 0,
-        'mascot-width': 42,
-        'mascot-y': 5.5,
+        'mascot-width': 67.4,
+        'mascot-y': -1.3,
         'number-size': 108,
-        'number-offset-y': -1.2,
-        'frame-width': 36.67,
-        'frame-height': 36.7,
+        'number-offset-y': 0.5,
+        'frame-width': 40.87,
+        'frame-height': 36.9,
         'frame-y': 21.6,
         'msg-size': 8,
         'msg-y': 7.7,
@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Các chi tiết này là ảnh trang trí cố định của mẫu Mùa Xuân.
     // Khóa chúng để không có điều khiển nào tạo cảm giác thay đổi được nhưng không có hiệu lực.
     const springStaticArtControlIds = [
+        'bg-color',
+        'bg-opacity',
         'number-bg-color',
         'number-border-color',
         'number-border-width',
@@ -98,9 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const activateSpring = () => {
         masterTicketInner.classList.add('spring-template');
         document.body.dataset.template = 'spring';
+        /*
+          Nền mặc định của mẫu là ảnh hoa anh đào. Ảnh người dùng tải lên khi
+          đang dùng mẫu (image-editor đặt --bg-image) sẽ đè lên ảnh này.
+          Bấm lại "Mùa Xuân" để đưa nền về mặc định.
+        */
         document.body.style.setProperty(
             '--bg-image',
-            "url('assets/images/templates/spring-background.png')"
+            "url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-background.png')"
         );
 
         if (window.applyControlPreset) {
@@ -129,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         }
 
-        setToolState('background-tool-toggle', true);
+        setToolState('background-tool-toggle', true, true);
         setToolState('border-tool-toggle', false, true);
         setToolState('mascot-tool-toggle', true);
         setToolState('number-tool-toggle', true);
