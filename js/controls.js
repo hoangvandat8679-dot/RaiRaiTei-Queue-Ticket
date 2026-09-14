@@ -103,6 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'branch-stroke-w', unit: 'pt', base: 0, limit: 2, min: 0, max: 5 }
     ];
 
+    controls.forEach((definition) => {
+        definition.defaultBase = definition.base;
+    });
+
+    const controlBindings = new Map();
+
     const clamp = (value, min, max) =>
         Math.min(max, Math.max(min, value));
 
@@ -325,7 +331,34 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             stepDelta(event.key === 'ArrowUp' ? 1 : -1);
         });
+
+        controlBindings.set(definition.id, {
+            definition,
+            applyDelta
+        });
     });
+
+    /*
+      Một mẫu có thể thay đổi các giá trị chuẩn mà không làm mất
+      nguyên tắc: giữa thanh trượt luôn là 0.
+    */
+    window.applyControlPreset = (preset = {}) => {
+        controls.forEach((definition) => {
+            const value = Object.prototype.hasOwnProperty.call(
+                preset,
+                definition.id
+            )
+                ? preset[definition.id]
+                : definition.defaultBase;
+            const binding = controlBindings.get(definition.id);
+
+            definition.base = value;
+
+            if (binding) {
+                binding.applyDelta(0);
+            }
+        });
+    };
 
     const coreWInput = document.getElementById('core-width-input'); const coreHInput = document.getElementById('core-height-input');
     function updateCoreSize() {
