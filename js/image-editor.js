@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadDefaultMascot() {
         try {
-            const res = await fetch('assets/images/mascot.png');
+            const res = await fetch('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/mascot.png');
 
             if (!res.ok) {
                 throw new Error('Default mascot could not be loaded.');
