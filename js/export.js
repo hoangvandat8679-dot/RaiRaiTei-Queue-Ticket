@@ -46,6 +46,49 @@ async function waitForPrintImages(root) {
 }
 
 /*
+  Nền/khung số/dải băng của mẫu Mùa Xuân là background-image CSS (tải từ
+  CDN), không phải thẻ <img> — bộ chụp có thể vẽ thiếu nếu ảnh chưa về.
+*/
+async function waitForCssBackgroundImages(root) {
+    const urls = new Set();
+
+    Array.from(root.querySelectorAll('*')).forEach((element) => {
+        const backgroundImage = window.getComputedStyle(element)
+            .backgroundImage;
+
+        if (!backgroundImage || backgroundImage === 'none') return;
+
+        const pattern = /url\(["']?([^"')]+)["']?\)/g;
+        let match;
+
+        while ((match = pattern.exec(backgroundImage)) !== null) {
+            urls.add(match[1]);
+        }
+    });
+
+    await Promise.all(
+        Array.from(urls).map((url) => new Promise((resolve) => {
+            const probe = new Image();
+
+            probe.crossOrigin = 'anonymous';
+            probe.onload = resolve;
+            probe.onerror = resolve;
+            probe.src = url;
+        }))
+    );
+}
+
+/*
+  Co cỡ số theo độ dài để không tràn khung: 1 chữ số giữ nguyên thiết kế,
+  2 chữ số 72%, từ 3 chữ số 55% kích thước gốc.
+*/
+function getNumberShrinkFactor(text) {
+    if (text.length >= 3) return 0.55;
+    if (text.length === 2) return 0.72;
+    return 1;
+}
+
+/*
   360 DPI dùng chung cho mobile và PC: nét hơn bản mobile cũ,
   nhưng vẫn cân bằng dung lượng khi gửi PDF tới máy in combini.
   Tỷ lệ CSS chuẩn là 96 DPI.
@@ -112,6 +155,8 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
         Math.max(0, (printableHeight - bestRows * ticketH) / 2);
     const masterTicket = document.getElementById('master-ticket');
     const previewNumber = document.getElementById('preview-number');
+    const previewBaseFontSize = window.getComputedStyle(previewNumber)
+        .fontSize;
     const loadingTitle = document.getElementById('print_loading_title');
     const originalNumber = previewNumber.textContent;
     const originalLoadingTitle = loadingTitle
@@ -124,6 +169,20 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
         }
 
         await waitForPrintImages(masterTicket);
+        await waitForCssBackgroundImages(masterTicket);
+
+        /*
+          Vẽ đủ 10 chữ số để kích hoạt mọi webfont tải trễ, rồi chờ
+          fonts.ready lần nữa. Nếu bỏ qua, các vé chụp sau khi font vừa
+          tải xong sẽ dùng font khác (số to/lệch khung so với phần còn
+          lại của trang) — đúng lỗi thấy ở số 10–12 khi in mẫu Mùa Xuân.
+        */
+        previewNumber.textContent = '0123456789';
+        await waitForPaintFrames(2);
+
+        if (document.fonts && document.fonts.ready) {
+            await document.fonts.ready;
+        }
 
         let fontEmbedCSS;
 
@@ -197,7 +256,14 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
 
                     const column = cellIndex % bestCols;
                     const row = Math.floor(cellIndex / bestCols);
-                    previewNumber.textContent = String(ticketNumber);
+                    const numberText = String(ticketNumber);
+
+                    previewNumber.textContent = numberText;
+                    previewNumber.style.fontSize =
+                        getNumberShrinkFactor(numberText) < 1
+                            ? `${parseFloat(previewBaseFontSize) *
+                                getNumberShrinkFactor(numberText)}px`
+                            : '';
                     completedTickets++;
 
                     if (loadingTitle) {
@@ -246,7 +312,14 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
                 activePage = pageIndex;
             }
 
-            previewNumber.textContent = String(ticketsToPrint[index]);
+            const numberText = String(ticketsToPrint[index]);
+
+            previewNumber.textContent = numberText;
+            previewNumber.style.fontSize =
+                getNumberShrinkFactor(numberText) < 1
+                    ? `${parseFloat(previewBaseFontSize) *
+                        getNumberShrinkFactor(numberText)}px`
+                    : '';
 
             if (loadingTitle) {
                 loadingTitle.textContent = window.t(
@@ -283,6 +356,7 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
         return pdf.output('blob');
     } finally {
         previewNumber.textContent = originalNumber;
+        previewNumber.style.fontSize = '';
 
         if (loadingTitle) {
             loadingTitle.textContent = originalLoadingTitle;
@@ -665,6 +739,7 @@ async function printDesktopInIsolatedFrame(
     }
 
     await waitForPrintImages(printRoot);
+    await waitForCssBackgroundImages(printRoot);
     await waitForPaintFrames(2);
 
     const frameWindow = frame.contentWindow;
@@ -830,6 +905,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /*
+      Lưu thiết kế dưới dạng tệp tùy chỉnh nhỏ gọn (JSON) thay vì chụp
+      toàn bộ trang HTML: không còn nhúng source ứng dụng nên không thể
+      dùng tệp để truy cập/sửa code, đồng thời dễ nhập lại sau này.
+      Bộ thu thập/áp dụng dùng chung với undo/redo (design-history.js).
+    */
     document.getElementById('backup-btn').addEventListener('click', async (e) => {
         const btn = e.currentTarget;
         const originalText = btn.innerHTML;
@@ -845,103 +926,16 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.classList.add('opacity-50', 'cursor-not-allowed');
 
         try {
-            let combinedCss = '';
-            const cssFiles = [
-                'css/main.css',
-                'css/layout.css',
-                'css/ticket.css',
-                'css/print.css'
-            ];
+            const design = window.designHistory
+                ? window.designHistory.collect()
+                : null;
 
-            for (const file of cssFiles) {
-                try {
-                    const res = await fetch(file);
-
-                    if (res.ok) {
-                        combinedCss += `${await res.text()}\n`;
-                    }
-                } catch (err) {
-                    // Bỏ qua tệp CSS không tải được.
-                }
+            if (!design) {
+                throw new Error('design history module unavailable');
             }
 
-            const clonedDoc = document.documentElement.cloneNode(true);
-
-            clonedDoc
-                .querySelectorAll('link[rel="stylesheet"]')
-                .forEach((link) => {
-                    if (link.getAttribute('href').startsWith('css/')) {
-                        link.remove();
-                    }
-                });
-
-            if (combinedCss) {
-                const styleTag = document.createElement('style');
-                styleTag.textContent = combinedCss;
-                clonedDoc.querySelector('head').appendChild(styleTag);
-            }
-
-            const inputs = document.querySelectorAll(
-                'input, textarea, select'
-            );
-            const clonedInputs = clonedDoc.querySelectorAll(
-                'input, textarea, select'
-            );
-
-            for (let i = 0; i < inputs.length; i++) {
-                const original = inputs[i];
-                const clone = clonedInputs[i];
-
-                if (
-                    original.type === 'checkbox' ||
-                    original.type === 'radio'
-                ) {
-                    if (original.checked) {
-                        clone.setAttribute('checked', 'checked');
-                    } else {
-                        clone.removeAttribute('checked');
-                    }
-                } else if (original.tagName === 'SELECT') {
-                    clone.querySelectorAll('option').forEach((opt) => {
-                        if (opt.value === original.value) {
-                            opt.setAttribute('selected', 'selected');
-                        } else {
-                            opt.removeAttribute('selected');
-                        }
-                    });
-                } else if (original.type !== 'file') {
-                    clone.setAttribute('value', original.value);
-
-                    if (original.tagName === 'TEXTAREA') {
-                        clone.textContent = original.value;
-                    }
-                }
-            }
-
-            if (window.currentBgBase64) {
-                clonedDoc
-                    .querySelector('#main-body')
-                    .style.setProperty(
-                        '--bg-image',
-                        `url('${window.currentBgBase64}')`
-                    );
-            }
-
-            if (window.currentMascotBase64) {
-                const clonedMascotImg =
-                    clonedDoc.querySelector('#mascot-preview');
-
-                if (clonedMascotImg) {
-                    clonedMascotImg.setAttribute(
-                        'src',
-                        window.currentMascotBase64
-                    );
-                }
-            }
-
-            const htmlContent = `<!DOCTYPE html>\n${clonedDoc.outerHTML}`;
-            const blob = new Blob([htmlContent], {
-                type: 'text/html;charset=utf-8'
+            const blob = new Blob([JSON.stringify(design, null, 2)], {
+                type: 'application/json;charset=utf-8'
             });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -954,7 +948,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `${('0' + (d.getMonth() + 1)).slice(-2)}` +
                 `${('0' + d.getDate()).slice(-2)}`;
 
-            a.download = `Ticket_Design_${timeStr}.html`;
+            a.download = `Ticket_Design_${timeStr}.customization.json`;
 
             document.body.appendChild(a);
             a.click();
@@ -973,6 +967,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    });
+
+    /*
+      Nhập lại tệp tùy chỉnh (.customization.json): áp dụng qua bộ dùng
+      chung của design-history (có xác thực định dạng/màu/font), rồi ghi
+      vào lịch sử để undo/redo hoạt động nhất quán.
+    */
+    const restoreInput = document.getElementById('restore-file');
+
+    document.getElementById('restore-btn').addEventListener('click', () => {
+        restoreInput.value = '';
+        restoreInput.click();
+    });
+
+    restoreInput.addEventListener('change', async () => {
+        const file = restoreInput.files && restoreInput.files[0];
+
+        if (!file) return;
+
+        let design = null;
+
+        try {
+            design = JSON.parse(await file.text());
+        } catch (error) {
+            console.error(error);
+        }
+
+        const applied =
+            design && window.designHistory
+                ? window.designHistory.apply(design)
+                : false;
+
+        if (!applied) {
+            alert(window.t('error_backup_create'));
+            return;
+        }
+
+        if (window.designHistory) {
+            window.designHistory.capture();
         }
     });
 });

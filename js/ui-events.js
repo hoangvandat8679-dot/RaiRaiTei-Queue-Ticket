@@ -160,38 +160,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
     
+    // Chế độ “Thiết lập” (mobile): ẩn tab, mở sheet cài đặt, nút trở lại thay thế tab
+    const applySettingsMode = (enabled) => {
+        categoryBar.classList.toggle('settings-open', enabled);
+        sidebar.classList.toggle('settings-open', enabled);
+    };
+
     // 1. CHUYỂN ĐỔI TAB VÀ ĐÓNG/MỞ Ở ĐIỆN THOẠI
     const catBtns = document.querySelectorAll('.cat-btn');
     const panels = document.querySelectorAll('.mobile-panel');
 
+    const closeMobileSheet = () => {
+        applySettingsMode(false);
+        sidebar.classList.remove('sheet-open');
+        appContainer.classList.remove('pushed-up');
+        catBtns.forEach(b => {
+            b.classList.remove('text-[#cbfb45]', 'border-[#cbfb45]', 'bg-[#cbfb45]/10');
+            b.classList.add('text-gray-500', 'border-transparent');
+        });
+        panels.forEach(p => p.classList.remove('active-panel'));
+        fitMobilePreview();
+    };
+
     catBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            const targetId = btn.getAttribute('data-target');
-            const targetPanel = document.getElementById(targetId);
+            const targetIds = btn.getAttribute('data-target').split(/\s+/);
+            const targetPanel = document.getElementById(targetIds[0]);
             const isOpen = sidebar.classList.contains('sheet-open');
-            const isThisTabActive = targetPanel.classList.contains('active-panel');
+            const isThisTabActive = targetIds.every((id) => {
+                const panel = document.getElementById(id);
+
+                return panel && panel.classList.contains('active-panel');
+            });
 
             if (window.innerWidth < 768 && isOpen && isThisTabActive) {
-                sidebar.classList.remove('sheet-open'); 
-                appContainer.classList.remove('pushed-up');
-                catBtns.forEach(b => {
-                    b.classList.remove('text-[#cbfb45]', 'border-[#cbfb45]');
-                    b.classList.add('text-gray-500', 'border-transparent');
-                });
-                targetPanel.classList.remove('active-panel');
-                fitMobilePreview();
+                closeMobileSheet();
                 return; 
             }
 
+            applySettingsMode(btn.getAttribute('data-group') === 'settings');
+
             catBtns.forEach(b => {
-                b.classList.remove('text-[#cbfb45]', 'border-[#cbfb45]');
+                b.classList.remove('text-[#cbfb45]', 'border-[#cbfb45]', 'bg-[#cbfb45]/10');
                 b.classList.add('text-gray-500', 'border-transparent');
             });
             btn.classList.remove('text-gray-500', 'border-transparent');
-            btn.classList.add('text-[#cbfb45]', 'border-[#cbfb45]');
+            btn.classList.add('text-[#cbfb45]', 'border-[#cbfb45]', 'bg-[#cbfb45]/10');
 
             panels.forEach(p => p.classList.remove('active-panel'));
-            targetPanel.classList.add('active-panel');
+            targetIds.forEach((id) => {
+                const panel = document.getElementById(id);
+
+                if (panel) panel.classList.add('active-panel');
+            });
 
             if (window.innerWidth < 768) {
                 sidebar.classList.add('sheet-open');
@@ -201,16 +222,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Nút trở lại: đóng sheet và khôi phục thanh tab
+    const backBtn = document.getElementById('settings-back-btn');
+    backBtn.addEventListener('click', () => {
+        closeMobileSheet();
+    });
+
     previewArea.addEventListener('click', () => {
         if(window.innerWidth < 768 && sidebar.classList.contains('sheet-open')) {
-            sidebar.classList.remove('sheet-open'); 
-            appContainer.classList.remove('pushed-up');
-            catBtns.forEach(b => {
-                b.classList.remove('text-[#cbfb45]', 'border-[#cbfb45]');
-                b.classList.add('text-gray-500', 'border-transparent');
-            });
-            panels.forEach(p => p.classList.remove('active-panel'));
-            fitMobilePreview();
+            closeMobileSheet();
         }
     });
 
@@ -288,7 +308,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = () => { exportModal.classList.add('hidden'); exportModal.classList.remove('flex'); };
     
     document.getElementById('mobile-print-btn').addEventListener('click', openModal);
-    document.getElementById('pc-open-export-btn').addEventListener('click', openModal);
+    const topPrintBtn =
+        document.getElementById('pc-top-print-btn') ||
+        document.getElementById('design-print-btn');
+
+    if (topPrintBtn) {
+        topPrintBtn.addEventListener('click', openModal);
+    }
     document.getElementById('close-export-modal').addEventListener('click', closeModal);
     exportModal.addEventListener('click', (e) => { if(e.target === exportModal) closeModal(); });
 

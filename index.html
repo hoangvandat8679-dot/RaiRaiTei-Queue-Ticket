@@ -7,8 +7,8 @@
     <!-- Fonts & Tailwind -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/main.css?v=stepper-1">
-    <link rel="stylesheet" href="css/layout.css?v=mobile-ui-1">
+    <link rel="stylesheet" href="css/main.css?v=spring-7">
+    <link rel="stylesheet" href="css/layout.css?v=settings-nav-1">
     <link rel="stylesheet" href="css/ticket.css?v=relative-controls-1">
     <link rel="stylesheet" href="css/print.css?v=print-fix-v1">
     <style id="dynamic-print-style"></style>
@@ -25,16 +25,17 @@
     <div id="app-wrapper">
         <div id="app-container">
             <!-- HEADER -->
-            <div id="preview-header" class="px-4 py-3 md:px-6 md:py-4 bg-[#111] md:bg-gray-900/90 flex justify-between items-center z-10 border-b border-[#222] md:border-none shadow-md">
+            <div id="preview-header" class="relative px-4 py-3 md:px-6 md:py-4 bg-[#111] md:bg-gray-900/90 flex justify-between items-center z-10 border-b border-[#222] md:border-none shadow-md">
                 <div class="md:hidden flex items-center justify-between w-full">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-6 h-6 text-gray-300 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        <button id="mobile-lang-toggle-btn" type="button" class="mobile-lang-button" aria-label="言語を切り替える（現在：日本語）">
-                            <span id="mobile-lang-icon" class="lang-icon lang-jp"></span>
-                            <span id="mobile-lang-label">JP</span>
-                        </button>
-                    </div>
-                    <button id="mobile-print-btn" class="bg-[#cbfb45] text-black font-bold text-xs px-6 py-2 rounded shadow-[0_0_10px_rgba(203,251,69,0.3)] active:scale-95 transition-transform"><span id="mobile_print_text">印刷 / PDF保存</span></button>
+                    <button id="mobile-lang-toggle-btn" type="button" class="mobile-lang-button" aria-label="言語を切り替える（現在：日本語）">
+                        <span id="mobile-lang-icon" class="lang-icon lang-jp"></span>
+                        <span id="mobile-lang-label">JP</span>
+                    </button>
+                    <button id="mobile-print-btn" class="toolbar-icon-btn bg-[#cbfb45] text-black" aria-label="印刷 / PDF保存"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5z"></path></svg></button>
+                </div>
+                <div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
+                    <button id="history-undo" type="button" title="元に戻す" aria-label="元に戻す" class="toolbar-icon-btn disabled:opacity-30 disabled:cursor-not-allowed"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"></path></svg></button>
+                    <button id="history-redo" type="button" title="やり直す" aria-label="やり直す" class="toolbar-icon-btn disabled:opacity-30 disabled:cursor-not-allowed"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"></path></svg></button>
                 </div>
                 <h1 class="hidden md:flex text-lg text-white font-medium items-center shrink-0">
                     <svg class="w-5 h-5 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -42,6 +43,7 @@
                 </h1>
                 <div class="hidden md:flex items-center gap-2">
                     <span id="header-core-size" class="text-xs bg-gray-700 text-yellow-400 font-bold px-2 py-1 rounded border border-gray-600"><span id="core_size_label_header">コア</span>: 4.4x7.9cm</span>
+                    <button id="pc-top-print-btn" type="button" title="印刷 / PDF保存" aria-label="印刷 / PDF保存" class="toolbar-icon-btn"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5z"></path></svg></button>
                     <button id="lang-toggle-btn" type="button" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded px-2 py-1.5 flex items-center justify-center transition-colors shadow-sm"><span id="current-lang-icon" class="lang-icon lang-jp"></span></button>
                     <button id="toggle-panel-btn" type="button" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded border border-gray-600 transition-colors flex items-center shadow-sm shrink-0"><span id="text_collapse" class="text-xs font-semibold">全画面表示</span></button>
                 </div>
@@ -59,7 +61,7 @@
                                     <svg width="100%" height="100%" style="overflow: visible" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" class="svg-dot big-dot" /><rect x="0" y="0" width="100%" height="100%" pathLength="100" class="svg-dot small-dot" /></svg>
                                 </div>
                                 <div class="ticket-content">
-                                    <img src="assets/images/mascot.png" id="mascot-preview" alt="マスコット画像" class="mascot-img">
+                                    <img src="https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/mascot.png" id="mascot-preview" alt="マスコット画像" class="mascot-img">
                                     <div class="number-frame"><div class="queue-number" id="preview-number">1</div></div>
                                     <div class="japanese-text" id="display-msg">現在、店内満席のため<br>順番にご案内いたします。<br>番号をお呼びするまで<br>お待ちください。</div>
                                     <div class="branch-name" id="display-branch">安佐南相田店</div>
@@ -70,14 +72,12 @@
                 </div>
             </div>
             
-            <!-- BOTTOM NAVBAR (Menu cuộn ngang) -->
-            <div id="mobile-category-bar" class="md:hidden fixed bottom-0 left-0 right-0 h-[50px] bg-[#0a0a0a] flex overflow-x-auto whitespace-nowrap z-50 items-center hide-scroll px-2 shadow-[0_-4px_10px_rgba(0,0,0,0.5)]">
-                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-template"><span id="nav_template">テンプレート設計</span></button>
-                <button class="cat-btn active text-[#cbfb45] text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-[#cbfb45]" data-target="panel-1"><span id="nav_size">サイズ</span></button>
-                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-2"><span id="nav_border">枠線・装飾</span></button>
-                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-3"><span id="nav_number">番号枠</span></button>
-                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-4"><span id="nav_message">メッセージ</span></button>
-                <button class="cat-btn text-gray-500 text-[11px] font-bold px-4 py-2 shrink-0 border-b-2 border-transparent transition-colors" data-target="panel-5"><span id="nav_branch">店舗名</span></button>
+            <!-- BOTTOM NAVBAR (Mobile) / RAIL DỌC (PC) -->
+            <div id="mobile-category-bar" class="fixed bottom-0 left-0 right-0 md:bottom-auto md:top-0 md:right-auto md:w-[76px] h-[64px] md:h-auto bg-[#101318] flex flex-row md:flex-col justify-around md:justify-start z-50 items-center md:pt-16 px-3 md:px-1 md:rounded-none rounded-t-2xl border-t border-gray-500/50 md:border-0 shadow-[0_-6px_24px_rgba(0,0,0,0.6)] md:shadow-none">
+                <button id="settings-back-btn" type="button" class="hidden nav-back-btn" aria-label="戻る" title="戻る"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h13.5a4.5 4.5 0 010 9H12"></path></svg></button>
+                <button class="cat-btn active text-[#cbfb45] text-[10px] font-bold shrink-0 md:w-full border-b-0 md:border-l-2 border-transparent flex flex-col items-center gap-1 px-4 py-1.5 rounded-full" data-target="panel-template" data-group="design"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"></path></svg><span id="nav_template">テンプレート</span></button>
+                <button class="cat-btn text-gray-400 text-[10px] font-bold shrink-0 md:w-full border-b-0 md:border-l-2 border-transparent transition-colors flex flex-col items-center gap-1 px-4 py-1.5 rounded-full" data-target="panel-1 panel-2 panel-3 panel-4 panel-5" data-group="settings"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg><span id="nav_settings">設定</span></button>
+                <button class="cat-btn text-gray-400 text-[10px] font-bold shrink-0 md:w-full border-b-0 md:border-l-2 border-transparent transition-colors flex flex-col items-center gap-1 px-4 py-1.5 rounded-full" data-target="panel-saved" data-group="saved"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776"></path></svg><span id="nav_saved">保存済み</span></button>
             </div>
         </div>
 
@@ -90,7 +90,7 @@
             </div>
             
             <!-- TAB 0: THIẾT KẾ MẪU -->
-            <details id="panel-template" class="mobile-panel bg-gray-800 p-3 rounded-lg border border-[#cbfb45]/30 mb-3 cursor-pointer group" open>
+            <details id="panel-template" class="mobile-panel active-panel bg-gray-800 p-3 rounded-lg border border-[#cbfb45]/30 mb-3 cursor-pointer group" open>
                 <summary class="text-xs md:text-sm font-semibold text-gray-200 uppercase flex justify-between">
                     <span id="template_design_title">テンプレート設計</span>
                     <span class="text-gray-400 group-open:rotate-180">▼</span>
@@ -113,7 +113,7 @@
             </details>
 
             <!-- TAB 1: KÍCH THƯỚC -->
-            <details id="panel-1" class="mobile-panel active-panel bg-gray-800 p-3 rounded-lg border border-gray-700 mb-3 cursor-pointer group" open>
+            <details id="panel-1" class="mobile-panel bg-gray-800 p-3 rounded-lg border border-gray-700 mb-3 cursor-pointer group" open>
                 <summary class="text-xs md:text-sm font-semibold text-gray-200 uppercase flex justify-between"><span id="sec1_title">1. サイズと背景</span><span class="text-gray-400 group-open:rotate-180">▼</span></summary>
                 <div class="mt-4 cursor-auto">
                     <label class="tool-enable-row">
@@ -203,9 +203,15 @@
                 </div>
             </details>
 
-            <!-- CHỈ DÀNH CHO PC -->
-            <button id="pc-open-export-btn" class="hidden md:flex w-full bg-[#cbfb45] hover:bg-[#b0df2b] text-gray-900 font-black py-3 px-4 rounded transition-transform transform active:scale-95 items-center justify-center mb-4"><span id="btn_print_pc">印刷 / PDF保存</span></button>
-            <button id="backup-btn" class="hidden md:flex w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded text-xs items-center justify-center mb-6"><span id="btn_backup">デザインを保存（HTML）</span></button>
+            <!-- TAB: ĐÃ LƯU (Lưu/tải/xóa thiết kế) -->
+            <div id="panel-saved" class="mobile-panel">
+                <div class="bg-gray-800 p-3 rounded-lg border border-gray-700 mb-6">
+                    <button id="backup-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2.5 px-4 rounded text-xs flex items-center justify-center gap-2 mb-2"><span>⬇</span><span id="btn_backup">デザインを保存（JSON）</span></button>
+                    <button id="restore-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2.5 px-4 rounded text-xs flex items-center justify-center gap-2 mb-2"><span>⬆</span><span id="btn_restore">デザインを読み込む</span></button>
+                    <button id="history-clear" type="button" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium py-2.5 px-4 rounded text-xs flex items-center justify-center gap-2"><span>🗑</span><span id="history_clear_label">履歴を消去</span></button>
+                    <input type="file" id="restore-file" accept=".json,.customization,.customization.json,application/json" class="hidden">
+                </div>
+            </div>
         </div>
     </div> 
 
@@ -258,16 +264,17 @@
 
     <div id="print-area" style="display: none;"></div>
 
-    <script src="js/i18n.js?v=direct-pdf-v1" defer></script>
+    <script src="js/i18n.js?v=settings-nav-1&direct-pdf-v1" defer></script>
     <script src="js/layout-sync.js?v=qa-fix-1" defer></script>
-    <script src="js/image-editor.js?v=qa-fix-2" defer></script>
-    <script src="js/ui-events.js?v=qa-fix-2" defer></script>
+    <script src="js/image-editor.js?v=cdn-2" defer></script>
+    <script src="js/ui-events.js?v=settings-nav-1" defer></script>
     <script src="js/controls.js?v=templates-1" defer></script>
-    <script src="js/templates.js?v=spring-2" defer></script>
+    <script src="js/templates.js?v=spring-7" defer></script>
+    <script src="js/design-history.js?v=history-2" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
-    <script src="js/export.js?v=direct-print-v5" defer></script>
+    <script src="js/export.js?v=print-fix-2" defer></script>
 </body>
 </html>
 
