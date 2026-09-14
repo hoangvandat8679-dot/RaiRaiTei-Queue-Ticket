@@ -347,7 +347,6 @@ input[type=range]:active::-webkit-slider-thumb { background: #cbfb45; transform:
 }
 .ticket-core.spring-template .queue-number {
     z-index: 1;
-    font-family: "Times New Roman", "Noto Serif JP", serif;
     color: #ed5793;
     font-weight: 700;
 }
