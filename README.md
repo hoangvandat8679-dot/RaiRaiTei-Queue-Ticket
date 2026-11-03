@@ -1,6 +1,6 @@
 # RaiRaiTei Queue Ticket — Công cụ tạo vé xếp hàng 来来亭 整理券作成ツール
 
-Ứng dụng web tĩnh để **thiết kế và in vé số thứ tự (整理券） bằng giấy** cho quán ramen RaiRaiTei Asaminami Aida (Hiroshima): chỉnh mẫu vé, đánh số, xuất PDF và in hàng loạt trên khổ A4, gồm cả in hai mặt khớp nhau.
+Ứng dụng web tĩnh để **thiết kế và in vé số thứ tự (整理券） bằng giấy** cho quán ramen RaiRaiTei: chỉnh mẫu vé, đánh số, xuất PDF và in hàng loạt trên khổ A4, gồm cả in hai mặt khớp nhau.
 
 - **Bản đang chạy:** https://hoangvandat8679-dot.github.io/RaiRaiTei-Queue-Ticket/
 - **Ngôn ngữ giao diện:** tiếng Nhật (mặc định) và tiếng Việt — đổi bằng nút ngôn ngữ trên thanh công cụ.
