@@ -503,7 +503,7 @@
     "dis": false
    },
    "number-font-select": {
-    "v": "'Times New Roman', 'Noto Serif JP', serif",
+    "v": "'Impact', 'Anton', sans-serif",
     "dis": false
    },
    "number-size-val": {
@@ -579,11 +579,11 @@
     "dis": false
    },
    "msg-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "msg-weight": {
-    "v": "700",
+    "v": "900",
     "dis": false
    },
    "msg-style": {
@@ -631,7 +631,7 @@
     "dis": false
    },
    "branch-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "branch-weight": {
@@ -729,7 +729,7 @@
   },
   "bodyTemplate": "spring",
   "coreClass": "ticket-core spring-template",
-  "bgImage": "url('assets/images/templates/spring-background.png')",
+  "bgImage": "url('../assets/images/templates/spring-background.png')",
   "branchBgVar": "#ec5a8b",
   "branch": {
    "bg": "rgba(0, 0, 0, 0)",
@@ -856,7 +856,7 @@
     "dis": true
    },
    "mascot-tool-toggle": {
-    "v": true,
+    "v": false,
     "dis": false
    },
    "mascot-upload": {
@@ -944,7 +944,7 @@
     "dis": false
    },
    "number-border-color": {
-    "v": "#ff9900",
+    "v": "#d90012",
     "dis": false
    },
    "number-border-width-val": {
@@ -964,11 +964,11 @@
     "dis": false
    },
    "msg-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "msg-weight": {
-    "v": "700",
+    "v": "900",
     "dis": false
    },
    "msg-style": {
@@ -992,7 +992,7 @@
     "dis": false
    },
    "msg-color": {
-    "v": "#111111",
+    "v": "#ffffff",
     "dis": false
    },
    "msg-stroke-c": {
@@ -1016,7 +1016,7 @@
     "dis": false
    },
    "branch-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "branch-weight": {
@@ -1072,7 +1072,7 @@
     "dis": false
    },
    "branch-bg": {
-    "v": "#d90012",
+    "v": "#db0010",
     "dis": false
    },
    "branch-stroke-c": {
@@ -1114,8 +1114,8 @@
   },
   "bodyTemplate": "summer",
   "coreClass": "ticket-core summer-template",
-  "bgImage": "url('assets/templates/summer.svg')",
-  "branchBgVar": "#d90012",
+  "bgImage": "url('../assets/templates/summer.svg')",
+  "branchBgVar": "#db0010",
   "branch": {
    "bg": "var(--branch-bg)",
    "color": "rgb(255, 255, 255)",
@@ -1241,7 +1241,7 @@
     "dis": true
    },
    "mascot-tool-toggle": {
-    "v": true,
+    "v": false,
     "dis": false
    },
    "mascot-upload": {
@@ -1273,7 +1273,7 @@
     "dis": false
    },
    "number-font-select": {
-    "v": "'Times New Roman', 'Noto Serif JP', serif",
+    "v": "'Impact', 'Anton', sans-serif",
     "dis": false
    },
    "number-size-val": {
@@ -1329,7 +1329,7 @@
     "dis": false
    },
    "number-border-color": {
-    "v": "#d97706",
+    "v": "#c70000",
     "dis": false
    },
    "number-border-width-val": {
@@ -1349,11 +1349,11 @@
     "dis": false
    },
    "msg-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "msg-weight": {
-    "v": "700",
+    "v": "900",
     "dis": false
    },
    "msg-style": {
@@ -1401,7 +1401,7 @@
     "dis": false
    },
    "branch-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "branch-weight": {
@@ -1457,7 +1457,7 @@
     "dis": false
    },
    "branch-bg": {
-    "v": "#b45309",
+    "v": "#d0010a",
     "dis": false
    },
    "branch-stroke-c": {
@@ -1499,8 +1499,8 @@
   },
   "bodyTemplate": "autumn",
   "coreClass": "ticket-core autumn-template",
-  "bgImage": "url('assets/templates/autumn.svg')",
-  "branchBgVar": "#b45309",
+  "bgImage": "url('../assets/templates/autumn.svg')",
+  "branchBgVar": "#d0010a",
   "branch": {
    "bg": "var(--branch-bg)",
    "color": "rgb(255, 255, 255)",
@@ -1626,7 +1626,7 @@
     "dis": true
    },
    "mascot-tool-toggle": {
-    "v": true,
+    "v": false,
     "dis": false
    },
    "mascot-upload": {
@@ -1714,7 +1714,7 @@
     "dis": false
    },
    "number-border-color": {
-    "v": "#0284c7",
+    "v": "#023882",
     "dis": false
    },
    "number-border-width-val": {
@@ -1734,11 +1734,11 @@
     "dis": false
    },
    "msg-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "msg-weight": {
-    "v": "700",
+    "v": "900",
     "dis": false
    },
    "msg-style": {
@@ -1762,7 +1762,7 @@
     "dis": false
    },
    "msg-color": {
-    "v": "#0f172a",
+    "v": "#ffffff",
     "dis": false
    },
    "msg-stroke-c": {
@@ -1786,7 +1786,7 @@
     "dis": false
    },
    "branch-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "branch-weight": {
@@ -1842,7 +1842,7 @@
     "dis": false
    },
    "branch-bg": {
-    "v": "#0369a1",
+    "v": "#d40009",
     "dis": false
    },
    "branch-stroke-c": {
@@ -1884,8 +1884,8 @@
   },
   "bodyTemplate": "winter",
   "coreClass": "ticket-core winter-template",
-  "bgImage": "url('assets/templates/winter.svg')",
-  "branchBgVar": "#0369a1",
+  "bgImage": "url('../assets/templates/winter.svg')",
+  "branchBgVar": "#d40009",
   "branch": {
    "bg": "var(--branch-bg)",
    "color": "rgb(255, 255, 255)",
@@ -2043,7 +2043,7 @@
     "dis": false
    },
    "number-font-select": {
-    "v": "'Times New Roman', 'Noto Serif JP', serif",
+    "v": "'Impact', 'Anton', sans-serif",
     "dis": false
    },
    "number-size-val": {
@@ -2119,11 +2119,11 @@
     "dis": false
    },
    "msg-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "msg-weight": {
-    "v": "700",
+    "v": "900",
     "dis": false
    },
    "msg-style": {
@@ -2171,7 +2171,7 @@
     "dis": false
    },
    "branch-font": {
-    "v": "'Noto Sans JP', sans-serif",
+    "v": "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
     "dis": false
    },
    "branch-weight": {
@@ -2269,7 +2269,7 @@
   },
   "bodyTemplate": "spring",
   "coreClass": "ticket-core spring-template",
-  "bgImage": "url('assets/images/templates/spring-background.png')",
+  "bgImage": "url('../assets/images/templates/spring-background.png')",
   "branchBgVar": "#ec5a8b",
   "branch": {
    "bg": "rgba(0, 0, 0, 0)",
