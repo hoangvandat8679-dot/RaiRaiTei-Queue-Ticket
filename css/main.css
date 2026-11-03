@@ -585,6 +585,15 @@ label[for="mascot-upload"]:hover {
     font-weight: 700;
     text-align: center;
 }
+/* ============================================================ */
+/* KHU VỰC QUY TẮC THEO MẪU MÙA — lõi vé (.ticket-core.<mùa>)   */
+/* Mọi ghi đè theo mẫu cho lõi vé chỉ nằm trong khu này.        */
+/* GĐ1 vé 1.2 (3/11/2026): đã bỏ 31 !important thừa trong khu —  */
+/* selector .ticket-core.<mùa> (0,3,0) tự thắng quy tắc gốc      */
+/* (0,1,0) trong css/ticket.css; đối chiếu computed style 5 mẫu  */
+/* x 23 phần tử: 0 khác biệt. !important còn lại ở khu thẻ mẫu   */
+/* (template-card) là để thắng Tailwind, xử lý ở GĐ2/R4.        */
+/* ============================================================ */
 .ticket-core.spring-template,
 .ticket-core.summer-template,
 .ticket-core.autumn-template,
@@ -631,8 +640,8 @@ label[for="mascot-upload"]:hover {
     background-image: var(--bg-image, url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-background.png'));
     background-position: center;
     background-size: 100% 100%;
-    display: block !important;
-    opacity: 1 !important;
+    display: block;
+    opacity: 1;
 }
 .ticket-core.spring-template .marquee-border,
 .ticket-core.spring-template .marquee-dots,
@@ -642,16 +651,16 @@ label[for="mascot-upload"]:hover {
 .ticket-core.autumn-template .marquee-dots,
 .ticket-core.winter-template .marquee-border,
 .ticket-core.winter-template .marquee-dots {
-    display: none !important;
+    display: none;
 }
 .ticket-core.spring-template .number-frame {
-    border: none !important;
-    border-radius: 0 !important;
-    background-color: transparent !important;
-    background-image: url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-number-frame.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: 100% 100% !important;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-number-frame.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
 }
 .ticket-core.spring-template .queue-number {
     z-index: 7;
@@ -660,12 +669,12 @@ label[for="mascot-upload"]:hover {
 }
 .ticket-core.spring-template .branch-name {
     z-index: 2;
-    background-color: transparent !important;
-    background-image: url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-branch-ribbon.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: 100% 100% !important;
-    color: #ffffff !important;
+    background-color: transparent;
+    background-image: url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-branch-ribbon.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    color: #ffffff;
 }
 
 /* ============================================================ */
@@ -676,16 +685,16 @@ label[for="mascot-upload"]:hover {
 .ticket-core.summer-template .number-frame,
 .ticket-core.autumn-template .number-frame,
 .ticket-core.winter-template .number-frame {
-    border: none !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .ticket-core.summer-template .mascot-wrap,
 .ticket-core.autumn-template .mascot-wrap,
 .ticket-core.winter-template .mascot-wrap {
-    display: none !important;
+    display: none;
 }
 
 .ticket-core.summer-template .branch-name,
@@ -696,42 +705,42 @@ label[for="mascot-upload"]:hover {
        neo 2mm từ đáy — nền trong suốt khiến chữ trắng vô hình trên nền vé
        sáng. Dải tên quán dùng lại màu cấu hình của từng mẫu
        (var(--branch-bg) từ .branch-name gốc), không đè lên artwork. */
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    color: #ffffff !important;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: #ffffff;
     font-weight: 900;
 }
 
 .ticket-core.summer-template .queue-number {
     z-index: 7;
-    color: #d90012 !important;
+    color: #d90012;
     font-weight: 900;
 }
 .ticket-core.summer-template .ticket-msg {
-    color: #ffffff !important;
+    color: #ffffff;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
     font-weight: 700;
 }
 
 .ticket-core.autumn-template .queue-number {
     z-index: 7;
-    color: #e10000 !important;
+    color: #e10000;
     font-weight: 900;
 }
 .ticket-core.autumn-template .ticket-msg {
-    color: #ffffff !important;
+    color: #ffffff;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
     font-weight: 700;
 }
 
 .ticket-core.winter-template .queue-number {
     z-index: 7;
-    color: #d80000 !important;
+    color: #d80000;
     font-weight: 900;
 }
 .ticket-core.winter-template .ticket-msg {
-    color: #0f172a !important;
+    color: #0f172a;
     font-weight: 700;
 }
 
