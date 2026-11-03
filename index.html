@@ -418,6 +418,10 @@
                         </h3>
                         <span id="saved-presets-count" class="bg-gray-700 text-[#fcd116] text-[10px] font-bold px-2 py-0.5 rounded-full border border-gray-600">0</span>
                     </div>
+                    <div id="draft-status-bar" class="hidden mb-3 flex items-center justify-between gap-2 bg-indigo-950/60 border border-indigo-700/60 rounded-lg px-3 py-2">
+                        <span id="draft-status-text" class="text-[11px] text-indigo-200 font-medium"></span>
+                        <button id="draft-reset-btn" type="button" class="shrink-0 text-[11px] font-bold text-black bg-[#cbfb45] hover:bg-[#b0df2b] active:scale-95 transition-all rounded-md px-2.5 py-1">Về mặc định</button>
+                    </div>
                     <div id="saved-presets-container" class="space-y-3">
                         <!-- Danh sách card do PresetManager.renderUI() kết xuất -->
                     </div>
@@ -541,6 +545,7 @@
     <script src="js/design-history.js?v=history-2" defer></script>
     <!-- Storage & Preset Manager (Sprint 7) -->
     <script src="js/storage/preset-manager.js?v=sprint7-1" defer></script>
+    <script src="js/storage/draft-manager.js?v=gd3-1" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
