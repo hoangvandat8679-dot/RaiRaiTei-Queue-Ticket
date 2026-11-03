@@ -1,0 +1,2997 @@
+{
+ "standard": {
+  "inputs": {
+   "background-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "core-width-input": {
+    "v": "43.0",
+    "dis": false
+   },
+   "core-height-input": {
+    "v": "78.0",
+    "dis": false
+   },
+   "bg-color": {
+    "v": "#fcd116",
+    "dis": false
+   },
+   "bg-upload": {
+    "v": "",
+    "dis": false
+   },
+   "bg-opacity-val": {
+    "v": "0",
+    "dis": false
+   },
+   "bg-opacity": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y": {
+    "v": "0",
+    "dis": false
+   },
+   "border-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "border-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "border-width": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-density-val": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-density": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-size-1-val": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-size-1": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-size-2-val": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-size-2": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-offset-val": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-offset": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-upload": {
+    "v": "",
+    "dis": false
+   },
+   "remove-white-bg": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-width": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "number-font-select": {
+    "v": "'Impact', sans-serif",
+    "dis": false
+   },
+   "number-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-size": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-color": {
+    "v": "#e60012",
+    "dis": false
+   },
+   "frame-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "frame-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-width": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-bg-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "number-border-color": {
+    "v": "#e60012",
+    "dis": false
+   },
+   "number-border-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-border-width": {
+    "v": "0",
+    "dis": false
+   },
+   "message-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "msg-input": {
+    "v": "現在、店内満席のため\n順番にご案内いたします。\n番号をお呼びするまで\nお待ちください。",
+    "dis": false
+   },
+   "msg-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "msg-weight": {
+    "v": "700",
+    "dis": false
+   },
+   "msg-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "msg-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-size": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-color": {
+    "v": "#111111",
+    "dis": false
+   },
+   "msg-stroke-c": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "msg-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "branch-input": {
+    "v": "安佐南相田店",
+    "dis": false
+   },
+   "branch-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "branch-weight": {
+    "v": "900",
+    "dis": false
+   },
+   "branch-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "branch-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-size": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "branch-bg": {
+    "v": "#e60012",
+    "dis": false
+   },
+   "branch-stroke-c": {
+    "v": "#000000",
+    "dis": false
+   },
+   "branch-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "save-preset-name": {
+    "v": "",
+    "dis": false
+   },
+   "preset-file-input": {
+    "v": "",
+    "dis": false
+   },
+   "restore-file": {
+    "v": "",
+    "dis": false
+   },
+   "print-quantity": {
+    "v": "30",
+    "dis": false
+   },
+   "print-custom": {
+    "v": "",
+    "dis": false
+   },
+   "duplex-print-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "crop-marks-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "drag-mascot-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-mascot-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dy": {
+    "v": "0",
+    "dis": false
+   }
+  },
+  "bodyTemplate": null,
+  "coreClass": "ticket-core",
+  "bgImage": null,
+  "branchBgVar": "#e60012",
+  "branch": {
+   "bg": "var(--branch-bg)",
+   "color": "var(--branch-color)",
+   "fs": "var(--branch-size)"
+  },
+  "number": null,
+  "selected": [
+   [
+    "spring",
+    false
+   ],
+   [
+    "summer",
+    false
+   ],
+   [
+    "autumn",
+    false
+   ],
+   [
+    "winter",
+    false
+   ],
+   [
+    "standard",
+    true
+   ]
+  ],
+  "activeTpl": "standard"
+ },
+ "spring": {
+  "inputs": {
+   "background-tool-toggle": {
+    "v": true,
+    "dis": true
+   },
+   "core-width-input": {
+    "v": "43.0",
+    "dis": false
+   },
+   "core-height-input": {
+    "v": "78.0",
+    "dis": false
+   },
+   "bg-color": {
+    "v": "#fff9f2",
+    "dis": true
+   },
+   "bg-upload": {
+    "v": "",
+    "dis": false
+   },
+   "bg-opacity-val": {
+    "v": "0",
+    "dis": true
+   },
+   "bg-opacity": {
+    "v": "0",
+    "dis": true
+   },
+   "cut-margin-x-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y": {
+    "v": "0",
+    "dis": false
+   },
+   "border-tool-toggle": {
+    "v": false,
+    "dis": true
+   },
+   "border-width-val": {
+    "v": "0",
+    "dis": true
+   },
+   "border-width": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset": {
+    "v": "0",
+    "dis": true
+   },
+   "mascot-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-upload": {
+    "v": "",
+    "dis": false
+   },
+   "remove-white-bg": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-width": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "number-font-select": {
+    "v": "'Times New Roman', 'Noto Serif JP', serif",
+    "dis": false
+   },
+   "number-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-size": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-color": {
+    "v": "#ed5793",
+    "dis": false
+   },
+   "frame-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "frame-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-width": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-bg-color": {
+    "v": "#ffffff",
+    "dis": true
+   },
+   "number-border-color": {
+    "v": "#d5ad45",
+    "dis": true
+   },
+   "number-border-width-val": {
+    "v": "0",
+    "dis": true
+   },
+   "number-border-width": {
+    "v": "0",
+    "dis": true
+   },
+   "message-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "msg-input": {
+    "v": "現在、店内満席のため\n順番にご案内いたします。\n番号をお呼びするまで\nお待ちください。",
+    "dis": false
+   },
+   "msg-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "msg-weight": {
+    "v": "700",
+    "dis": false
+   },
+   "msg-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "msg-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-size": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-color": {
+    "v": "#111111",
+    "dis": false
+   },
+   "msg-stroke-c": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "msg-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "branch-input": {
+    "v": "安佐南相田店",
+    "dis": false
+   },
+   "branch-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "branch-weight": {
+    "v": "900",
+    "dis": false
+   },
+   "branch-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "branch-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-size": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius-val": {
+    "v": "0",
+    "dis": true
+   },
+   "branch-radius": {
+    "v": "0",
+    "dis": true
+   },
+   "branch-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "branch-bg": {
+    "v": "#ec5a8b",
+    "dis": true
+   },
+   "branch-stroke-c": {
+    "v": "#000000",
+    "dis": false
+   },
+   "branch-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "save-preset-name": {
+    "v": "",
+    "dis": false
+   },
+   "preset-file-input": {
+    "v": "",
+    "dis": false
+   },
+   "restore-file": {
+    "v": "",
+    "dis": false
+   },
+   "print-quantity": {
+    "v": "30",
+    "dis": false
+   },
+   "print-custom": {
+    "v": "",
+    "dis": false
+   },
+   "duplex-print-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "crop-marks-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "drag-mascot-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-mascot-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dy": {
+    "v": "0",
+    "dis": false
+   }
+  },
+  "bodyTemplate": "spring",
+  "coreClass": "ticket-core spring-template",
+  "bgImage": "url('assets/images/templates/spring-background.png')",
+  "branchBgVar": "#ec5a8b",
+  "branch": {
+   "bg": "rgba(0, 0, 0, 0)",
+   "color": "rgb(255, 255, 255)",
+   "fs": "var(--branch-size)"
+  },
+  "number": null,
+  "selected": [
+   [
+    "spring",
+    true
+   ],
+   [
+    "spring",
+    true
+   ],
+   [
+    "summer",
+    false
+   ],
+   [
+    "autumn",
+    false
+   ],
+   [
+    "winter",
+    false
+   ],
+   [
+    "standard",
+    false
+   ]
+  ],
+  "activeTpl": "spring"
+ },
+ "summer": {
+  "inputs": {
+   "background-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "core-width-input": {
+    "v": "43.0",
+    "dis": false
+   },
+   "core-height-input": {
+    "v": "78.0",
+    "dis": false
+   },
+   "bg-color": {
+    "v": "#fffbe8",
+    "dis": false
+   },
+   "bg-upload": {
+    "v": "",
+    "dis": false
+   },
+   "bg-opacity-val": {
+    "v": "0",
+    "dis": false
+   },
+   "bg-opacity": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y": {
+    "v": "0",
+    "dis": false
+   },
+   "border-tool-toggle": {
+    "v": false,
+    "dis": true
+   },
+   "border-width-val": {
+    "v": "0",
+    "dis": true
+   },
+   "border-width": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset": {
+    "v": "0",
+    "dis": true
+   },
+   "mascot-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-upload": {
+    "v": "",
+    "dis": false
+   },
+   "remove-white-bg": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-width": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "number-font-select": {
+    "v": "'Impact', sans-serif",
+    "dis": false
+   },
+   "number-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-size": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-color": {
+    "v": "#d90012",
+    "dis": false
+   },
+   "frame-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "frame-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-width": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-bg-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "number-border-color": {
+    "v": "#ff9900",
+    "dis": false
+   },
+   "number-border-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-border-width": {
+    "v": "0",
+    "dis": false
+   },
+   "message-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "msg-input": {
+    "v": "現在、店内満席のため\n順番にご案内いたします。\n番号をお呼びするまで\nお待ちください。",
+    "dis": false
+   },
+   "msg-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "msg-weight": {
+    "v": "700",
+    "dis": false
+   },
+   "msg-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "msg-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-size": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-color": {
+    "v": "#111111",
+    "dis": false
+   },
+   "msg-stroke-c": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "msg-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "branch-input": {
+    "v": "安佐南相田店",
+    "dis": false
+   },
+   "branch-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "branch-weight": {
+    "v": "900",
+    "dis": false
+   },
+   "branch-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "branch-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-size": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "branch-bg": {
+    "v": "#d90012",
+    "dis": false
+   },
+   "branch-stroke-c": {
+    "v": "#000000",
+    "dis": false
+   },
+   "branch-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "save-preset-name": {
+    "v": "",
+    "dis": false
+   },
+   "preset-file-input": {
+    "v": "",
+    "dis": false
+   },
+   "restore-file": {
+    "v": "",
+    "dis": false
+   },
+   "print-quantity": {
+    "v": "30",
+    "dis": false
+   },
+   "print-custom": {
+    "v": "",
+    "dis": false
+   },
+   "duplex-print-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "crop-marks-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "drag-mascot-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-mascot-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dy": {
+    "v": "0",
+    "dis": false
+   }
+  },
+  "bodyTemplate": "summer",
+  "coreClass": "ticket-core summer-template",
+  "bgImage": "url('assets/templates/summer.svg')",
+  "branchBgVar": "#d90012",
+  "branch": {
+   "bg": "var(--branch-bg)",
+   "color": "rgb(255, 255, 255)",
+   "fs": "var(--branch-size)"
+  },
+  "number": null,
+  "selected": [
+   [
+    "summer",
+    true
+   ],
+   [
+    "spring",
+    false
+   ],
+   [
+    "summer",
+    true
+   ],
+   [
+    "autumn",
+    false
+   ],
+   [
+    "winter",
+    false
+   ],
+   [
+    "standard",
+    false
+   ]
+  ],
+  "activeTpl": "summer"
+ },
+ "autumn": {
+  "inputs": {
+   "background-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "core-width-input": {
+    "v": "43.0",
+    "dis": false
+   },
+   "core-height-input": {
+    "v": "78.0",
+    "dis": false
+   },
+   "bg-color": {
+    "v": "#fff5eb",
+    "dis": false
+   },
+   "bg-upload": {
+    "v": "",
+    "dis": false
+   },
+   "bg-opacity-val": {
+    "v": "0",
+    "dis": false
+   },
+   "bg-opacity": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y": {
+    "v": "0",
+    "dis": false
+   },
+   "border-tool-toggle": {
+    "v": false,
+    "dis": true
+   },
+   "border-width-val": {
+    "v": "0",
+    "dis": true
+   },
+   "border-width": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset": {
+    "v": "0",
+    "dis": true
+   },
+   "mascot-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-upload": {
+    "v": "",
+    "dis": false
+   },
+   "remove-white-bg": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-width": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "number-font-select": {
+    "v": "'Times New Roman', 'Noto Serif JP', serif",
+    "dis": false
+   },
+   "number-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-size": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-color": {
+    "v": "#e10000",
+    "dis": false
+   },
+   "frame-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "frame-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-width": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-bg-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "number-border-color": {
+    "v": "#d97706",
+    "dis": false
+   },
+   "number-border-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-border-width": {
+    "v": "0",
+    "dis": false
+   },
+   "message-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "msg-input": {
+    "v": "現在、店内満席のため\n順番にご案内いたします。\n番号をお呼びするまで\nお待ちください。",
+    "dis": false
+   },
+   "msg-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "msg-weight": {
+    "v": "700",
+    "dis": false
+   },
+   "msg-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "msg-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-size": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-color": {
+    "v": "#111111",
+    "dis": false
+   },
+   "msg-stroke-c": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "msg-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "branch-input": {
+    "v": "安佐南相田店",
+    "dis": false
+   },
+   "branch-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "branch-weight": {
+    "v": "900",
+    "dis": false
+   },
+   "branch-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "branch-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-size": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "branch-bg": {
+    "v": "#b45309",
+    "dis": false
+   },
+   "branch-stroke-c": {
+    "v": "#000000",
+    "dis": false
+   },
+   "branch-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "save-preset-name": {
+    "v": "",
+    "dis": false
+   },
+   "preset-file-input": {
+    "v": "",
+    "dis": false
+   },
+   "restore-file": {
+    "v": "",
+    "dis": false
+   },
+   "print-quantity": {
+    "v": "30",
+    "dis": false
+   },
+   "print-custom": {
+    "v": "",
+    "dis": false
+   },
+   "duplex-print-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "crop-marks-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "drag-mascot-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-mascot-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dy": {
+    "v": "0",
+    "dis": false
+   }
+  },
+  "bodyTemplate": "autumn",
+  "coreClass": "ticket-core autumn-template",
+  "bgImage": "url('assets/templates/autumn.svg')",
+  "branchBgVar": "#b45309",
+  "branch": {
+   "bg": "var(--branch-bg)",
+   "color": "rgb(255, 255, 255)",
+   "fs": "var(--branch-size)"
+  },
+  "number": null,
+  "selected": [
+   [
+    "autumn",
+    true
+   ],
+   [
+    "spring",
+    false
+   ],
+   [
+    "summer",
+    false
+   ],
+   [
+    "autumn",
+    true
+   ],
+   [
+    "winter",
+    false
+   ],
+   [
+    "standard",
+    false
+   ]
+  ],
+  "activeTpl": "autumn"
+ },
+ "winter": {
+  "inputs": {
+   "background-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "core-width-input": {
+    "v": "43.0",
+    "dis": false
+   },
+   "core-height-input": {
+    "v": "78.0",
+    "dis": false
+   },
+   "bg-color": {
+    "v": "#f0f9ff",
+    "dis": false
+   },
+   "bg-upload": {
+    "v": "",
+    "dis": false
+   },
+   "bg-opacity-val": {
+    "v": "0",
+    "dis": false
+   },
+   "bg-opacity": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y": {
+    "v": "0",
+    "dis": false
+   },
+   "border-tool-toggle": {
+    "v": false,
+    "dis": true
+   },
+   "border-width-val": {
+    "v": "0",
+    "dis": true
+   },
+   "border-width": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset": {
+    "v": "0",
+    "dis": true
+   },
+   "mascot-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-upload": {
+    "v": "",
+    "dis": false
+   },
+   "remove-white-bg": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-width": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "number-font-select": {
+    "v": "'Impact', sans-serif",
+    "dis": false
+   },
+   "number-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-size": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-color": {
+    "v": "#d80000",
+    "dis": false
+   },
+   "frame-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "frame-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-width": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-bg-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "number-border-color": {
+    "v": "#0284c7",
+    "dis": false
+   },
+   "number-border-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-border-width": {
+    "v": "0",
+    "dis": false
+   },
+   "message-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "msg-input": {
+    "v": "現在、店内満席のため\n順番にご案内いたします。\n番号をお呼びするまで\nお待ちください。",
+    "dis": false
+   },
+   "msg-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "msg-weight": {
+    "v": "700",
+    "dis": false
+   },
+   "msg-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "msg-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-size": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-color": {
+    "v": "#0f172a",
+    "dis": false
+   },
+   "msg-stroke-c": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "msg-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "branch-input": {
+    "v": "安佐南相田店",
+    "dis": false
+   },
+   "branch-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "branch-weight": {
+    "v": "900",
+    "dis": false
+   },
+   "branch-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "branch-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-size": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "branch-bg": {
+    "v": "#0369a1",
+    "dis": false
+   },
+   "branch-stroke-c": {
+    "v": "#000000",
+    "dis": false
+   },
+   "branch-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "save-preset-name": {
+    "v": "",
+    "dis": false
+   },
+   "preset-file-input": {
+    "v": "",
+    "dis": false
+   },
+   "restore-file": {
+    "v": "",
+    "dis": false
+   },
+   "print-quantity": {
+    "v": "30",
+    "dis": false
+   },
+   "print-custom": {
+    "v": "",
+    "dis": false
+   },
+   "duplex-print-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "crop-marks-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "drag-mascot-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-mascot-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dy": {
+    "v": "0",
+    "dis": false
+   }
+  },
+  "bodyTemplate": "winter",
+  "coreClass": "ticket-core winter-template",
+  "bgImage": "url('assets/templates/winter.svg')",
+  "branchBgVar": "#0369a1",
+  "branch": {
+   "bg": "var(--branch-bg)",
+   "color": "rgb(255, 255, 255)",
+   "fs": "var(--branch-size)"
+  },
+  "number": null,
+  "selected": [
+   [
+    "winter",
+    true
+   ],
+   [
+    "spring",
+    false
+   ],
+   [
+    "summer",
+    false
+   ],
+   [
+    "autumn",
+    false
+   ],
+   [
+    "winter",
+    true
+   ],
+   [
+    "standard",
+    false
+   ]
+  ],
+  "activeTpl": "winter"
+ },
+ "spring#2": {
+  "inputs": {
+   "background-tool-toggle": {
+    "v": true,
+    "dis": true
+   },
+   "core-width-input": {
+    "v": "43.0",
+    "dis": false
+   },
+   "core-height-input": {
+    "v": "78.0",
+    "dis": false
+   },
+   "bg-color": {
+    "v": "#fff9f2",
+    "dis": true
+   },
+   "bg-upload": {
+    "v": "",
+    "dis": false
+   },
+   "bg-opacity-val": {
+    "v": "0",
+    "dis": true
+   },
+   "bg-opacity": {
+    "v": "0",
+    "dis": true
+   },
+   "cut-margin-x-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y": {
+    "v": "0",
+    "dis": false
+   },
+   "border-tool-toggle": {
+    "v": false,
+    "dis": true
+   },
+   "border-width-val": {
+    "v": "0",
+    "dis": true
+   },
+   "border-width": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-density": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-1": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-size-2": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset-val": {
+    "v": "0",
+    "dis": true
+   },
+   "dot-offset": {
+    "v": "0",
+    "dis": true
+   },
+   "mascot-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-upload": {
+    "v": "",
+    "dis": false
+   },
+   "remove-white-bg": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-width": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "number-font-select": {
+    "v": "'Times New Roman', 'Noto Serif JP', serif",
+    "dis": false
+   },
+   "number-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-size": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-color": {
+    "v": "#ed5793",
+    "dis": false
+   },
+   "frame-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "frame-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-width": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-bg-color": {
+    "v": "#ffffff",
+    "dis": true
+   },
+   "number-border-color": {
+    "v": "#d5ad45",
+    "dis": true
+   },
+   "number-border-width-val": {
+    "v": "0",
+    "dis": true
+   },
+   "number-border-width": {
+    "v": "0",
+    "dis": true
+   },
+   "message-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "msg-input": {
+    "v": "現在、店内満席のため\n順番にご案内いたします。\n番号をお呼びするまで\nお待ちください。",
+    "dis": false
+   },
+   "msg-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "msg-weight": {
+    "v": "700",
+    "dis": false
+   },
+   "msg-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "msg-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-size": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-color": {
+    "v": "#111111",
+    "dis": false
+   },
+   "msg-stroke-c": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "msg-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "branch-input": {
+    "v": "安佐南相田店",
+    "dis": false
+   },
+   "branch-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "branch-weight": {
+    "v": "900",
+    "dis": false
+   },
+   "branch-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "branch-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-size": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius-val": {
+    "v": "0",
+    "dis": true
+   },
+   "branch-radius": {
+    "v": "0",
+    "dis": true
+   },
+   "branch-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "branch-bg": {
+    "v": "#ec5a8b",
+    "dis": true
+   },
+   "branch-stroke-c": {
+    "v": "#000000",
+    "dis": false
+   },
+   "branch-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "save-preset-name": {
+    "v": "",
+    "dis": false
+   },
+   "preset-file-input": {
+    "v": "",
+    "dis": false
+   },
+   "restore-file": {
+    "v": "",
+    "dis": false
+   },
+   "print-quantity": {
+    "v": "30",
+    "dis": false
+   },
+   "print-custom": {
+    "v": "",
+    "dis": false
+   },
+   "duplex-print-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "crop-marks-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "drag-mascot-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-mascot-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dy": {
+    "v": "0",
+    "dis": false
+   }
+  },
+  "bodyTemplate": "spring",
+  "coreClass": "ticket-core spring-template",
+  "bgImage": "url('assets/images/templates/spring-background.png')",
+  "branchBgVar": "#ec5a8b",
+  "branch": {
+   "bg": "rgba(0, 0, 0, 0)",
+   "color": "rgb(255, 255, 255)",
+   "fs": "var(--branch-size)"
+  },
+  "number": null,
+  "selected": [
+   [
+    "spring",
+    true
+   ],
+   [
+    "spring",
+    true
+   ],
+   [
+    "summer",
+    false
+   ],
+   [
+    "autumn",
+    false
+   ],
+   [
+    "winter",
+    false
+   ],
+   [
+    "standard",
+    false
+   ]
+  ],
+  "activeTpl": "spring"
+ },
+ "standard#2": {
+  "inputs": {
+   "background-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "core-width-input": {
+    "v": "43.0",
+    "dis": false
+   },
+   "core-height-input": {
+    "v": "78.0",
+    "dis": false
+   },
+   "bg-color": {
+    "v": "#fcd116",
+    "dis": false
+   },
+   "bg-upload": {
+    "v": "",
+    "dis": false
+   },
+   "bg-opacity-val": {
+    "v": "0",
+    "dis": false
+   },
+   "bg-opacity": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-x": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "cut-margin-y": {
+    "v": "0",
+    "dis": false
+   },
+   "border-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "border-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "border-width": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-density-val": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-density": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-size-1-val": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-size-1": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-size-2-val": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-size-2": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-offset-val": {
+    "v": "0",
+    "dis": false
+   },
+   "dot-offset": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-upload": {
+    "v": "",
+    "dis": false
+   },
+   "remove-white-bg": {
+    "v": true,
+    "dis": false
+   },
+   "mascot-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-width": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "mascot-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "number-font-select": {
+    "v": "'Impact', sans-serif",
+    "dis": false
+   },
+   "number-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-size": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-offset-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-color": {
+    "v": "#e60012",
+    "dis": false
+   },
+   "frame-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "frame-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-width": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-height": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "frame-y": {
+    "v": "0",
+    "dis": false
+   },
+   "number-bg-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "number-border-color": {
+    "v": "#e60012",
+    "dis": false
+   },
+   "number-border-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "number-border-width": {
+    "v": "0",
+    "dis": false
+   },
+   "message-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "msg-input": {
+    "v": "現在、店内満席のため\n順番にご案内いたします。\n番号をお呼びするまで\nお待ちください。",
+    "dis": false
+   },
+   "msg-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "msg-weight": {
+    "v": "700",
+    "dis": false
+   },
+   "msg-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "msg-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-size": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-y": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-color": {
+    "v": "#111111",
+    "dis": false
+   },
+   "msg-stroke-c": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "msg-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "msg-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-tool-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "branch-input": {
+    "v": "安佐南相田店",
+    "dis": false
+   },
+   "branch-font": {
+    "v": "'Noto Sans JP', sans-serif",
+    "dis": false
+   },
+   "branch-weight": {
+    "v": "900",
+    "dis": false
+   },
+   "branch-style": {
+    "v": "normal",
+    "dis": false
+   },
+   "branch-size-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-size": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-width": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-pad-y": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-radius": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-color": {
+    "v": "#ffffff",
+    "dis": false
+   },
+   "branch-bg": {
+    "v": "#e60012",
+    "dis": false
+   },
+   "branch-stroke-c": {
+    "v": "#000000",
+    "dis": false
+   },
+   "branch-stroke-w-val": {
+    "v": "0",
+    "dis": false
+   },
+   "branch-stroke-w": {
+    "v": "0",
+    "dis": false
+   },
+   "save-preset-name": {
+    "v": "",
+    "dis": false
+   },
+   "preset-file-input": {
+    "v": "",
+    "dis": false
+   },
+   "restore-file": {
+    "v": "",
+    "dis": false
+   },
+   "print-quantity": {
+    "v": "30",
+    "dis": false
+   },
+   "print-custom": {
+    "v": "",
+    "dis": false
+   },
+   "duplex-print-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "crop-marks-toggle": {
+    "v": true,
+    "dis": false
+   },
+   "drag-mascot-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-mascot-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-frame-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-number-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-msg-dy": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dx": {
+    "v": "0",
+    "dis": false
+   },
+   "drag-branch-dy": {
+    "v": "0",
+    "dis": false
+   }
+  },
+  "bodyTemplate": null,
+  "coreClass": "ticket-core",
+  "bgImage": null,
+  "branchBgVar": "#e60012",
+  "branch": {
+   "bg": "var(--branch-bg)",
+   "color": "var(--branch-color)",
+   "fs": "var(--branch-size)"
+  },
+  "number": null,
+  "selected": [
+   [
+    "spring",
+    false
+   ],
+   [
+    "summer",
+    false
+   ],
+   [
+    "autumn",
+    false
+   ],
+   [
+    "winter",
+    false
+   ],
+   [
+    "standard",
+    true
+   ]
+  ],
+  "activeTpl": "standard"
+ }
+}

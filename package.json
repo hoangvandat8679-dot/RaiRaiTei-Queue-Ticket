@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "start": "node server.mjs",
-    "test": "node test-full-integration.mjs && node test-sprint8-cropmarks.mjs && node test-behavior.mjs",
+    "test": "node test-full-integration.mjs && node test-sprint8-cropmarks.mjs && node test-behavior.mjs && node test-snapshot.mjs",
     "build:css": "tailwindcss -i css/tailwind.src.css -o css/tailwind.css --minify"
   },
   "version": "1.0.0"

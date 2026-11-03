@@ -7,34 +7,17 @@
 // mùa (đã sửa 3/11/2026) làm mục A đỏ ngay.
 // Chạy: npm test  (hoặc node test-behavior.mjs)
 // ============================================================
-import { JSDOM } from 'jsdom';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadApp, makeChecker } from './tests/lib/load-app.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-let pass = 0, fail = 0;
-const failures = [];
-function check(name, cond, detail = '') {
-    if (cond) { pass++; console.log(`  ✅ ${name}`); }
-    else { fail++; failures.push(name); console.log(`  ❌ ${name}${detail ? ' — ' + detail : ''}`); }
-}
+const { check, summary } = makeChecker('TEST HÀNH VI');
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
-// --- Dựng app: nội tuyến CSS/JS local vào HTML, bỏ script CDN ---
-let html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-html = html.replace(/<link[^>]*href="(css\/[^"?]+)[^"]*"[^>]*>/g, (m, p) => {
-    try { return '<style>' + fs.readFileSync(path.join(root, p), 'utf8') + '</style>'; } catch { return ''; }
-});
-html = html.replace(/<script[^>]*src="([^"]+)"[^>]*>\s*<\/script>/g, (m, src) => {
-    if (src.startsWith('http')) return '';
-    const p = src.split('?')[0];
-    try { return '<script>' + fs.readFileSync(path.join(root, p), 'utf8') + '</script>'; } catch { return ''; }
-});
-const dom = new JSDOM(html, { url: 'http://localhost/', runScripts: 'dangerously', pretendToBeVisual: true });
-const { window } = dom;
-await new Promise(r => setTimeout(r, 1200));
-const d = window.document;
+// --- Dựng app qua bộ nạp dùng chung (tests/lib/load-app.mjs) ---
+const { window, document: d } = await loadApp(root);
 
 // --- A. Dải tên quán phải nhìn thấy được ở cả 5 mẫu ---
 // (bắt lại đúng lỗi 3/11/2026: Hạ/Thu/Đông bị ép nền trong suốt + chữ trắng)
@@ -122,8 +105,19 @@ window.refreshPreflightUI();
 check('đủ lại thư viện: nút in mở lại', !d.getElementById('generate-pdf-btn').disabled);
 check('hàm in trang kiểm tra tồn tại', typeof window.printTestPage === 'function');
 
+// --- F. R0: đường in — crop marks + dàn trang ---
+console.log('\nF. Đường in (R0):');
+const svg = window.generateCropMarksSvg({ startX: 5, startY: 5, bestCols: 4, bestRows: 3, ticketW: 45, ticketH: 80, pageWidth: 210, pageHeight: 297 });
+const lineCount = (svg.match(/<line /g) || []).length;
+check('crop marks SVG: 4x3 ô -> 30 vạch (ticks + chữ thập)', lineCount === 30, String(lineCount));
+check('crop marks SVG: viewBox đúng khổ A4 210x297', svg.includes('viewBox="0 0 210 297"'));
+let pdfOk = false;
+try {
+  const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+  window.drawPdfCropMarks(doc, { startX: 5, startY: 5, bestCols: 4, bestRows: 3, ticketW: 45, ticketH: 80, pageWidth: 210, pageHeight: 297 });
+  pdfOk = doc.output('blob').size > 1000;
+} catch (e) { pdfOk = false; }
+check('drawPdfCropMarks vẽ lên jsPDF thật không lỗi, PDF có nội dung', pdfOk);
+
 console.log('\n==================================================');
-console.log(`TEST HÀNH VI: ${pass} ĐẠT / ${fail} LỖI`);
-if (failures.length) console.log('Lỗi ở:', failures.join(' | '));
-console.log('==================================================');
-process.exit(fail > 0 ? 1 : 0);
+process.exit(summary() > 0 ? 1 : 0);
