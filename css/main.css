@@ -562,7 +562,7 @@ label[for="mascot-upload"]:hover {
     height: 62px;
     border-radius: 6px;
     border: 1px solid rgba(255,255,255,.3);
-    background: center / cover no-repeat url('../assets/images/templates/spring-background.png');
+    background: center / cover no-repeat url('../assets/images/templates/thumbs/spring.webp');
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 .template-card-name {
