@@ -684,3 +684,20 @@ input[type="range"]::-webkit-slider-thumb {
     }
 }
 
+/* ============================================================ */
+/* UX MOBILE (gói A+B, 4/11/2026): vùng bấm tối thiểu 44px cho */
+/* các nút chính + nhãn dễ đọc hơn trên điện thoại. Chỉ áp     */
+/* dụng ≤767px — giao diện PC giữ nguyên.                      */
+/* ============================================================ */
+@media (max-width: 767px) {
+    #mobile-lang-toggle-btn { min-height: 44px; }
+    #history-undo, #history-redo { width: 44px !important; height: 44px !important; }
+    #ticket-drag-reset { min-height: 44px; padding-left: 14px; padding-right: 14px; }
+    #mobile-print-btn { width: 44px !important; height: 44px !important; }
+    #btn-focus-preview { min-height: 44px; }
+    #settings-back-btn { width: 44px; height: 44px; }
+    #draft-reset-btn { min-height: 44px; }
+    .cat-btn { font-size: 11px; }
+    #controls-sidebar label { font-size: 12px; }
+}
+
