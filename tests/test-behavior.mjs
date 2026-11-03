@@ -10,9 +10,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadApp, makeChecker } from './tests/lib/load-app.mjs';
+import { loadApp, makeChecker } from './lib/load-app.mjs';
 
-const root = path.dirname(fileURLToPath(import.meta.url));
+const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const { check, summary } = makeChecker('TEST HÀNH VI');
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 

@@ -23,8 +23,8 @@
 
 ```bash
 node server.mjs   # mở http://localhost:3000 — chỉ dùng lúc phát triển, không phải máy chủ production
-node test-full-integration.mjs
-node test-sprint8-cropmarks.mjs
+node tests/test-full-integration.mjs
+node tests/test-sprint8-cropmarks.mjs
 ```
 
 ## Cấu trúc thư mục
