@@ -601,7 +601,7 @@ label[for="mascot-upload"]:hover {
     background-color: transparent;
 }
 .template-card-summer .template-card-preview {
-    background: center / cover no-repeat url('../assets/templates/summer.svg'), linear-gradient(145deg, #fff3e0, #f97316);
+    background: center / cover no-repeat url('../assets/images/templates/thumbs/summer.webp'), linear-gradient(145deg, #fff3e0, #f97316);
     border-color: #f97316;
 }
 .template-card-summer:hover,
@@ -612,7 +612,7 @@ label[for="mascot-upload"]:hover {
 }
 
 .template-card-autumn .template-card-preview {
-    background: center / cover no-repeat url('../assets/templates/autumn.svg'), linear-gradient(145deg, #fff5eb, #b45309);
+    background: center / cover no-repeat url('../assets/images/templates/thumbs/autumn.webp'), linear-gradient(145deg, #fff5eb, #b45309);
     border-color: #d97706;
 }
 .template-card-autumn:hover,
@@ -623,7 +623,7 @@ label[for="mascot-upload"]:hover {
 }
 
 .template-card-winter .template-card-preview {
-    background: center / cover no-repeat url('../assets/templates/winter.svg'), linear-gradient(145deg, #f0f9ff, #0284c7);
+    background: center / cover no-repeat url('../assets/images/templates/thumbs/winter.webp'), linear-gradient(145deg, #f0f9ff, #0284c7);
     border-color: #0284c7;
 }
 .template-card-winter:hover,
