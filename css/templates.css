@@ -186,68 +186,51 @@
 }
 
 /* ============================================================ */
-/* ĐỒNG BỘ TÁCH LỚP CHO CÁC MẪU MÙA (HẠ, THU, ĐÔNG)            */
-/* Sử dụng khung số, mascot và banner nghệ thuật gốc từ SVG     */
-/* Loại bỏ hoàn toàn sự đè chồng kép (Duplicate Stacking)       */
+/* TÁCH LỚP CÁC MẪU MÙA (HẠ, THU, ĐÔNG) — như mẫu Xuân          */
+/* File SVG gốc là bản vẽ cắt lớp: nền chỉ còn phong cảnh,      */
+/* khung số / ruy-băng tên quán / linh vật là ảnh lớp riêng     */
+/* (assets/images/templates/{mùa}-*.png) đặt lên phần tử thật   */
+/* của app; số, thông điệp, tên quán là chữ sống như cũ.        */
+/* Màu/cỡ của số và chữ lấy từ biến của từng mẫu (định nghĩa    */
+/* mẫu), không ép cứng ở đây.                                   */
 /* ============================================================ */
 .ticket-core.summer-template .number-frame,
 .ticket-core.autumn-template .number-frame,
 .ticket-core.winter-template .number-frame {
     border: none;
     border-radius: 0;
-    background: transparent;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
     box-shadow: none;
 }
-
-.ticket-core.summer-template .mascot-wrap,
-.ticket-core.autumn-template .mascot-wrap,
-.ticket-core.winter-template .mascot-wrap {
-    display: none;
+.ticket-core.summer-template .number-frame {
+    background-image: url('../assets/images/templates/summer-number-frame.png');
 }
-
+.ticket-core.autumn-template .number-frame {
+    background-image: url('../assets/images/templates/autumn-number-frame.png');
+}
+.ticket-core.winter-template .number-frame {
+    background-image: url('../assets/images/templates/winter-number-frame.png');
+}
 .ticket-core.summer-template .branch-name,
 .ticket-core.autumn-template .branch-name,
 .ticket-core.winter-template .branch-name {
-    /* Rai Aide 3/11/2026: bỏ ép nền trong suốt. Artwork SVG (588x984) bị
-       letterbox trên lõi vé 43x78mm nên không phủ tới chân vé, nơi tên quán
-       neo 2mm từ đáy — nền trong suốt khiến chữ trắng vô hình trên nền vé
-       sáng. Dải tên quán dùng lại màu cấu hình của từng mẫu
-       (var(--branch-bg) từ .branch-name gốc), không đè lên artwork. */
     border: none;
     border-radius: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
     box-shadow: none;
-    color: #ffffff;
-    font-weight: 900;
 }
-
-.ticket-core.summer-template .queue-number {
-    z-index: 7;
-    color: #d90012;
-    font-weight: 900;
+.ticket-core.summer-template .branch-name {
+    background-image: url('../assets/images/templates/summer-branch-ribbon.png');
 }
-.ticket-core.summer-template .ticket-msg {
-    color: #ffffff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-    font-weight: 700;
+.ticket-core.autumn-template .branch-name {
+    background-image: url('../assets/images/templates/autumn-branch-ribbon.png');
 }
-
-.ticket-core.autumn-template .queue-number {
-    z-index: 7;
-    color: #e10000;
-    font-weight: 900;
-}
-.ticket-core.autumn-template .ticket-msg {
-    color: #ffffff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-    font-weight: 700;
-}
-
-.ticket-core.winter-template .queue-number {
-    z-index: 7;
-    color: #d80000;
-    font-weight: 900;
-}
-.ticket-core.winter-template .ticket-msg {
-    color: #0f172a;
-    font-weight: 700;
+.ticket-core.winter-template .branch-name {
+    background-image: url('../assets/images/templates/winter-branch-ribbon.png');
 }

@@ -35,7 +35,7 @@
 
     #app-wrapper,
     #print-overlay,
-    #export-modal {
+    #panel-print {
         display: none !important;
     }
 

@@ -2,6 +2,7 @@ import { ticketStore } from '../core/store.js';
 import { applyControlPreset } from '../controls.js';
 import { calculateAILayout } from '../layout-sync.js';
 import { ticketDrag } from '../ticket-drag.js';
+import { applyTemplateMascot } from '../image-editor.js';
 import { StandardTemplate } from './templates/standard.js';
 import { SpringTemplate } from './templates/spring.js';
 import { SummerTemplate } from './templates/summer.js';
@@ -151,11 +152,17 @@ const TemplateRegistry = {
       }
     }
 
-    // 8. Linh vật mặc định
-    const defaultMascot = document.querySelector('input[name="mascot-type"][value="default"]');
-    if (defaultMascot) {
-      defaultMascot.checked = true;
-      defaultMascot.dispatchEvent(new Event('change', { bubbles: true }));
+    // 8. Linh vật: mẫu tách lớp có linh vật riêng (mascotImage) thì nạp ảnh
+    // của mẫu; còn lại đặt lại linh vật mặc định như trước.
+    if (tpl.mascotImage) {
+      applyTemplateMascot(tpl.mascotImage);
+    } else {
+      applyTemplateMascot(null);
+      const defaultMascot = document.querySelector('input[name="mascot-type"][value="default"]');
+      if (defaultMascot) {
+        defaultMascot.checked = true;
+        defaultMascot.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     }
 
     // 9. Công cụ bật/tắt (Tools)

@@ -63,33 +63,13 @@ for (const tid of ['summer', 'autumn', 'winter']) {
   assert(templatesCssContent.includes(`.ticket-core.${tid}-template`), `css/templates.css có style ticket-core cho ${tid}`);
 }
 
-// 6. Kiểm tra thuật toán Floyd-Steinberg Dithering trong js/print (trước đây là export.js)
+// 6. js/print: nén JPEG 0.92 cho PDF; thuật toán dithering in nhiệt đã gỡ
+// hẳn theo phạm vi sản phẩm (Đạt chốt: app không có in nhiệt — ghim vắng mặt).
 const exportContent = ['cropmarks.js','layout.js','print-mobile.js','print-pc.js','print.js','raster.js','preflight.js']
   .map(f => fs.readFileSync('js/print/' + f, 'utf8')).join('\n');
-assert(exportContent.includes('applyFloydSteinbergDithering'), 'js/print chứa thuật toán Floyd-Steinberg Dithering');
+assert(!exportContent.includes('applyFloydSteinbergDithering') && !exportContent.includes('toggleThermalPreview'), 'js/print không còn cơ chế in nhiệt (dithering/toggle đã gỡ)');
 assert(exportContent.includes('image/jpeg') && exportContent.includes('0.92'), 'js/print sử dụng nén JPEG 0.92 tối ưu dung lượng PDF');
 
-// 7. Kiểm tra toán học Dithering trực tiếp
-function simulateDithering(data, width, height) {
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const idx = (y * width + x) * 4;
-      const oldVal = (data[idx] + data[idx + 1] + data[idx + 2]) / 3;
-      const newVal = oldVal < 128 ? 0 : 255;
-      const err = oldVal - newVal;
-      data[idx] = data[idx + 1] = data[idx + 2] = newVal;
-      if (x + 1 < width) data[(y * width + (x + 1)) * 4] += (err * 7) / 16;
-      if (x - 1 >= 0 && y + 1 < height) data[((y + 1) * width + (x - 1)) * 4] += (err * 3) / 16;
-      if (y + 1 < height) data[((y + 1) * width + x) * 4] += (err * 5) / 16;
-      if (x + 1 < width && y + 1 < height) data[((y + 1) * width + (x + 1)) * 4] += (err * 1) / 16;
-    }
-  }
-}
-
-const mockImg = new Uint8Array([100, 100, 100, 255, 150, 150, 150, 255, 200, 200, 200, 255, 50, 50, 50, 255]);
-simulateDithering(mockImg, 2, 2);
-const allBinary = [0, 4, 8, 12].every(i => mockImg[i] === 0 || mockImg[i] === 255);
-assert(allBinary, 'Toán học Floyd-Steinberg xuất ra 100% pixel đen trắng tuyệt đối (0 hoặc 255)');
 
 // ============================================================
 // VÒNG PHỤ THUỘC IMPORT (ghim sự cố 4/11/2026): app chạy ES Modules

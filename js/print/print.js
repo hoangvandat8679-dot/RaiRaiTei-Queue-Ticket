@@ -7,16 +7,14 @@
 import { t, applyTranslations } from '../i18n.js';
 import { calculateAILayout, parseCustomRange, layoutConfig } from '../layout-sync.js';
 import { designHistory } from '../design-history.js';
-import { ticketStore } from '../core/store.js';
 import { guardInAppBrowserForPrint } from '../in-app-guard.js';
 import { waitForPrintImages, waitForCssBackgroundImages, clampRasterScale } from './raster.js';
 import { isDuplexPrintEnabled } from './layout.js';
 import { buildPrintPdfBlob, isMobilePrintDevice } from './print-mobile.js';
 import { printDesktopInIsolatedFrame } from './print-pc.js';
 
-const printExportsImpl = { exportTicketPng: null, toggleThermalPreview: null };
+const printExportsImpl = { exportTicketPng: null };
 export async function exportTicketPng(...args) { return printExportsImpl.exportTicketPng(...args); }
-export function toggleThermalPreview(...args) { return printExportsImpl.toggleThermalPreview(...args); }
 export { isMobilePrintDevice };
 export { isCropMarksEnabled, drawPdfCropMarks, generateCropMarksSvg } from './cropmarks.js';
 
@@ -78,9 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(t('error_ticket_too_large'));
                 return;
             }
-
-            document.getElementById('export-modal').classList.add('hidden');
-            document.getElementById('export-modal').classList.remove('flex');
 
             const overlay =
                 document.getElementById('print-overlay');
@@ -263,52 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
      * Khử răng cưa đơn sắc (1-bit monochrome error diffusion)
      * Tái tạo ảnh giống 100% bản in nhiệt vật lý 203 DPI của máy in hóa đơn.
      */
-    function applyFloydSteinbergDithering(canvas) {
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
-        const imgData = ctx.getImageData(0, 0, width, height);
-        const data = imgData.data;
-
-        const gray = new Float32Array(width * height);
-        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-            gray[j] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-        }
-
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const idx = y * width + x;
-                const oldVal = gray[idx];
-                const newVal = oldVal < 128 ? 0 : 255;
-                gray[idx] = newVal;
-                const err = oldVal - newVal;
-
-                if (x + 1 < width) {
-                    gray[idx + 1] += err * (7 / 16);
-                }
-                if (x - 1 >= 0 && y + 1 < height) {
-                    gray[(y + 1) * width + (x - 1)] += err * (3 / 16);
-                }
-                if (y + 1 < height) {
-                    gray[(y + 1) * width + x] += err * (5 / 16);
-                }
-                if (x + 1 < width && y + 1 < height) {
-                    gray[(y + 1) * width + (x + 1)] += err * (1 / 16);
-                }
-            }
-        }
-
-        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-            const val = gray[j] < 128 ? 0 : 255;
-            data[i] = val;
-            data[i + 1] = val;
-            data[i + 2] = val;
-            data[i + 3] = 255;
-        }
-
-        ctx.putImageData(imgData, 0, 0);
-        return canvas;
-    }
 
     /**
      * Xuất ảnh vé đơn chiếc độ phân giải cao (Super-sampled High-Res PNG)
@@ -324,7 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
             await waitForPrintImages(ticketNode);
             await waitForCssBackgroundImages(ticketNode);
 
-            const isThermal = document.body.classList.contains('thermal-simulation-mode');
             let outCanvas = null;
 
             if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
@@ -341,13 +289,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (outCanvas) {
-                if (isThermal) {
-                    applyFloydSteinbergDithering(outCanvas);
-                }
-
                 const dataUrl = outCanvas.toDataURL('image/png');
                 const link = document.createElement('a');
-                link.download = `rairaitei-ticket-${isThermal ? 'thermal-' : ''}${Date.now()}.png`;
+                link.download = `rairaitei-ticket-${Date.now()}.png`;
                 link.href = dataUrl;
                 document.body.appendChild(link);
                 link.click();
@@ -360,27 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     };
 
-    /**
-     * Chuyển đổi chế độ mô phỏng máy in nhiệt đơn sắc (Thermal Monochrome Simulation)
-     */
-    printExportsImpl.toggleThermalPreview = function (forceState) {
-        const body = document.body;
-        const nextState = typeof forceState === 'boolean' 
-            ? forceState 
-            : !body.classList.contains('thermal-simulation-mode');
-        
-        body.classList.toggle('thermal-simulation-mode', nextState);
-        if (ticketStore && ticketStore.studio && ticketStore.studio.showThermalMonochrome) {
-            ticketStore.studio.showThermalMonochrome.set(nextState);
-        }
-
-        const btn = document.getElementById('thermal-preview-toggle-btn');
-        if (btn) {
-            btn.classList.toggle('is-active', nextState);
-            btn.setAttribute('aria-pressed', String(nextState));
-        }
-        return nextState;
-    };
 
 
 });

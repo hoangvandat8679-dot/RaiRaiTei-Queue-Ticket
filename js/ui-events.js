@@ -1,6 +1,6 @@
 import { t, setLanguage, currentLang } from './i18n.js';
 import { calculateAILayout } from './layout-sync.js';
-import { exportTicketPng, toggleThermalPreview } from './print/print.js';
+import { exportTicketPng } from './print/print.js';
 import { guardInAppBrowserForPrint } from './in-app-guard.js';
 import { printTestPage, refreshPreflightUI } from './print/preflight.js';
 
@@ -373,30 +373,27 @@ document.addEventListener('DOMContentLoaded', () => {
         .addEventListener('click', toggleLang);
     syncLanguageButtons();
 
-    // MỞ/ĐÓNG POP-UP XUẤT FILE
-    const exportModal = document.getElementById('export-modal');
-    const openModal = () => {
-        if (!guardInAppBrowserForPrint()) {
-            return;
+    // TAB IN ẤN (gộp nút in — Đạt chốt 4/11/2026): không còn pop-up
+    // export-modal và 2 nút in ở header; tab In mở panel-print như mọi tab
+    // khác, nút "印刷 / 保存を確定" trong panel là nút in duy nhất.
+    // Canh gác trình duyệt nhúng chạy ở pha capture trên thanh tab: nếu
+    // guard từ chối thì chặn luôn việc chuyển tab (giữ hành vi cũ của
+    // pop-up: không cho vào khu vực in trong webview nhúng).
+    categoryBar.addEventListener('click', (e) => {
+        const printTab = e.target.closest('.cat-btn[data-group="print"]');
+        if (printTab && !guardInAppBrowserForPrint()) {
+            e.stopPropagation();
+            e.preventDefault();
         }
-
-        exportModal.classList.remove('hidden');
-        exportModal.classList.add('flex');
-        calculateAILayout();
-        refreshPreflightUI();
-    };
-    const closeModal = () => { exportModal.classList.add('hidden'); exportModal.classList.remove('flex'); };
-    
-    document.getElementById('mobile-print-btn').addEventListener('click', openModal);
-    const topPrintBtn =
-        document.getElementById('pc-top-print-btn') ||
-        document.getElementById('design-print-btn');
-
-    if (topPrintBtn) {
-        topPrintBtn.addEventListener('click', openModal);
+    }, true);
+    // Khi tab In được mở: tính lại bố cục A4 + làm mới cảnh báo preflight.
+    const printTabBtn = document.querySelector('.cat-btn[data-group="print"]');
+    if (printTabBtn) {
+        printTabBtn.addEventListener('click', () => {
+            calculateAILayout();
+            refreshPreflightUI();
+        });
     }
-    document.getElementById('close-export-modal').addEventListener('click', closeModal);
-    exportModal.addEventListener('click', (e) => { if(e.target === exportModal) closeModal(); });
 
     // IN TRANG KIỂM TRA (GĐ4 vé 4.1)
     const printTestBtn = document.getElementById('print-test-btn');
@@ -424,15 +421,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // BẬT / TẮT CHẾ ĐỘ XEM TRƯỚC MÁY IN NHIỆT (Thermal Simulation)
-    const thermalBtn = document.getElementById('thermal-preview-toggle-btn');
-    if (thermalBtn) {
-        thermalBtn.addEventListener('click', () => {
-            if (toggleThermalPreview) {
-                toggleThermalPreview();
-            }
-        });
-    }
 
     // RESIZER CHO PC
     const appWrapper = document.getElementById('app-wrapper'); 
