@@ -468,6 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
         exportModal.classList.remove('hidden');
         exportModal.classList.add('flex');
         window.calculateAILayout();
+        if (window.refreshPreflightUI) window.refreshPreflightUI();
     };
     const closeModal = () => { exportModal.classList.add('hidden'); exportModal.classList.remove('flex'); };
     
@@ -481,6 +482,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.getElementById('close-export-modal').addEventListener('click', closeModal);
     exportModal.addEventListener('click', (e) => { if(e.target === exportModal) closeModal(); });
+
+    // IN TRANG KIỂM TRA (GĐ4 vé 4.1)
+    const printTestBtn = document.getElementById('print-test-btn');
+    if (printTestBtn) {
+        printTestBtn.addEventListener('click', () => {
+            if (window.printTestPage) window.printTestPage();
+        });
+    }
 
     // TẢI ẢNH PNG VÉ ĐƠN
     const exportPngBtn = document.getElementById('export-single-png-btn');

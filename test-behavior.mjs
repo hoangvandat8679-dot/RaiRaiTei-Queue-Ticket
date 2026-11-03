@@ -103,6 +103,25 @@ check('DraftManager.restoreNow khôi phục được bản nháp', window.DraftM
 check('giá trị trở lại như bản nháp sau khôi phục', d.getElementById('branch-bg').value === '#123456', d.getElementById('branch-bg').value);
 window.DraftManager.clear();
 
+// --- E. GĐ4: preflight trước in ---
+console.log('\nE. Kiểm tra trước in (GĐ4):');
+// jsdom không tải ảnh thật: đánh dấu các ảnh trong vé là đã tải (môi trường kiểm thử).
+d.querySelectorAll('#ticket-preview-wrapper img').forEach((img) => {
+  Object.defineProperty(img, 'complete', { value: true, configurable: true });
+  Object.defineProperty(img, 'naturalWidth', { value: 100, configurable: true });
+});
+check('PrintCheck sẵn sàng với đủ 3 thư viện local', !!(window.PrintCheck && window.PrintCheck.runPrintPreflight().ok));
+window.refreshPreflightUI();
+check('preflight đạt: nút in được bật, hộp cảnh báo ẩn', !d.getElementById('generate-pdf-btn').disabled && d.getElementById('preflight-status').classList.contains('hidden'));
+const savedH2C = window.html2canvas;
+window.html2canvas = undefined;
+window.refreshPreflightUI();
+check('thiếu thư viện: nút in bị khóa + hiện lý do', d.getElementById('generate-pdf-btn').disabled && !d.getElementById('preflight-status').classList.contains('hidden') && d.getElementById('preflight-status').textContent.includes('html2canvas'));
+window.html2canvas = savedH2C;
+window.refreshPreflightUI();
+check('đủ lại thư viện: nút in mở lại', !d.getElementById('generate-pdf-btn').disabled);
+check('hàm in trang kiểm tra tồn tại', typeof window.printTestPage === 'function');
+
 console.log('\n==================================================');
 console.log(`TEST HÀNH VI: ${pass} ĐẠT / ${fail} LỖI`);
 if (failures.length) console.log('Lỗi ở:', failures.join(' | '));
