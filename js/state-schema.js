@@ -25,6 +25,7 @@ export const DESIGN_SCHEMA = {
         fonts: 'map id -> string (giá trị của ô chọn phông)',
         toggles: 'map id -> boolean (công tắc công cụ)',
         mascots: 'map id -> string',
+        texts: 'map id -> string (ô nhập chữ của thiết kế: branch-input, msg-input)',
         dragOffsets: 'map DRAG_KEYS -> { dx, dy } số mm trong [-150, 150]',
         backgroundImage: 'string (data URL) hoặc vắng mặt',
         mascotImage: 'string (data URL) hoặc vắng mặt',
@@ -66,6 +67,7 @@ export function validateDesign(design) {
     checkStringMap('colors', design.colors, errors, HEX_COLOR);
     checkStringMap('fonts', design.fonts, errors);
     checkStringMap('mascots', design.mascots, errors);
+    checkStringMap('texts', design.texts, errors);
     if (design.toggles != null) {
         if (!isPlainObject(design.toggles)) errors.push('toggles: phải là object');
         else for (const [k, v] of Object.entries(design.toggles)) {

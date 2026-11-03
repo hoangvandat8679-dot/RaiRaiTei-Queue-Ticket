@@ -91,6 +91,49 @@ simulateDithering(mockImg, 2, 2);
 const allBinary = [0, 4, 8, 12].every(i => mockImg[i] === 0 || mockImg[i] === 255);
 assert(allBinary, 'Toán học Floyd-Steinberg xuất ra 100% pixel đen trắng tuyệt đối (0 hoặc 255)');
 
+// ============================================================
+// VÒNG PHỤ THUỘC IMPORT (ghim sự cố 4/11/2026): app chạy ES Modules
+// native — nếu đồ thị import có vòng, thứ tự khởi tạo của trình duyệt
+// thật khác bản đóng gói của harness và các hằng (translations,
+// currentLang) bị đọc trước khi khởi tạo (lỗi TDZ), làm chết thầm lặng
+// cả nhóm tính năng. Harness jsdom KHÔNG lộ được lớp lỗi này nên phải
+// cấm vòng import bằng kiểm tra tĩnh trên đồ thị thật.
+{
+  const jsRoot = path.join(process.cwd(), 'js');
+  const moduleFiles = [];
+  (function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, entry.name);
+      if (entry.isDirectory()) { if (entry.name !== 'vendor') walk(p); }
+      else if (entry.name.endsWith('.js')) moduleFiles.push(p);
+    }
+  })(jsRoot);
+  const graph = new Map();
+  for (const file of moduleFiles) {
+    const src = fs.readFileSync(file, 'utf8');
+    const deps = [];
+    for (const m of src.matchAll(/import\s+(?:[^'"]*?\s+from\s+)?['"](\.[^'"]+)['"]/g)) {
+      deps.push(path.normalize(path.join(path.dirname(file), m[1])));
+    }
+    graph.set(file, deps);
+  }
+  const foundCycles = [];
+  const state = new Map(); const stack = [];
+  const dfs = (node) => {
+    state.set(node, 1); stack.push(node);
+    for (const dep of graph.get(node) || []) {
+      if (!graph.has(dep)) continue;
+      if (state.get(dep) === 1) foundCycles.push(stack.slice(stack.indexOf(dep)).concat(dep).map(p => path.basename(p)).join(' -> '));
+      else if (!state.get(dep)) dfs(dep);
+    }
+    stack.pop(); state.set(node, 2);
+  };
+  for (const file of moduleFiles) if (!state.get(file)) dfs(file);
+  assert(foundCycles.length === 0, `Đồ thị import không có vòng phụ thuộc (${moduleFiles.length} module)` + (foundCycles.length ? ' — vòng: ' + foundCycles[0] : ''));
+  const i18nSrc = fs.readFileSync(path.join(jsRoot, 'i18n.js'), 'utf8');
+  assert(!/^import\s/m.test(i18nSrc), 'i18n.js là module lá (không import module app nào)');
+}
+
 console.log('\n==================================================');
 console.log(`KẾT QUẢ KIỂM THỬ: ${passCount} ĐẠT (PASS) / ${failCount} LỖI (FAIL)`);
 console.log('==================================================');

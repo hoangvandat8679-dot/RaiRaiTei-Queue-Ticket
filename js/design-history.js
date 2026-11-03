@@ -34,7 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
             colors: {},
             fonts: {},
             toggles: {},
-            mascots: {}
+            mascots: {},
+            texts: {}
         };
 
         document
@@ -85,6 +86,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         );
+
+        // Ô nhập chữ của thiết kế (tên quán + thông điệp): trước đây
+        // collect bỏ sót nên preset/bản nháp/hoàn tác đều mất hai chữ này.
+        ['branch-input', 'msg-input'].forEach((id) => {
+            const field = document.getElementById(id);
+
+            if (field) {
+                design.texts[id] = field.value;
+            }
+        });
 
         const mascotType = document.querySelector(
             'input[name="mascot-type"]:checked'
@@ -187,6 +198,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 Object.entries(design.mascots).forEach(([id, value]) => {
                     if (typeof value === 'string') {
                         applyValue(id, value, 'change');
+                    }
+                });
+            }
+
+            if (design.texts) {
+                Object.entries(design.texts).forEach(([id, value]) => {
+                    if (typeof value === 'string') {
+                        applyValue(id, value, 'input');
                     }
                 });
             }

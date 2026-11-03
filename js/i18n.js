@@ -1,6 +1,10 @@
-import { PresetManager } from './storage/preset-manager.js';
-import { calculateAILayout } from './layout-sync.js';
-
+// Module lá (leaf): KHÔNG import module app nào khác. i18n được mọi
+// module dùng ngay trong lúc khởi tạo (t() ở top-level của preset-manager,
+// layout-sync, controls, ticket-drag) — nếu i18n import ngược lại chúng,
+// vòng phụ thuộc làm các hằng translations/currentLang chưa kịp khởi tạo
+// khi bị đọc (lỗi TDZ trên trình duyệt thật, bản đóng gói test không lộ).
+// Module cần vẽ lại khi đổi ngôn ngữ thì nghe sự kiện
+// 'rairaitei:language-changed' do applyTranslations phát ra.
 export let currentLang = (() => {
     try {
         const savedLanguage = localStorage.getItem('rairaitei-language');
@@ -576,10 +580,6 @@ export function applyTranslations() {
         presetNameInput.placeholder = t('save_preset_placeholder');
     }
 
-    if (typeof PresetManager !== 'undefined' && typeof PresetManager.renderUI === 'function') {
-        PresetManager.renderUI();
-    }
-
     const handleStatusEl = document.getElementById('handle_status_text');
     if (handleStatusEl) {
         const isExp = document.getElementById('controls-sidebar')?.classList.contains('sheet-expanded');
@@ -667,10 +667,9 @@ export function applyTranslations() {
 
     refreshTranslatedFileNames();
 
-    calculateAILayout();
-
-    // Các module khác (kéo thả, bản nháp) nghe sự kiện này để vẽ lại
-    // nhãn theo ngôn ngữ mới — thay cơ chế bọc hàm trước đây (R1).
+    // Các module khác (kéo thả, bản nháp, preset, dàn trang) nghe sự
+    // kiện này để vẽ lại theo ngôn ngữ mới — thay cơ chế gọi trực tiếp
+    // trước đây (R1), giữ i18n là module lá không phụ thuộc ngược.
     document.dispatchEvent(new CustomEvent('rairaitei:language-changed'));
 };
 

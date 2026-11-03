@@ -131,3 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         duplexToggle.addEventListener('change', calculateAILayout);
     }
 });
+
+// Đổi ngôn ngữ: tính lại dàn trang để các nhãn số liệu vẽ theo ngôn ngữ
+// mới (i18n là module lá nên không gọi trực tiếp vào đây được).
+document.addEventListener('rairaitei:language-changed', calculateAILayout);

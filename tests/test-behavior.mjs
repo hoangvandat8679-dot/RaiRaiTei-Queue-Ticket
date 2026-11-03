@@ -144,6 +144,28 @@ let pngThrew = '';
 try { await window.RaiRaiTeiApp.exportTicketPng(1); } catch (e) { pngThrew = String(e && e.message || e); }
 check('gọi xuất PNG không văng lỗi "is not a function"', !/is not a function/.test(pngThrew), pngThrew.slice(0, 120));
 check('nút xem trước in nhiệt có trong trang', !!d.getElementById('thermal-preview-toggle-btn'));
+// I) Ô chữ của thiết kế (tên quán + thông điệp) phải đi trọn vòng
+// thu thập -> áp dụng (ghim lỗi 4/11: collectDesign bỏ sót branch-input
+// và msg-input nên preset, bản nháp và hoàn tác đều mất hai chữ này).
+console.log('\n— I) Ô chữ trong thiết kế');
+const branchEl = d.getElementById('branch-input');
+const msgEl = d.getElementById('msg-input');
+branchEl.value = 'Tên Quán Kiểm Tra';
+branchEl.dispatchEvent(new window.Event('input', { bubbles: true }));
+msgEl.value = 'Thông điệp kiểm tra';
+msgEl.dispatchEvent(new window.Event('input', { bubbles: true }));
+const collectedTexts = window.RaiRaiTeiApp.designHistory.collect();
+check('collect thu được tên quán vào design.texts', collectedTexts.texts && collectedTexts.texts['branch-input'] === 'Tên Quán Kiểm Tra');
+check('collect thu được thông điệp vào design.texts', collectedTexts.texts && collectedTexts.texts['msg-input'] === 'Thông điệp kiểm tra');
+check('validateDesign chấp nhận design có texts', window.RaiRaiTeiApp.validateDesign(collectedTexts).ok === true);
+branchEl.value = 'Tên Khác';
+branchEl.dispatchEvent(new window.Event('input', { bubbles: true }));
+msgEl.value = 'Khác';
+msgEl.dispatchEvent(new window.Event('input', { bubbles: true }));
+check('apply khôi phục được tên quán', window.RaiRaiTeiApp.designHistory.apply(collectedTexts) === true && branchEl.value === 'Tên Quán Kiểm Tra');
+check('apply khôi phục được thông điệp', msgEl.value === 'Thông điệp kiểm tra');
+check('chữ trên vé cập nhật theo apply', d.getElementById('display-branch').textContent === 'Tên Quán Kiểm Tra');
+
 d.getElementById('mobile-print-btn').click();
 check('bấm nút in (mobile) mở được hộp thoại xuất bản in', !d.getElementById('export-modal').classList.contains('hidden'));
 check('mở hộp thoại in có chạy kiểm tra trước in (preflight hiện diện)', !!d.getElementById('preflight-status'));

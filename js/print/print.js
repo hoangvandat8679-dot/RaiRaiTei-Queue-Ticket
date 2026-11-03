@@ -8,7 +8,7 @@ import { t, applyTranslations } from '../i18n.js';
 import { calculateAILayout, parseCustomRange, layoutConfig } from '../layout-sync.js';
 import { designHistory } from '../design-history.js';
 import { ticketStore } from '../core/store.js';
-import { guardInAppBrowserForPrint } from '../ui-events.js';
+import { guardInAppBrowserForPrint } from '../in-app-guard.js';
 import { waitForPrintImages, waitForCssBackgroundImages, clampRasterScale } from './raster.js';
 import { isDuplexPrintEnabled } from './layout.js';
 import { buildPrintPdfBlob, isMobilePrintDevice } from './print-mobile.js';

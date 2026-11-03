@@ -630,6 +630,10 @@ const PresetManager = {
       });
     }
 
+    // Đổi ngôn ngữ: vẽ lại danh sách theo nhãn mới (i18n là module lá
+    // nên không gọi trực tiếp vào đây được — nghe sự kiện của nó).
+    document.addEventListener('rairaitei:language-changed', () => this.renderUI());
+
     // Render danh sách ban đầu
     this.renderUI();
     console.log('✅ [PresetManager] Sprint 7: Khởi tạo Storage & Preset Manager thành công.');
