@@ -1,7 +1,7 @@
 import { t, setLanguage, currentLang } from './i18n.js';
 import { calculateAILayout } from './layout-sync.js';
-import { exportTicketPng, toggleThermalPreview } from './export.js';
-import { printTestPage, refreshPreflightUI } from './print-check.js';
+import { exportTicketPng, toggleThermalPreview } from './print/print.js';
+import { printTestPage, refreshPreflightUI } from './print/preflight.js';
 
 export function detectInAppBrowserForPrint() {
     const userAgent =

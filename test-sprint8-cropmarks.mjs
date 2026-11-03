@@ -89,7 +89,8 @@ test('6. Kiểm tra thuật toán dàn trang lưới A4 N-up (43x78mm core + 1.0
 
 // 7. Kiểm tra hàm drawPdfCropMarks logic
 test('7. Kiểm tra tọa độ vạch cắt Crop Marks (Ticks 3mm và Chữ thập + 3mm)', () => {
-    const exportJs = fs.readFileSync('js/export.js', 'utf8');
+    const exportJs = ['cropmarks.js','layout.js','print-mobile.js','print-pc.js','print.js','raster.js']
+        .map(f => fs.readFileSync('js/print/' + f, 'utf8')).join('\n');
     assert(exportJs.includes('function drawPdfCropMarks(pdf, options)'), 'Thiếu function drawPdfCropMarks');
     assert(exportJs.includes('function generateCropMarksSvg(options)'), 'Thiếu function generateCropMarksSvg');
     assert(exportJs.includes('function isCropMarksEnabled()'), 'Thiếu function isCropMarksEnabled');
@@ -143,7 +144,8 @@ test('7. Kiểm tra tọa độ vạch cắt Crop Marks (Ticks 3mm và Chữ th�
 
 // 8. Kiểm tra SVG Crop Marks Generator
 test('8. Kiểm tra chuỗi SVG Crop Marks trong Desktop Direct Print', () => {
-    const exportJs = fs.readFileSync('js/export.js', 'utf8');
+    const exportJs = ['cropmarks.js','layout.js','print-mobile.js','print-pc.js','print.js','raster.js']
+        .map(f => fs.readFileSync('js/print/' + f, 'utf8')).join('\n');
     assert(exportJs.includes('.crop-marks-svg'), 'Thiếu style cho .crop-marks-svg');
     assert(exportJs.includes('.has-crop-marks .ticket-wrapper'), 'Thiếu style cho .has-crop-marks');
     assert(exportJs.includes('viewBox="0 0'), 'Thiếu viewBox trong SVG');

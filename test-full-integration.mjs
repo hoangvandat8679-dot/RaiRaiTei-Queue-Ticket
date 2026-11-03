@@ -62,10 +62,11 @@ for (const tid of ['summer', 'autumn', 'winter']) {
   assert(cssContent.includes(`.ticket-core.${tid}-template`), `css/main.css có style ticket-core cho ${tid}`);
 }
 
-// 6. Kiểm tra thuật toán Floyd-Steinberg Dithering trong export.js
-const exportContent = fs.readFileSync('js/export.js', 'utf8');
-assert(exportContent.includes('applyFloydSteinbergDithering'), 'export.js chứa thuật toán Floyd-Steinberg Dithering');
-assert(exportContent.includes('image/jpeg') && exportContent.includes('0.92'), 'export.js sử dụng nén JPEG 0.92 tối ưu dung lượng PDF');
+// 6. Kiểm tra thuật toán Floyd-Steinberg Dithering trong js/print (trước đây là export.js)
+const exportContent = ['cropmarks.js','layout.js','print-mobile.js','print-pc.js','print.js','raster.js','preflight.js']
+  .map(f => fs.readFileSync('js/print/' + f, 'utf8')).join('\n');
+assert(exportContent.includes('applyFloydSteinbergDithering'), 'js/print chứa thuật toán Floyd-Steinberg Dithering');
+assert(exportContent.includes('image/jpeg') && exportContent.includes('0.92'), 'js/print sử dụng nén JPEG 0.92 tối ưu dung lượng PDF');
 
 // 7. Kiểm tra toán học Dithering trực tiếp
 function simulateDithering(data, width, height) {

@@ -19,8 +19,8 @@ import { ticketDrag } from './ticket-drag.js';
 import { designHistory } from './design-history.js';
 import { PresetManager } from './storage/preset-manager.js';
 import { DraftManager } from './storage/draft-manager.js';
-import { exportTicketPng, toggleThermalPreview, isCropMarksEnabled, drawPdfCropMarks, generateCropMarksSvg, isMobilePrintDevice } from './export.js';
-import { PrintCheck, runPrintPreflight, refreshPreflightUI, printTestPage } from './print-check.js';
+import { exportTicketPng, toggleThermalPreview, isCropMarksEnabled, drawPdfCropMarks, generateCropMarksSvg, isMobilePrintDevice } from './print/print.js';
+import { PrintCheck, runPrintPreflight, refreshPreflightUI, printTestPage } from './print/preflight.js';
 
 window.RaiRaiTeiApp = {
     ticketStore,

@@ -1,0 +1,489 @@
+/**
+ * print/print.js — điều phối in/xuất file (R2 tách từ export.js).
+ * Nối hộp thoại in với hai đường in (PC iframe / điện thoại PDF), xuất
+ * PNG vé đơn và sao lưu JSON thiết kế. Các khối chuyên trách nằm ở
+ * raster.js, layout.js, cropmarks.js, print-pc.js, print-mobile.js.
+ */
+import { t, applyTranslations } from '../i18n.js';
+import { calculateAILayout, parseCustomRange, layoutConfig } from '../layout-sync.js';
+import { designHistory } from '../design-history.js';
+import { ticketStore } from '../core/store.js';
+import { guardInAppBrowserForPrint } from '../ui-events.js';
+import { waitForPrintImages, waitForCssBackgroundImages } from './raster.js';
+import { isDuplexPrintEnabled } from './layout.js';
+import { buildPrintPdfBlob, isMobilePrintDevice } from './print-mobile.js';
+import { printDesktopInIsolatedFrame } from './print-pc.js';
+
+const printExportsImpl = { exportTicketPng: null, toggleThermalPreview: null };
+export async function exportTicketPng(...args) { return printExportsImpl.exportTicketPng(...args); }
+export function toggleThermalPreview(...args) { return printExportsImpl.toggleThermalPreview(...args); }
+export { isMobilePrintDevice };
+export { isCropMarksEnabled, drawPdfCropMarks, generateCropMarksSvg } from './cropmarks.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('generate-pdf-btn').addEventListener('click', async () => {
+        try {
+            if (
+                guardInAppBrowserForPrint &&
+                !guardInAppBrowserForPrint()
+            ) {
+                return;
+            }
+
+            calculateAILayout();
+
+            const {
+                bestCols,
+                bestRows,
+                totalPerPage,
+                orientation,
+                ticketW,
+                ticketH
+            } = layoutConfig;
+
+            const modeRadio = document.querySelector(
+                'input[name="print-mode"]:checked'
+            );
+            const mode = modeRadio ? modeRadio.value : 'sequential';
+            let ticketsToPrint = [];
+
+            if (mode === 'sequential') {
+                const max = parseInt(
+                    document.getElementById('print-quantity').value,
+                    10
+                );
+
+                for (let i = 1; i <= max; i++) {
+                    ticketsToPrint.push(i);
+                }
+            } else {
+                ticketsToPrint = parseCustomRange(
+                    document.getElementById('print-custom').value
+                );
+            }
+
+            const totalTickets = ticketsToPrint.length;
+
+            if (totalTickets === 0) {
+                alert(t('error_invalid_quantity'));
+                return;
+            }
+
+            if (
+                !Number.isFinite(totalPerPage) ||
+                totalPerPage < 1 ||
+                bestCols < 1 ||
+                bestRows < 1
+            ) {
+                alert(t('error_ticket_too_large'));
+                return;
+            }
+
+            document.getElementById('export-modal').classList.add('hidden');
+            document.getElementById('export-modal').classList.remove('flex');
+
+            const overlay =
+                document.getElementById('print-overlay');
+            const layout = {
+                bestCols,
+                bestRows,
+                totalPerPage,
+                ticketW,
+                ticketH
+            };
+
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+
+            if (!isMobilePrintDevice()) {
+                try {
+                    await printDesktopInIsolatedFrame(
+                        ticketsToPrint,
+                        orientation,
+                        layout
+                    );
+                } finally {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                }
+
+                return;
+            }
+
+            const duplex = isDuplexPrintEnabled();
+            const pdfTab = window.open('', '_blank');
+
+            if (pdfTab) {
+                const totalTarget = duplex ? ticketsToPrint.length * 2 : ticketsToPrint.length;
+                pdfTab.document.write(`<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xuất File In PDF - RaiRaiTei</title>
+    <style>
+        body {
+            margin: 0;
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #1e293b;
+            padding: 32px 24px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 18px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        h2 { margin: 0 0 8px; font-size: 1.2rem; font-weight: 700; color: #f1f5f9; }
+        p { margin: 0 0 18px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4; }
+        .progress-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.2s ease;
+        }
+        .status-desc { font-size: 0.88rem; font-weight: 600; color: #38bdf8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h2>Đang tạo PDF A4...</h2>
+        <p>Vui lòng giữ tab này mở trong quá trình xử lý.</p>
+        <div class="progress-track"><div class="progress-bar" id="pdf-status-bar"></div></div>
+        <div class="status-desc" id="pdf-status-desc">0 / ${totalTarget} vé</div>
+    </div>
+</body>
+</html>`);
+                pdfTab.document.close();
+            }
+
+            try {
+                const pdfBlob = await buildPrintPdfBlob(
+                    ticketsToPrint,
+                    orientation,
+                    layout,
+                    pdfTab
+                );
+                const pdfUrl = URL.createObjectURL(pdfBlob);
+
+                if (pdfTab && !pdfTab.closed) {
+                    try {
+                        pdfTab.document.title = 'RaiRaiTei-Tickets.pdf';
+                        pdfTab.document.body.innerHTML = `
+                            <style>
+                                html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:#0f172a; }
+                                .mobile-pdf-bar {
+                                    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+                                    background: #1e293b; display: flex; align-items: center; justify-content: space-between;
+                                    padding: 0 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); z-index: 100;
+                                    border-bottom: 1px solid rgba(255,255,255,0.1);
+                                }
+                                .mobile-pdf-bar span { color: #f8fafc; font-weight: 600; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+                                .mobile-pdf-bar a {
+                                    background: #2563eb; color: #ffffff; text-decoration: none; font-weight: 700;
+                                    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                                    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+                                }
+                                iframe { width: 100%; height: calc(100% - 54px); margin-top: 54px; border: none; background: #334155; }
+                            </style>
+                            <div class="mobile-pdf-bar">
+                                <span>📄 RaiRaiTei-Tickets.pdf</span>
+                                <a href="${pdfUrl}" download="RaiRaiTei-Tickets.pdf">Tải PDF Về Máy</a>
+                            </div>
+                            <iframe src="${pdfUrl}" type="application/pdf"></iframe>
+                        `;
+                        pdfTab.focus();
+                    } catch (tabNavError) {
+                        pdfTab.location.href = pdfUrl;
+                    }
+                } else {
+                    alert(t('popup_blocked_notice'));
+
+                    const link = document.createElement('a');
+                    link.href = pdfUrl;
+                    link.download = 'RaiRaiTei-Tickets.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                }
+
+                setTimeout(
+                    () => URL.revokeObjectURL(pdfUrl),
+                    300000
+                );
+            } catch (pdfError) {
+                if (pdfTab && !pdfTab.closed) {
+                    pdfTab.close();
+                }
+
+                throw pdfError;
+            } finally {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+            }
+        } catch (error) {
+            console.error(error);
+            alert(t('error_pdf_create'));
+        }
+    });
+
+    /*
+      Lưu thiết kế dưới dạng tệp tùy chỉnh nhỏ gọn (JSON) thay vì chụp
+      toàn bộ trang HTML: không còn nhúng source ứng dụng nên không thể
+      dùng tệp để truy cập/sửa code, đồng thời dễ nhập lại sau này.
+      Bộ thu thập/áp dụng dùng chung với undo/redo (design-history.js).
+    */
+    document.getElementById('backup-btn').addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        const originalText = btn.innerHTML;
+        const buttonLabel = document.getElementById('btn_backup');
+
+        if (buttonLabel) {
+            buttonLabel.textContent = t('processing');
+        } else {
+            btn.textContent = t('processing');
+        }
+
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+        try {
+            const design = designHistory
+                ? designHistory.collect()
+                : null;
+
+            if (!design) {
+                throw new Error('design history module unavailable');
+            }
+
+            const blob = new Blob([JSON.stringify(design, null, 2)], {
+                type: 'application/json;charset=utf-8'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            a.href = url;
+
+            const d = new Date();
+            const timeStr =
+                `${d.getFullYear()}` +
+                `${('0' + (d.getMonth() + 1)).slice(-2)}` +
+                `${('0' + d.getDate()).slice(-2)}`;
+
+            a.download = `Ticket_Design_${timeStr}.customization.json`;
+
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+            alert(t('error_backup_create'));
+        } finally {
+            btn.disabled = false;
+
+            if (applyTranslations) {
+                applyTranslations();
+            } else {
+                btn.innerHTML = originalText;
+            }
+
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    });
+
+    /*
+      Nhập lại tệp tùy chỉnh (.customization.json): áp dụng qua bộ dùng
+      chung của design-history (có xác thực định dạng/màu/font), rồi ghi
+      vào lịch sử để undo/redo hoạt động nhất quán.
+    */
+    const restoreInput = document.getElementById('restore-file');
+
+    document.getElementById('restore-btn').addEventListener('click', () => {
+        restoreInput.value = '';
+        restoreInput.click();
+    });
+
+    restoreInput.addEventListener('change', async () => {
+        const file = restoreInput.files && restoreInput.files[0];
+
+        if (!file) return;
+
+        let design = null;
+
+        try {
+            design = JSON.parse(await file.text());
+        } catch (error) {
+            console.error(error);
+        }
+
+        const applied =
+            design && designHistory
+                ? designHistory.apply(design)
+                : false;
+
+        if (!applied) {
+            alert(t('error_backup_create'));
+            return;
+        }
+
+        if (designHistory) {
+            designHistory.capture();
+        }
+    });
+
+    /**
+    /**
+     * Thuật toán Floyd-Steinberg Dithering:
+     * Khử răng cưa đơn sắc (1-bit monochrome error diffusion)
+     * Tái tạo ảnh giống 100% bản in nhiệt vật lý 203 DPI của máy in hóa đơn.
+     */
+    function applyFloydSteinbergDithering(canvas) {
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const imgData = ctx.getImageData(0, 0, width, height);
+        const data = imgData.data;
+
+        const gray = new Float32Array(width * height);
+        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            gray[j] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+        }
+
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const idx = y * width + x;
+                const oldVal = gray[idx];
+                const newVal = oldVal < 128 ? 0 : 255;
+                gray[idx] = newVal;
+                const err = oldVal - newVal;
+
+                if (x + 1 < width) {
+                    gray[idx + 1] += err * (7 / 16);
+                }
+                if (x - 1 >= 0 && y + 1 < height) {
+                    gray[(y + 1) * width + (x - 1)] += err * (3 / 16);
+                }
+                if (y + 1 < height) {
+                    gray[(y + 1) * width + x] += err * (5 / 16);
+                }
+                if (x + 1 < width && y + 1 < height) {
+                    gray[(y + 1) * width + (x + 1)] += err * (1 / 16);
+                }
+            }
+        }
+
+        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            const val = gray[j] < 128 ? 0 : 255;
+            data[i] = val;
+            data[i + 1] = val;
+            data[i + 2] = val;
+            data[i + 3] = 255;
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+        return canvas;
+    }
+
+    /**
+     * Xuất ảnh vé đơn chiếc độ phân giải cao (Super-sampled High-Res PNG)
+     * Thích hợp cho máy in nhiệt đơn lẻ hoặc chia sẻ
+     */
+    printExportsImpl.exportTicketPng = async function (scale = 3.5) {
+        const ticketNode = document.getElementById('master-ticket-inner');
+        if (!ticketNode) return null;
+
+        try {
+            await waitForPrintImages(ticketNode);
+            await waitForCssBackgroundImages(ticketNode);
+
+            const isThermal = document.body.classList.contains('thermal-simulation-mode');
+            let outCanvas = null;
+
+            if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
+                outCanvas = await window.htmlToImage.toCanvas(ticketNode, {
+                    pixelRatio: scale,
+                    backgroundColor: '#ffffff'
+                });
+            } else if (window.html2canvas) {
+                outCanvas = await window.html2canvas(ticketNode, {
+                    scale: scale,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+            }
+
+            if (outCanvas) {
+                if (isThermal) {
+                    applyFloydSteinbergDithering(outCanvas);
+                }
+
+                const dataUrl = outCanvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `rairaitei-ticket-${isThermal ? 'thermal-' : ''}${Date.now()}.png`;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                return true;
+            }
+        } catch (err) {
+            console.error('[ExportTicketPng] Lỗi xuất ảnh:', err);
+        }
+        return false;
+    };
+
+    /**
+     * Chuyển đổi chế độ mô phỏng máy in nhiệt đơn sắc (Thermal Monochrome Simulation)
+     */
+    printExportsImpl.toggleThermalPreview = function (forceState) {
+        const body = document.body;
+        const nextState = typeof forceState === 'boolean' 
+            ? forceState 
+            : !body.classList.contains('thermal-simulation-mode');
+        
+        body.classList.toggle('thermal-simulation-mode', nextState);
+        if (ticketStore && ticketStore.studio && ticketStore.studio.showThermalMonochrome) {
+            ticketStore.studio.showThermalMonochrome.set(nextState);
+        }
+
+        const btn = document.getElementById('thermal-preview-toggle-btn');
+        if (btn) {
+            btn.classList.toggle('is-active', nextState);
+            btn.setAttribute('aria-pressed', String(nextState));
+        }
+        return nextState;
+    };
+
+
+});

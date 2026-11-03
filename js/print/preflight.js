@@ -1,5 +1,5 @@
-import { t } from './i18n.js';
-import { isMobilePrintDevice } from './export.js';
+import { t } from '../i18n.js';
+import { isMobilePrintDevice } from './print-mobile.js';
 
 /**
  * RaiRaiTei Queue Ticket Studio — Kiểm tra trước in + trang kiểm tra in (GĐ4 vé 4.1)
