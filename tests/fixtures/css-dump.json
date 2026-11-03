@@ -101,7 +101,7 @@
    "--branch-dx": "0mm",
    "--branch-dy": "0mm",
    "--ticket-scale": "0.5000",
-   "--number-font": "'Impact', sans-serif",
+   "--number-font": "'Impact', 'Anton', sans-serif",
    "--msg-font": "'Noto Sans JP', sans-serif",
    "--branch-font": "'Noto Sans JP', sans-serif"
   },
@@ -2628,7 +2628,7 @@
    "--branch-dx": "0mm",
    "--branch-dy": "0mm",
    "--ticket-scale": "0.5000",
-   "--number-font": "'Impact', sans-serif",
+   "--number-font": "'Impact', 'Anton', sans-serif",
    "--msg-font": "'Noto Sans JP', sans-serif",
    "--branch-font": "'Noto Sans JP', sans-serif",
    "--bg-image": "url('assets/templates/summer.svg')"
@@ -5166,7 +5166,7 @@
    "--branch-dx": "0mm",
    "--branch-dy": "0mm",
    "--ticket-scale": "0.5000",
-   "--number-font": "'Impact', sans-serif",
+   "--number-font": "'Impact', 'Anton', sans-serif",
    "--msg-font": "'Noto Sans JP', sans-serif",
    "--branch-font": "'Noto Sans JP', sans-serif",
    "--bg-image": "url('assets/templates/winter.svg')"

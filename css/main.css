@@ -31,7 +31,7 @@ body {
     --frame-width: 39mm;
     --frame-height: 37.5mm;
     --number-base-y: 40.25mm;
-    --number-font: 'Impact';
+    --number-font: 'Impact', 'Anton', sans-serif;
     --number-size: 100pt;
     --number-color: #e60012;
     --number-bg-color: #ffffff;

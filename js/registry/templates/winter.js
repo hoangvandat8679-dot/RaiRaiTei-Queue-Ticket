@@ -56,7 +56,7 @@ export const WinterTemplate = {
 
   // Phông chữ Mùa Đông
   fonts: {
-    'number-font-select': "'Impact', sans-serif",
+    'number-font-select': "'Impact', 'Anton', sans-serif",
     'msg-font': "'Noto Sans JP', sans-serif",
     'branch-font': "'Noto Sans JP', sans-serif"
   },
