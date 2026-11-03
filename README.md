@@ -23,8 +23,8 @@
 
 ```bash
 node server.mjs   # mở http://localhost:3000 — chỉ dùng lúc phát triển, không phải máy chủ production
-node test-full-integration.mjs
-node test-sprint8-cropmarks.mjs
+node tests/test-full-integration.mjs
+node tests/test-sprint8-cropmarks.mjs
 ```
 
 ## Cấu trúc thư mục
@@ -39,3 +39,10 @@ node test-sprint8-cropmarks.mjs
 
 - Bản lễ kỷ niệm 7–8/11/2026: tag `le-2026-ban-chinh`. Bản dự phòng: tag `le-2026-ban-du-phong`.
 - Mọi thay đổi đều qua kiểm chứng trên bản live sau khi GitHub Pages deploy.
+
+## Dành cho người phát triển
+
+- Chạy local: `node server.mjs` rồi mở http://127.0.0.1:3000 — server này chỉ dùng lúc phát triển (nghe mọi địa chỉ mạng, CORS mở), không phải bản live.
+- Chạy test: `npm install` (lần đầu, chỉ để lấy jsdom cho test) rồi `npm test`. Bộ test gồm 2 test tĩnh trên mã nguồn và 1 test hành vi chạy app thật trong jsdom (chọn mẫu, đọc số tùy ý, tính lưới A4).
+- Người dùng chủ yếu vào bằng điện thoại (~90%): khi sửa giao diện hoặc luồng in, kiểm tra bản mobile trước (thanh danh mục dưới đáy, nút in mobile đi đường PDF riêng), bản PC sau.
+- Quy ước commit: mỗi vé việc một commit nhỏ, thông điệp ghi rõ phạm vi; không commit khi chưa có phép của chủ repo theo giai đoạn đã duyệt.

@@ -1,4 +1,10 @@
-window.currentBgBase64 = null; window.currentMascotBase64 = null; window.mascotImgSrcRaw = null;
+// Trạng thái ảnh dùng chung (nền tự tải + linh vật): design-history đọc/ghi
+// qua object này thay cho các biến toàn cục rời trước đây (R1).
+export const imageState = {
+    currentBgBase64: null,
+    currentMascotBase64: null,
+    mascotImgSrcRaw: null
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     const mascotPreview = document.getElementById('mascot-preview');
@@ -8,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadDefaultMascot() {
         try {
-            const res = await fetch('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/mascot.png');
+            const res = await fetch('assets/images/mascot.png');
 
             if (!res.ok) {
                 throw new Error('Default mascot could not be loaded.');
@@ -17,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const blob = await res.blob();
             const reader = new FileReader();
             reader.onloadend = () => {
-                window.mascotImgSrcRaw = reader.result; 
-                processMascot(window.mascotImgSrcRaw);  
+                imageState.mascotImgSrcRaw = reader.result; 
+                processMascot(imageState.mascotImgSrcRaw);  
             }
             reader.readAsDataURL(blob);
         } catch (error) {
@@ -40,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     new Event('input', { bubbles: true })
                 );
             } else {
-                if (window.mascotImgSrcRaw) processMascot(window.mascotImgSrcRaw); else mascotPreview.src = '';
+                if (imageState.mascotImgSrcRaw) processMascot(imageState.mascotImgSrcRaw); else mascotPreview.src = '';
             }
         });
     });
@@ -57,11 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(data.data[i] > 245 && data.data[i+1] > 245 && data.data[i+2] > 245) data.data[i+3] = 0; 
                 }
                 ctx.putImageData(data, 0, 0); 
-                window.currentMascotBase64 = canvas.toDataURL('image/png'); 
-                mascotPreview.src = window.currentMascotBase64;
+                imageState.currentMascotBase64 = canvas.toDataURL('image/png'); 
+                mascotPreview.src = imageState.currentMascotBase64;
             } else { 
-                window.currentMascotBase64 = imageSrc; 
-                mascotPreview.src = window.currentMascotBase64; 
+                imageState.currentMascotBase64 = imageSrc; 
+                mascotPreview.src = imageState.currentMascotBase64; 
             }
         }
         img.src = imageSrc;
@@ -72,24 +78,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.files[0]) { 
             const reader = new FileReader(); 
             reader.onload = function(event) { 
-                window.mascotImgSrcRaw = event.target.result; 
+                imageState.mascotImgSrcRaw = event.target.result; 
                 document.querySelector('input[value="custom"]').checked = true;
-                processMascot(window.mascotImgSrcRaw); 
+                processMascot(imageState.mascotImgSrcRaw); 
             }; 
             reader.readAsDataURL(e.target.files[0]); 
         } 
     });
     
     document.getElementById('remove-white-bg').addEventListener('change', () => { 
-        if(window.mascotImgSrcRaw) processMascot(window.mascotImgSrcRaw); 
+        if(imageState.mascotImgSrcRaw) processMascot(imageState.mascotImgSrcRaw); 
     });
     
     document.getElementById('bg-upload').addEventListener('change', function(e) { 
         if (e.target.files[0]) { 
             const reader = new FileReader(); 
             reader.onload = function(event) { 
-                window.currentBgBase64 = event.target.result; 
-                document.body.style.setProperty('--bg-image', `url('${window.currentBgBase64}')`); 
+                imageState.currentBgBase64 = event.target.result; 
+                document.body.style.setProperty('--bg-image', `url('${imageState.currentBgBase64}')`); 
             }; 
             reader.readAsDataURL(e.target.files[0]); 
         } 

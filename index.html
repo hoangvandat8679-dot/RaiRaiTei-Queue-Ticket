@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>来来亭 整理券作成ツール</title>
     <!-- Fonts & Tailwind -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="css/fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/tailwind.css"> <!-- Tailwind biên dịch tĩnh (GĐ2 2.4) — build lại bằng: npm run build:css -->
 
     <!-- Design Tokens & Cascade Layers (V2) -->
     <link rel="stylesheet" href="css/tokens/index.css?v=v2-1">
 
     <link rel="stylesheet" href="css/main.css?v=prestige-1">
+    <link rel="stylesheet" href="css/templates.css?v=r4">
     <link rel="stylesheet" href="css/layout.css?v=prestige-1">
     <link rel="stylesheet" href="css/ticket.css?v=prestige-1">
     <link rel="stylesheet" href="css/ticket-drag.css?v=topbar-3">
@@ -90,7 +91,7 @@
                                     <svg width="100%" height="100%" style="overflow: visible" preserveAspectRatio="none"><rect x="0" y="0" width="100%" height="100%" pathLength="100" class="svg-dot big-dot" /><rect x="0" y="0" width="100%" height="100%" pathLength="100" class="svg-dot small-dot" /></svg>
                                 </div>
                                 <div class="ticket-content">
-                                    <img src="https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/mascot.png" id="mascot-preview" alt="マスコット画像" class="mascot-img">
+                                    <img src="assets/images/mascot.png" id="mascot-preview" alt="マスコット画像" class="mascot-img">
                                     <div class="number-frame" id="number-frame-preview"></div>
                                     <div class="queue-number" id="preview-number">1</div>
                                     <div class="japanese-text" id="display-msg">現在、店内満席のため<br>順番にご案内いたします。<br>番号をお呼びするまで<br>お待ちください。</div>
@@ -418,6 +419,10 @@
                         </h3>
                         <span id="saved-presets-count" class="bg-gray-700 text-[#fcd116] text-[10px] font-bold px-2 py-0.5 rounded-full border border-gray-600">0</span>
                     </div>
+                    <div id="draft-status-bar" class="hidden mb-3 flex items-center justify-between gap-2 bg-indigo-950/60 border border-indigo-700/60 rounded-lg px-3 py-2">
+                        <span id="draft-status-text" class="text-[11px] text-indigo-200 font-medium"></span>
+                        <button id="draft-reset-btn" type="button" class="shrink-0 text-[11px] font-bold text-black bg-[#cbfb45] hover:bg-[#b0df2b] active:scale-95 transition-all rounded-md px-2.5 py-1">Về mặc định</button>
+                    </div>
                     <div id="saved-presets-container" class="space-y-3">
                         <!-- Danh sách card do PresetManager.renderUI() kết xuất -->
                     </div>
@@ -445,7 +450,6 @@
                         </button>
                     </div>
                     <input type="file" id="preset-file-input" accept=".json,.customization,.customization.json,application/json" class="hidden">
-                    <input type="file" id="restore-file" accept=".json,.customization,.customization.json,application/json" class="hidden">
                 </div>
             </div>
         </div>
@@ -500,8 +504,13 @@
                 <span id="info_total_label" class="text-gray-400">A4の合計ページ数:</span> <strong id="info-total-pages" class="text-white text-right">...</strong>
             </div>
             
+            <div id="preflight-status" class="hidden mb-3 text-[11px] leading-relaxed text-amber-200 bg-amber-950/60 border border-amber-700/60 rounded p-3"></div>
             <button id="generate-pdf-btn" class="w-full bg-[#cbfb45] hover:bg-[#b0df2b] text-gray-900 font-black py-3 px-4 rounded transition-transform transform active:scale-95 flex items-center justify-center text-sm">
                 <span id="generate_pdf_text">印刷 / 保存を確定</span>
+            </button>
+            <button id="print-test-btn" type="button" class="w-full mt-2 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-200 hover:text-white font-bold py-2 px-3 rounded border border-indigo-700/80 transition-colors flex items-center justify-center gap-2 text-xs">
+                <svg class="w-3.5 h-3.5 text-[#cbfb45]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span id="print_test_text">印刷チェックページを印刷</span>
             </button>
             <button id="export-single-png-btn" type="button" class="w-full mt-2 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-200 hover:text-white font-bold py-2 px-3 rounded border border-indigo-700/80 transition-colors flex items-center justify-center gap-2 text-xs">
                 <svg class="w-3.5 h-3.5 text-[#cbfb45]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -512,40 +521,57 @@
 
     <div id="print-area" style="display: none;"></div>
 
-    <!-- Độ lệch kéo thả (mm) của các mục trên vé; được lưu cùng lịch sử thiết kế -->
-    <div id="drag-offset-store" hidden aria-hidden="true">
-        <input type="number" id="drag-mascot-dx" value="0" tabindex="-1"><input type="number" id="drag-mascot-dy" value="0" tabindex="-1">
-        <input type="number" id="drag-frame-dx" value="0" tabindex="-1"><input type="number" id="drag-frame-dy" value="0" tabindex="-1">
-        <input type="number" id="drag-number-dx" value="0" tabindex="-1"><input type="number" id="drag-number-dy" value="0" tabindex="-1">
-        <input type="number" id="drag-msg-dx" value="0" tabindex="-1"><input type="number" id="drag-msg-dy" value="0" tabindex="-1">
-        <input type="number" id="drag-branch-dx" value="0" tabindex="-1"><input type="number" id="drag-branch-dy" value="0" tabindex="-1">
-    </div>
 
     <!-- Core State & Signal Engine (V2 Modular Foundation) -->
-    <script src="js/core/signal.js?v=v2-1" defer></script>
-    <script src="js/core/store.js?v=v2-1" defer></script>
-
-    <script src="js/i18n.js?v=sep-frame-1" defer></script>
-    <script src="js/layout-sync.js?v=qa-fix-1" defer></script>
-    <script src="js/image-editor.js?v=cdn-2" defer></script>
-    <script src="js/ui-events.js?v=settings-nav-1" defer></script>
-    <script src="js/controls.js?v=sep-frame-1" defer></script>
     <!-- Template Registry System (V2) -->
-    <script src="js/registry/templates/standard.js?v=v2-1" defer></script>
-    <script src="js/registry/templates/spring.js?v=v2-1" defer></script>
-    <script src="js/registry/templates/summer.js?v=v2-1" defer></script>
-    <script src="js/registry/templates/autumn.js?v=v2-1" defer></script>
-    <script src="js/registry/templates/winter.js?v=v2-1" defer></script>
-    <script src="js/registry/template-registry.js?v=v2-1" defer></script>
-    <script src="js/templates.js?v=spring-coords-3" defer></script>
-    <script src="js/ticket-drag.js?v=topbar-1" defer></script>
-    <script src="js/design-history.js?v=history-2" defer></script>
     <!-- Storage & Preset Manager (Sprint 7) -->
-    <script src="js/storage/preset-manager.js?v=sprint7-1" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
-    <script src="js/export.js?v=print-fix-3" defer></script>
+    <script src="js/vendor/html2canvas.min.js" defer></script>
+    <script src="js/vendor/html-to-image.min.js" defer></script>
+    <script src="js/vendor/jspdf.umd.min.js" defer></script>
+    <script type="module" src="js/app.js?v=r1"></script>
+
+    <!-- Thông báo bản mới của Service Worker (GĐ4): hiện khi có bản chờ, người dùng tự bấm nạp lại -->
+    <div id="sw-update-banner" class="hidden fixed left-1/2 -translate-x-1/2 bottom-20 md:bottom-6 z-[120] bg-[#cbfb45] text-gray-900 font-bold text-xs md:text-sm rounded-full shadow-2xl pl-4 pr-2 py-2 items-center gap-3">
+        <span id="sw_update_text">Đã có bản mới</span>
+        <button id="sw-update-reload" type="button" class="bg-gray-900 text-white rounded-full px-3 py-1.5 text-xs font-bold active:scale-95 transition-transform">Nạp lại</button>
+    </div>
+    <script>
+    (function () {
+      if (!('serviceWorker' in navigator)) return;
+      if (!/^https?:$/.test(location.protocol)) return;
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (refreshing) return;
+        refreshing = true;
+        location.reload();
+      });
+      navigator.serviceWorker.register('sw.js').then(function (reg) {
+        function showBanner() {
+          var b = document.getElementById('sw-update-banner');
+          if (!b) return;
+          b.classList.remove('hidden');
+          b.classList.add('flex');
+          document.getElementById('sw-update-reload').addEventListener('click', function () {
+            if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          });
+        }
+        if (reg.waiting && navigator.serviceWorker.controller) showBanner();
+        reg.addEventListener('updatefound', function () {
+          var nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function () {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) showBanner();
+          });
+        });
+        // Trình duyệt giới hạn tự kiểm tra bản mới (Chrome: tối đa 1 lần/24 giờ).
+        // Mỗi lần nhân viên quay lại tab thì chủ động hỏi một lần — bản mới
+        // tới tay quán sớm hơn mà không tự ý thay giữa ca (vẫn qua banner).
+        document.addEventListener('visibilitychange', function () {
+          if (document.visibilityState === 'visible') reg.update().catch(function () {});
+        });
+      }).catch(function (err) { console.warn('[SW] Đăng ký thất bại:', err); });
+    })();
+    </script>
 </body>
 </html>
 

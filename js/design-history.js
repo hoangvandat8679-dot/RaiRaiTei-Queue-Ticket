@@ -1,3 +1,13 @@
+import { imageState } from './image-editor.js';
+import { TemplateRegistry } from './registry/template-registry.js';
+import { ticketStore } from './core/store.js';
+import { validateDesign, extractLegacyDragOffsets, normalizeDragOffsets } from './state-schema.js';
+
+// designHistory hình thành trong DOMContentLoaded — export object ổn định,
+// các phương thức thật được gán khi DOM sẵn sàng (cùng mẫu controls/ticket-drag).
+const designHistoryImpl = { collect: null, apply: null, capture: null, SUPPORTED_VERSION: 1 };
+export const designHistory = designHistoryImpl;
+
 /* ============================================================ */
 /* FILE: js/design-history.js                                    */
 /* Undo/redo + thư mục thiết kế (tải lên/xuống) dùng chung       */
@@ -84,14 +94,21 @@ document.addEventListener('DOMContentLoaded', () => {
             design.mascotType = mascotType.value;
         }
 
-        if (window.currentBgBase64) {
-            design.backgroundImage = window.currentBgBase64;
-            historyState.images.bg = window.currentBgBase64;
+        if (imageState.currentBgBase64) {
+            design.backgroundImage = imageState.currentBgBase64;
+            historyState.images.bg = imageState.currentBgBase64;
         }
 
-        if (window.currentMascotBase64) {
-            design.mascotImage = window.currentMascotBase64;
-            historyState.images.mascot = window.currentMascotBase64;
+        if (imageState.currentMascotBase64) {
+            design.mascotImage = imageState.currentMascotBase64;
+            historyState.images.mascot = imageState.currentMascotBase64;
+        }
+
+        // Độ lệch kéo thả lấy từ ticketStore (R3) — không còn input ẩn.
+        const snap = ticketStore.actions.getSnapshot();
+        design.dragOffsets = {};
+        for (const [key, val] of Object.entries(snap.elements)) {
+            design.dragOffsets[key] = { dx: val.dx, dy: val.dy };
         }
 
         return design;
@@ -105,20 +122,23 @@ document.addEventListener('DOMContentLoaded', () => {
         input.dispatchEvent(new Event(eventName, { bubbles: true }));
     };
 
+    // Phiên bản định dạng thiết kế mà bản app này đọc được (GĐ3 vé 3.3).
+    // Tệp không ghi version = bản cũ (v0) vẫn nhận; version lớn hơn = tệp
+    // của app mới hơn, từ chối rõ ràng thay vì áp dụng hỏng.
+    const SUPPORTED_DESIGN_VERSION = 1;
+
     const applyDesign = (design) => {
-        if (
-            !design ||
-            design.format !== 'rairaitei-design' ||
-            typeof design !== 'object'
-        ) {
+        // Cổng nhận theo lược đồ trạng thái (R3): sai định dạng/kiểu dữ
+        // liệu/phiên bản mới hơn thì từ chối nguyên vẹn, không áp nửa vời.
+        if (!design || typeof design !== 'object' || !validateDesign(design).ok) {
             return false;
         }
 
         historyState.applying = true;
 
         try {
-            if (window.TemplateRegistry && typeof window.TemplateRegistry.apply === 'function') {
-                window.TemplateRegistry.apply(design.template || 'standard');
+            if (TemplateRegistry && typeof TemplateRegistry.apply === 'function') {
+                TemplateRegistry.apply(design.template || 'standard');
             } else if (design.template === 'spring') {
                 const springButton = document.getElementById('spring-template-btn');
                 if (springButton) springButton.click();
@@ -187,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (typeof design.backgroundImage === 'string') {
-                window.currentBgBase64 = design.backgroundImage;
+                imageState.currentBgBase64 = design.backgroundImage;
                 document.body.style.setProperty(
                     '--bg-image',
                     `url('${design.backgroundImage}')`
@@ -198,12 +218,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 typeof design.mascotImage === 'string' &&
                 design.mascotImage.startsWith('data:image/')
             ) {
-                window.currentMascotBase64 = design.mascotImage;
+                imageState.currentMascotBase64 = design.mascotImage;
                 const mascotImg = document.getElementById('mascot-preview');
 
                 if (mascotImg) {
                     mascotImg.src = design.mascotImage;
                 }
+            }
+
+            // Độ lệch kéo thả: định dạng mới ở design.dragOffsets; tệp cũ
+            // nằm trong controls dạng drag-<key>-dx/dy (trích xuất tương thích).
+            const offsets = design.dragOffsets
+                ? normalizeDragOffsets(design.dragOffsets)
+                : extractLegacyDragOffsets(design.controls || {});
+            if (offsets) {
+                ticketStore.actions.applySnapshot({ elements: offsets });
             }
 
             if (design.mascotType === 'default' || design.mascotType === 'custom') {
@@ -322,9 +351,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Kéo thả không qua input nữa (R3): nghe tín hiệu đổi thiết kế riêng.
+    document.addEventListener('rairaitei:design-changed', scheduleCapture);
+
     const clearBtn = document.getElementById('history-clear');
-    const downloadBtn = document.getElementById('history-download');
-    const restoreInput = document.getElementById('restore-file');
 
     [
         'history-undo',
@@ -346,20 +376,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (clearBtn) clearBtn.addEventListener('click', clearHistory);
 
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
-            const backupBtn = document.getElementById('backup-btn');
-
-            if (backupBtn) backupBtn.click();
-        });
-    }
-
     historyState.undo.push(collectDesign());
     updateButtons();
 
-    window.designHistory = {
-        collect: collectDesign,
-        apply: applyDesign,
-        capture
-    };
+    designHistoryImpl.collect = collectDesign;
+    designHistoryImpl.apply = applyDesign;
+    designHistoryImpl.capture = capture;
+    designHistoryImpl.SUPPORTED_VERSION = SUPPORTED_DESIGN_VERSION;
 });

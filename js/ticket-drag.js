@@ -1,3 +1,15 @@
+import { currentLang } from './i18n.js';
+import { ticketStore } from './core/store.js';
+import { effect } from './core/signal.js';
+
+// ticketDrag cần trạng thái trong DOMContentLoaded — export wrapper ổn định,
+// triển khai thật được gán khi DOM sẵn sàng (cùng mẫu với controls.js).
+let ticketDragImpl = { resetAll() {}, select() {} };
+export const ticketDrag = {
+    resetAll: (...args) => ticketDragImpl.resetAll(...args),
+    select: (...args) => ticketDragImpl.select(...args)
+};
+
 /* ============================================================ */
 /* FILE: js/ticket-drag.js                                      */
 /* Kéo thả các mục trên vé: linh vật, khung số, lời nhắn,       */
@@ -5,9 +17,9 @@
 /* ============================================================ */
 /*
   Nguyên tắc:
-  - Vị trí kéo được lưu thành độ lệch (mm) trong các input ẩn
-    #drag-<key>-dx / #drag-<key>-dy. Nhờ vậy undo/redo, lưu và tải
-    thiết kế (design-history.js) hoạt động mà không cần sửa thêm.
+  - Vị trí kéo được lưu thành độ lệch (mm) trong ticketStore
+    (R3: trước đây qua các input ẩn #drag-<key>-dx/dy). design-history
+    thu thập độ lệch từ store vào design.dragOffsets.
   - Giá trị được áp vào biến CSS --<key>-dx / --<key>-dy trên body.
     Bản in (iframe) và PDF sao chép biến trên body nên vị trí in
     luôn khớp với bản xem trước.
@@ -43,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const tr = (key) => {
-        const lang = window.currentLang === 'vn' ? 'vn' : 'jp';
+        const lang = currentLang === 'vn' ? 'vn' : 'jp';
         return TEXT[lang][key] || TEXT.jp[key] || key;
     };
 
@@ -60,11 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
         .map((item) => ({
             ...item,
-            el: ticket.querySelector(item.selector),
-            inputX: document.getElementById(`drag-${item.key}-dx`),
-            inputY: document.getElementById(`drag-${item.key}-dy`)
+            el: ticket.querySelector(item.selector)
         }))
-        .filter((item) => item.el && item.inputX && item.inputY);
+        .filter((item) => item.el);
 
     if (!items.length) return;
 
@@ -78,9 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return (rounded > 0 ? '+' : '−') + Math.abs(rounded).toFixed(1);
     };
 
+    // Độ lệch sống trong ticketStore (R3) — không còn input ẩn.
     const getOffset = (item) => ({
-        x: Number(item.inputX.value) || 0,
-        y: Number(item.inputY.value) || 0
+        x: ticketStore.elements[item.key].dx.peek(),
+        y: ticketStore.elements[item.key].dy.peek()
     });
 
     const applyVars = (item, x, y) => {
@@ -88,11 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.setProperty(`--${item.key}-dy`, `${round1(y)}mm`);
     };
 
-    // Ghi vào input ẩn rồi phát sự kiện để lịch sử thiết kế ghi nhận
+    // Ghi độ lệch vào store rồi báo "thiết kế đã đổi" để lịch sử/bản nháp ghi nhận
     const commit = (item, x, y) => {
-        item.inputX.value = String(round1(clamp(x, -MAX_OFFSET, MAX_OFFSET)));
-        item.inputY.value = String(round1(clamp(y, -MAX_OFFSET, MAX_OFFSET)));
-        item.inputY.dispatchEvent(new Event('input', { bubbles: true }));
+        ticketStore.actions.setElementOffset(
+            item.key,
+            round1(clamp(x, -MAX_OFFSET, MAX_OFFSET)),
+            round1(clamp(y, -MAX_OFFSET, MAX_OFFSET))
+        );
+        document.dispatchEvent(new CustomEvent('rairaitei:design-changed'));
     };
 
     // 1 mm bằng bao nhiêu px trên màn hình (đã tính zoom xem trước)
@@ -111,19 +125,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return rect.width > 0 && rect.height > 0;
     };
 
-    /* ---------- Đồng bộ input ẩn → biến CSS ---------- */
+    /* ---------- Đồng bộ store → biến CSS (R3) ---------- */
+    // effect() chạy ngay một lần khi đăng ký, lúc nút reset chưa được tạo
+    // (khai báo sau) — chỉ cập nhật trạng thái nút sau khi khởi tạo xong.
+    let dragUiReady = false;
     items.forEach((item) => {
         item.el.classList.add('td-item');
         item.el.setAttribute('draggable', 'false');
 
-        const sync = () => {
-            const { x, y } = getOffset(item);
+        effect(() => {
+            const x = ticketStore.elements[item.key].dx.get();
+            const y = ticketStore.elements[item.key].dy.get();
             applyVars(item, x, y);
-            updateResetState();
-        };
-
-        item.inputX.addEventListener('input', sync);
-        item.inputY.addEventListener('input', sync);
+            if (dragUiReady) updateResetState();
+        });
     });
 
     ticket.addEventListener('dragstart', (event) => event.preventDefault());
@@ -294,8 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
         applyVars(drag.item, x, y);
 
         // Đồng bộ thời gian thực với Central TicketStore
-        if (window.ticketStore && window.ticketStore.actions) {
-            window.ticketStore.actions.setElementOffset(drag.item.key, x, y);
+        if (ticketStore && ticketStore.actions) {
+            ticketStore.actions.setElementOffset(drag.item.key, x, y);
         }
 
         showGuide(snapped);
@@ -441,16 +456,10 @@ document.addEventListener('DOMContentLoaded', () => {
     resetButton.addEventListener('click', resetAll);
 
     /* ---------- Ngôn ngữ ---------- */
-    if (typeof window.applyTranslations === 'function') {
-        const originalApply = window.applyTranslations;
-        window.applyTranslations = function (...args) {
-            const result = originalApply.apply(this, args);
-            refreshTexts();
-            return result;
-        };
-    }
+    document.addEventListener('rairaitei:language-changed', refreshTexts);
 
     // Khởi tạo
+    dragUiReady = true;
     items.forEach((item) => {
         const { x, y } = getOffset(item);
         applyVars(item, x, y);
@@ -458,5 +467,5 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshTexts();
     updateResetState();
 
-    window.ticketDrag = { resetAll, select: (key) => select(items.find((i) => i.key === key) || null) };
+    ticketDragImpl = { resetAll, select: (key) => select(items.find((i) => i.key === key) || null) };
 });

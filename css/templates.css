@@ -1,0 +1,253 @@
+/* ============================================================ */
+/* css/templates.css — TOÀN BỘ quy tắc theo mẫu (R4 tách từ      */
+/* main.css): thẻ mẫu theo mùa, lõi vé .ticket-core.<mùa> và     */
+/* đồng bộ tách lớp Hạ/Thu/Đông. Nạp ngay sau main.css để giữ   */
+/* nguyên thứ tự ưu tiên cascade như khi còn nằm trong main.css. */
+/* ============================================================ */
+
+/* ============================================================ */
+/* MẪU THEO MÙA: MÙA XUÂN                                     */
+/* ============================================================ */
+.template-folder {
+    padding: 12px;
+    border: 1px solid rgba(244, 114, 182, 0.35);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(80, 34, 52, 0.38), rgba(22, 27, 34, 0.85));
+    box-shadow: 0 4px 16px rgba(244, 114, 182, 0.08);
+}
+.template-folder-title {
+    margin: 0 0 10px;
+    color: #fbcfe8;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+}
+.template-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+}
+.template-card,
+.template-reset-button {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #f3f4f6;
+    background: rgba(13, 17, 23, 0.85);
+    text-align: left;
+    transition: border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease;
+}
+.template-card {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 10px;
+    padding: 8px;
+    cursor: pointer;
+}
+.template-card:hover,
+.template-card:focus-visible,
+.template-card.is-selected {
+    border-color: #f472b6;
+    box-shadow: 0 0 0 1px rgba(244, 114, 182, .35), 0 8px 20px rgba(244, 114, 182, .18);
+    outline: none;
+    transform: translateY(-1px);
+}
+.template-reset-button:hover,
+.template-reset-button:focus-visible,
+.template-reset-button.is-selected {
+    border-color: #cbfb45;
+    box-shadow: 0 0 0 1px rgba(203, 251, 69, .35), 0 6px 16px rgba(203, 251, 69, .15);
+    outline: none;
+}
+.template-card:active,
+.template-reset-button:active {
+    transform: scale(.98);
+}
+.template-card-preview {
+    grid-row: 1 / span 2;
+    width: 46px;
+    height: 62px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.3);
+    background: center / cover no-repeat url('../assets/images/templates/thumbs/spring.webp');
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+.template-card-name {
+    align-self: end;
+    color: #fce7f3;
+    font-size: 12px;
+    font-weight: 800;
+}
+.template-card-description {
+    align-self: start;
+    color: #94a3b8;
+    font-size: 9.5px;
+    margin-top: 2px;
+}
+.template-reset-button {
+    margin-top: 10px;
+    padding: 9px 12px;
+    cursor: pointer;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-align: center;
+}
+/* ============================================================ */
+/* KHU VỰC QUY TẮC THEO MẪU MÙA — lõi vé (.ticket-core.<mùa>)   */
+/* Mọi ghi đè theo mẫu cho lõi vé chỉ nằm trong khu này.        */
+/* GĐ1 vé 1.2 (3/11/2026): đã bỏ 31 !important thừa trong khu —  */
+/* selector .ticket-core.<mùa> (0,3,0) tự thắng quy tắc gốc      */
+/* (0,1,0) trong css/ticket.css; đối chiếu computed style 5 mẫu  */
+/* x 23 phần tử: 0 khác biệt. !important còn lại ở khu thẻ mẫu   */
+/* (template-card) là để thắng Tailwind, xử lý ở GĐ2/R4.        */
+/* ============================================================ */
+.ticket-core.spring-template,
+.ticket-core.summer-template,
+.ticket-core.autumn-template,
+.ticket-core.winter-template {
+    background-color: transparent;
+}
+.template-card-summer .template-card-preview {
+    background: center / cover no-repeat url('../assets/images/templates/thumbs/summer.webp'), linear-gradient(145deg, #fff3e0, #f97316);
+    border-color: #f97316;
+}
+.template-card-summer:hover,
+.template-card-summer:focus-visible,
+.template-card-summer.is-selected {
+    border-color: #f97316 !important;
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, .4), 0 8px 20px rgba(249, 115, 22, .2) !important;
+}
+
+.template-card-autumn .template-card-preview {
+    background: center / cover no-repeat url('../assets/images/templates/thumbs/autumn.webp'), linear-gradient(145deg, #fff5eb, #b45309);
+    border-color: #d97706;
+}
+.template-card-autumn:hover,
+.template-card-autumn:focus-visible,
+.template-card-autumn.is-selected {
+    border-color: #d97706 !important;
+    box-shadow: 0 0 0 1px rgba(217, 119, 6, .4), 0 8px 20px rgba(217, 119, 6, .2) !important;
+}
+
+.template-card-winter .template-card-preview {
+    background: center / cover no-repeat url('../assets/images/templates/thumbs/winter.webp'), linear-gradient(145deg, #f0f9ff, #0284c7);
+    border-color: #0284c7;
+}
+.template-card-winter:hover,
+.template-card-winter:focus-visible,
+.template-card-winter.is-selected {
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 0 1px rgba(2, 132, 199, .4), 0 8px 20px rgba(2, 132, 199, .2) !important;
+}
+
+.ticket-core.spring-template .ticket-bg-layer,
+.ticket-core.summer-template .ticket-bg-layer,
+.ticket-core.autumn-template .ticket-bg-layer,
+.ticket-core.winter-template .ticket-bg-layer {
+    background-image: var(--bg-image, url('../assets/images/templates/spring-background.png'));
+    background-position: center;
+    background-size: 100% 100%;
+    display: block;
+    opacity: 1;
+}
+.ticket-core.spring-template .marquee-border,
+.ticket-core.spring-template .marquee-dots,
+.ticket-core.summer-template .marquee-border,
+.ticket-core.summer-template .marquee-dots,
+.ticket-core.autumn-template .marquee-border,
+.ticket-core.autumn-template .marquee-dots,
+.ticket-core.winter-template .marquee-border,
+.ticket-core.winter-template .marquee-dots {
+    display: none;
+}
+.ticket-core.spring-template .number-frame {
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: url('../assets/images/templates/spring-number-frame.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+}
+.ticket-core.spring-template .queue-number {
+    z-index: 7;
+    color: #ed5793;
+    font-weight: 700;
+}
+.ticket-core.spring-template .branch-name {
+    z-index: 2;
+    background-color: transparent;
+    background-image: url('../assets/images/templates/spring-branch-ribbon.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    color: #ffffff;
+}
+
+/* ============================================================ */
+/* ĐỒNG BỘ TÁCH LỚP CHO CÁC MẪU MÙA (HẠ, THU, ĐÔNG)            */
+/* Sử dụng khung số, mascot và banner nghệ thuật gốc từ SVG     */
+/* Loại bỏ hoàn toàn sự đè chồng kép (Duplicate Stacking)       */
+/* ============================================================ */
+.ticket-core.summer-template .number-frame,
+.ticket-core.autumn-template .number-frame,
+.ticket-core.winter-template .number-frame {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.ticket-core.summer-template .mascot-wrap,
+.ticket-core.autumn-template .mascot-wrap,
+.ticket-core.winter-template .mascot-wrap {
+    display: none;
+}
+
+.ticket-core.summer-template .branch-name,
+.ticket-core.autumn-template .branch-name,
+.ticket-core.winter-template .branch-name {
+    /* Rai Aide 3/11/2026: bỏ ép nền trong suốt. Artwork SVG (588x984) bị
+       letterbox trên lõi vé 43x78mm nên không phủ tới chân vé, nơi tên quán
+       neo 2mm từ đáy — nền trong suốt khiến chữ trắng vô hình trên nền vé
+       sáng. Dải tên quán dùng lại màu cấu hình của từng mẫu
+       (var(--branch-bg) từ .branch-name gốc), không đè lên artwork. */
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: #ffffff;
+    font-weight: 900;
+}
+
+.ticket-core.summer-template .queue-number {
+    z-index: 7;
+    color: #d90012;
+    font-weight: 900;
+}
+.ticket-core.summer-template .ticket-msg {
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    font-weight: 700;
+}
+
+.ticket-core.autumn-template .queue-number {
+    z-index: 7;
+    color: #e10000;
+    font-weight: 900;
+}
+.ticket-core.autumn-template .ticket-msg {
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    font-weight: 700;
+}
+
+.ticket-core.winter-template .queue-number {
+    z-index: 7;
+    color: #d80000;
+    font-weight: 900;
+}
+.ticket-core.winter-template .ticket-msg {
+    color: #0f172a;
+    font-weight: 700;
+}

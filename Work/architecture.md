@@ -3,6 +3,8 @@
 > **Phiên bản kiến trúc:** 2.0 (Modular Reactive Architecture)  
 > **Nguyên tắc thiết kế:** Độc lập module (Decoupled), Zero Build Step (Native ES Modules), Single Source of Truth (Reactive State Store), và Khả năng mở rộng mẫu không giới hạn (Extensible Template Registry).
 
+> **Ghi chú đồng bộ thực tế (3/11/2026, GĐ1):** Hai mục tiêu dưới đây CHƯA đạt ở bản hiện tại và được ghi nhận là hướng tới, không phải mô tả hiện trạng: (1) Native ES Modules — code hiện nạp bằng thẻ script thường, dùng biến toàn cục window.*; (2) Single Source of Truth — store tín hiệu hiện mới gánh tọa độ kéo thả qua adapter hai chiều với DOM, trạng thái chính vẫn nằm ở các ô nhập liệu. Việc chuyển hẳn sang module/store là vé tùy chọn GĐ5 trong kế hoạch hoàn thiện, chỉ làm khi có lưới test hành vi đủ dày.
+
 ---
 
 ## 1. So Sánh Kiến Trúc: Hiện Tại vs Mục Tiêu V2

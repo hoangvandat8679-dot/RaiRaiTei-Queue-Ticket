@@ -1,4 +1,9 @@
-window.detectInAppBrowserForPrint = function() {
+import { t, setLanguage, currentLang } from './i18n.js';
+import { calculateAILayout } from './layout-sync.js';
+import { exportTicketPng, toggleThermalPreview } from './print/print.js';
+import { printTestPage, refreshPreflightUI } from './print/preflight.js';
+
+export function detectInAppBrowserForPrint() {
     const userAgent =
         navigator.userAgent || navigator.vendor || '';
     const isIOS =
@@ -62,7 +67,7 @@ window.detectInAppBrowserForPrint = function() {
                 .test(userAgent)
         )
     ) {
-        return window.t('in_app_browser_generic');
+        return t('in_app_browser_generic');
     }
 
     if (
@@ -70,19 +75,19 @@ window.detectInAppBrowserForPrint = function() {
         !/Safari|CriOS|FxiOS|EdgiOS|OPiOS|CocCoc|DuckDuckGo/i
             .test(userAgent)
     ) {
-        return window.t('in_app_browser_generic');
+        return t('in_app_browser_generic');
     }
 
     return null;
 };
 
-window.guardInAppBrowserForPrint = function() {
-    const browserName = window.detectInAppBrowserForPrint();
+export function guardInAppBrowserForPrint() {
+    const browserName = detectInAppBrowserForPrint();
 
     if (!browserName) return true;
 
     alert(
-        window.t(
+        t(
             'in_app_browser_warning',
             { browser: browserName }
         )
@@ -199,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const txtEl = document.getElementById('txt_focus_preview');
             if (zoomIcon) zoomIcon.classList.remove('hidden');
             if (shrinkIcon) shrinkIcon.classList.add('hidden');
-            if (txtEl) txtEl.textContent = window.t('txt_focus_preview');
+            if (txtEl) txtEl.textContent = t('txt_focus_preview');
         }
         appContainer.classList.remove('pushed-up');
         catBtns.forEach(b => {
@@ -247,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 sidebar.classList.add('sheet-open');
                 appContainer.classList.add('pushed-up');
                 const statusText = document.getElementById('handle_status_text');
-                if (statusText) statusText.textContent = window.t('handle_compact');
+                if (statusText) statusText.textContent = t('handle_compact');
                 btn.blur();
                 fitMobilePreview();
             }
@@ -272,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Trên Mobile: ẩn các panel khác, chỉ bật panel được chọn
                 sidebar.classList.remove('sheet-expanded'); // Luôn trở về mặc định 32dvh khi chuyển sub-tab
                 const statusText = document.getElementById('handle_status_text');
-                if (statusText) statusText.textContent = window.t('handle_compact');
+                if (statusText) statusText.textContent = t('handle_compact');
                 chip.blur();
                 sidebar.scrollTop = 0;
                 panels.forEach(p => {
@@ -339,11 +344,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isFocus) {
                 if (zoomIcon) zoomIcon.classList.add('hidden');
                 if (shrinkIcon) shrinkIcon.classList.remove('hidden');
-                if (txtEl) txtEl.textContent = window.t('txt_focus_restore');
+                if (txtEl) txtEl.textContent = t('txt_focus_restore');
             } else {
                 if (zoomIcon) zoomIcon.classList.remove('hidden');
                 if (shrinkIcon) shrinkIcon.classList.add('hidden');
-                if (txtEl) txtEl.textContent = window.t('txt_focus_preview');
+                if (txtEl) txtEl.textContent = t('txt_focus_preview');
             }
             fitMobilePreview();
         });
@@ -363,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const txtEl = document.getElementById('txt_focus_preview');
                     if (zoomIcon) zoomIcon.classList.remove('hidden');
                     if (shrinkIcon) shrinkIcon.classList.add('hidden');
-                    if (txtEl) txtEl.textContent = window.t('txt_focus_preview');
+                    if (txtEl) txtEl.textContent = t('txt_focus_preview');
                 }
             } else {
                 sidebar.classList.toggle('sheet-expanded');
@@ -371,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isExp = sidebar.classList.contains('sheet-expanded');
             const statusText = document.getElementById('handle_status_text');
             if (statusText) {
-                statusText.textContent = window.t(isExp ? 'handle_expanded' : 'handle_compact');
+                statusText.textContent = t(isExp ? 'handle_expanded' : 'handle_compact');
             }
             fitMobilePreview();
         });
@@ -388,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const txtEl = document.getElementById('txt_focus_preview');
                 if (zoomIcon) zoomIcon.classList.remove('hidden');
                 if (shrinkIcon) shrinkIcon.classList.add('hidden');
-                if (txtEl) txtEl.textContent = window.t('txt_focus_preview');
+                if (txtEl) txtEl.textContent = t('txt_focus_preview');
             }
             fitMobilePreview();
             return;
@@ -408,14 +413,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('mode-sequential-input').classList.add('hidden');
                 document.getElementById('mode-custom-input').classList.remove('hidden');
             }
-            window.calculateAILayout();
+            calculateAILayout();
         });
     });
-    document.getElementById('print-custom').addEventListener('input', () => window.calculateAILayout());
+    document.getElementById('print-custom').addEventListener('input', () => calculateAILayout());
 
     // ĐỔI NGÔN NGỮ
     const syncLanguageButtons = () => {
-        const iconClass = window.currentLang === 'jp'
+        const iconClass = currentLang === 'jp'
             ? 'lang-icon lang-jp'
             : 'lang-icon lang-vn';
         const desktopIcon =
@@ -429,20 +434,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mobileIcon) mobileIcon.className = iconClass;
         if (mobileLabel) {
             mobileLabel.textContent =
-                window.currentLang === 'jp' ? 'JP' : 'VN';
+                currentLang === 'jp' ? 'JP' : 'VN';
         }
     };
 
     const toggleLang = () => {
         const nextLanguage =
-            window.currentLang === 'jp' ? 'vn' : 'jp';
+            currentLang === 'jp' ? 'vn' : 'jp';
 
-        if (window.setLanguage) {
-            window.setLanguage(nextLanguage);
-        } else {
-            window.currentLang = nextLanguage;
-            if (window.applyTranslations) window.applyTranslations();
-        }
+        setLanguage(nextLanguage);
 
         syncLanguageButtons();
     };
@@ -458,16 +458,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // MỞ/ĐÓNG POP-UP XUẤT FILE
     const exportModal = document.getElementById('export-modal');
     const openModal = () => {
-        if (
-            window.guardInAppBrowserForPrint &&
-            !window.guardInAppBrowserForPrint()
-        ) {
+        if (!guardInAppBrowserForPrint()) {
             return;
         }
 
         exportModal.classList.remove('hidden');
         exportModal.classList.add('flex');
-        window.calculateAILayout();
+        calculateAILayout();
+        refreshPreflightUI();
     };
     const closeModal = () => { exportModal.classList.add('hidden'); exportModal.classList.remove('flex'); };
     
@@ -482,16 +480,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-export-modal').addEventListener('click', closeModal);
     exportModal.addEventListener('click', (e) => { if(e.target === exportModal) closeModal(); });
 
+    // IN TRANG KIỂM TRA (GĐ4 vé 4.1)
+    const printTestBtn = document.getElementById('print-test-btn');
+    if (printTestBtn) {
+        printTestBtn.addEventListener('click', () => {
+            printTestPage();
+        });
+    }
+
     // TẢI ẢNH PNG VÉ ĐƠN
     const exportPngBtn = document.getElementById('export-single-png-btn');
     if (exportPngBtn) {
         exportPngBtn.addEventListener('click', async () => {
-            if (window.exportTicketPng) {
+            if (exportTicketPng) {
                 exportPngBtn.disabled = true;
                 const oldText = exportPngBtn.innerHTML;
                 exportPngBtn.innerHTML = '<span>生成中…</span>';
                 try {
-                    await window.exportTicketPng(3.5);
+                    await exportTicketPng(3.5);
                 } finally {
                     exportPngBtn.disabled = false;
                     exportPngBtn.innerHTML = oldText;
@@ -504,8 +510,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const thermalBtn = document.getElementById('thermal-preview-toggle-btn');
     if (thermalBtn) {
         thermalBtn.addEventListener('click', () => {
-            if (window.toggleThermalPreview) {
-                window.toggleThermalPreview();
+            if (toggleThermalPreview) {
+                toggleThermalPreview();
             }
         });
     }

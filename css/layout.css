@@ -2,8 +2,6 @@
 /* FILE: css/layout.css                                         */
 /* ============================================================ */
 html, body { overflow: hidden !important; overscroll-behavior: none; }
-.hide-scroll::-webkit-scrollbar { display: none; }
-.hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
 #app-wrapper {
     position: relative;
@@ -313,7 +311,6 @@ html, body { overflow: hidden !important; overscroll-behavior: none; }
     /* Pill undo/redo nổi trên khung xem; chỉ hiện ở chế độ Cài đặt */
     #design-toolbar, #design-print-btn { pointer-events: auto; }
     #preview-area { position: relative; }
-    #design-toolbar.settings-mode { display: flex; }
 
     #controls-sidebar {
         position: relative;

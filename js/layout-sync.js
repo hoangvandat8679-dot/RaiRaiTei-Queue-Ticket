@@ -1,7 +1,9 @@
-window.layoutConfig = { bestCols: 0, bestRows: 0, totalPerPage: 0, orientation: 'portrait', ticketW: 0, ticketH: 0 };
+import { t } from './i18n.js';
+
+export let layoutConfig = { bestCols: 0, bestRows: 0, totalPerPage: 0, orientation: 'portrait', ticketW: 0, ticketH: 0 };
 
 // THUẬT TOÁN ĐỌC SỐ LẺ AN TOÀN CHỐNG TREO MÁY
-window.parseCustomRange = function(input) {
+export function parseCustomRange(input) {
     if (!input || input.trim() === '') return [];
 
     const numbers = new Set();
@@ -39,7 +41,7 @@ window.parseCustomRange = function(input) {
     return Array.from(numbers).sort((a, b) => a - b);
 };
 
-window.calculateAILayout = function() {
+export function calculateAILayout() {
     const coreW = Math.min(297, Math.max(1, parseFloat(document.getElementById('core-width-input').value) || 43));
     const coreH = Math.min(297, Math.max(1, parseFloat(document.getElementById('core-height-input').value) || 78));
     const bodyStyles = getComputedStyle(document.body);
@@ -71,7 +73,7 @@ window.calculateAILayout = function() {
         qty = Math.min(5000, Math.max(1, parseInt(document.getElementById('print-quantity').value, 10) || 30));
     } else {
         const customInput = document.getElementById('print-custom');
-        qty = customInput ? window.parseCustomRange(customInput.value).length : 0;
+        qty = customInput ? parseCustomRange(customInput.value).length : 0;
     }
 
     const w = coreW + (marginX * 2); const h = coreH + (marginY * 2);
@@ -92,24 +94,24 @@ window.calculateAILayout = function() {
     const colsP = Math.floor(portraitW / w); const rowsP = Math.floor(portraitH / h); const totalP = colsP * rowsP;
     const colsL = Math.floor(landscapeW / w); const rowsL = Math.floor(landscapeH / h); const totalL = colsL * rowsL;
     
-    if (totalL > totalP) window.layoutConfig = { bestCols: colsL, bestRows: rowsL, totalPerPage: totalL, orientation: 'landscape', ticketW: w, ticketH: h };
-    else window.layoutConfig = { bestCols: colsP, bestRows: rowsP, totalPerPage: totalP, orientation: 'portrait', ticketW: w, ticketH: h };
+    if (totalL > totalP) layoutConfig = { bestCols: colsL, bestRows: rowsL, totalPerPage: totalL, orientation: 'landscape', ticketW: w, ticketH: h };
+    else layoutConfig = { bestCols: colsP, bestRows: rowsP, totalPerPage: totalP, orientation: 'portrait', ticketW: w, ticketH: h };
 
     const sizeEl = document.getElementById('info-size');
     if(sizeEl) sizeEl.textContent = `${w.toFixed(1)} x ${h.toFixed(1)} mm`;
     
-    const translate = window.t || ((key) => key);
+    const translate = t;
     const ticketUnit = translate('tickets_unit');
     const pageUnit = translate('pages_unit');
 
-    if (window.layoutConfig.totalPerPage > 0) {
+    if (layoutConfig.totalPerPage > 0) {
         document.getElementById('info-orientation').textContent =
-            window.layoutConfig.orientation === 'portrait'
+            layoutConfig.orientation === 'portrait'
                 ? translate('paper_portrait')
                 : translate('paper_landscape');
         document.getElementById('info-per-page').textContent =
-            `${window.layoutConfig.totalPerPage} ${ticketUnit}`;
-        const sidePages = Math.ceil(qty / window.layoutConfig.totalPerPage);
+            `${layoutConfig.totalPerPage} ${ticketUnit}`;
+        const sidePages = Math.ceil(qty / layoutConfig.totalPerPage);
         const printedPages = isDuplex ? sidePages * 2 : sidePages;
         document.getElementById('info-total-pages').textContent =
             `${printedPages} ${pageUnit}`;
@@ -122,10 +124,10 @@ window.calculateAILayout = function() {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    window.calculateAILayout();
+    calculateAILayout();
 
     const duplexToggle = document.getElementById('duplex-print-toggle');
     if (duplexToggle) {
-        duplexToggle.addEventListener('change', window.calculateAILayout);
+        duplexToggle.addEventListener('change', calculateAILayout);
     }
 });
