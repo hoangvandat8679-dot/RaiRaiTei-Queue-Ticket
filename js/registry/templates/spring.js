@@ -14,7 +14,7 @@
     badge: 'SPRING',
     bodyClass: 'spring-template',
     datasetTemplate: 'spring',
-    bgImage: "url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-background.png')",
+    bgImage: "url('assets/images/templates/spring-background.png')",
 
     // Preset thông số phần tử chuẩn xác
     preset: {

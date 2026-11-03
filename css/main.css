@@ -562,7 +562,7 @@ label[for="mascot-upload"]:hover {
     height: 62px;
     border-radius: 6px;
     border: 1px solid rgba(255,255,255,.3);
-    background: center / cover no-repeat url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-background.png');
+    background: center / cover no-repeat url('../assets/images/templates/spring-background.png');
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 .template-card-name {
@@ -601,7 +601,7 @@ label[for="mascot-upload"]:hover {
     background-color: transparent;
 }
 .template-card-summer .template-card-preview {
-    background: center / cover no-repeat url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/Mu%CC%80a%20He%CC%80.svg'), linear-gradient(145deg, #fff3e0, #f97316);
+    background: center / cover no-repeat url('../assets/templates/summer.svg'), linear-gradient(145deg, #fff3e0, #f97316);
     border-color: #f97316;
 }
 .template-card-summer:hover,
@@ -612,7 +612,7 @@ label[for="mascot-upload"]:hover {
 }
 
 .template-card-autumn .template-card-preview {
-    background: center / cover no-repeat url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/Mu%CC%80a%20Thu.svg'), linear-gradient(145deg, #fff5eb, #b45309);
+    background: center / cover no-repeat url('../assets/templates/autumn.svg'), linear-gradient(145deg, #fff5eb, #b45309);
     border-color: #d97706;
 }
 .template-card-autumn:hover,
@@ -623,7 +623,7 @@ label[for="mascot-upload"]:hover {
 }
 
 .template-card-winter .template-card-preview {
-    background: center / cover no-repeat url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/Mu%CC%80a%20%C4%90o%CC%82ng.svg'), linear-gradient(145deg, #f0f9ff, #0284c7);
+    background: center / cover no-repeat url('../assets/templates/winter.svg'), linear-gradient(145deg, #f0f9ff, #0284c7);
     border-color: #0284c7;
 }
 .template-card-winter:hover,
@@ -637,7 +637,7 @@ label[for="mascot-upload"]:hover {
 .ticket-core.summer-template .ticket-bg-layer,
 .ticket-core.autumn-template .ticket-bg-layer,
 .ticket-core.winter-template .ticket-bg-layer {
-    background-image: var(--bg-image, url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-background.png'));
+    background-image: var(--bg-image, url('../assets/images/templates/spring-background.png'));
     background-position: center;
     background-size: 100% 100%;
     display: block;
@@ -657,7 +657,7 @@ label[for="mascot-upload"]:hover {
     border: none;
     border-radius: 0;
     background-color: transparent;
-    background-image: url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-number-frame.png');
+    background-image: url('../assets/images/templates/spring-number-frame.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
@@ -670,7 +670,7 @@ label[for="mascot-upload"]:hover {
 .ticket-core.spring-template .branch-name {
     z-index: 2;
     background-color: transparent;
-    background-image: url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-branch-ribbon.png');
+    background-image: url('../assets/images/templates/spring-branch-ribbon.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
