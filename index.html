@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>来来亭 整理券作成ツール</title>
     <!-- Fonts & Tailwind -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="css/fonts.css" rel="stylesheet">
     <link rel="stylesheet" href="css/tailwind.css"> <!-- Tailwind biên dịch tĩnh (GĐ2 2.4) — build lại bằng: npm run build:css -->
 
     <!-- Design Tokens & Cascade Layers (V2) -->
@@ -504,8 +504,13 @@
                 <span id="info_total_label" class="text-gray-400">A4の合計ページ数:</span> <strong id="info-total-pages" class="text-white text-right">...</strong>
             </div>
             
+            <div id="preflight-status" class="hidden mb-3 text-[11px] leading-relaxed text-amber-200 bg-amber-950/60 border border-amber-700/60 rounded p-3"></div>
             <button id="generate-pdf-btn" class="w-full bg-[#cbfb45] hover:bg-[#b0df2b] text-gray-900 font-black py-3 px-4 rounded transition-transform transform active:scale-95 flex items-center justify-center text-sm">
                 <span id="generate_pdf_text">印刷 / 保存を確定</span>
+            </button>
+            <button id="print-test-btn" type="button" class="w-full mt-2 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-200 hover:text-white font-bold py-2 px-3 rounded border border-indigo-700/80 transition-colors flex items-center justify-center gap-2 text-xs">
+                <svg class="w-3.5 h-3.5 text-[#cbfb45]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span id="print_test_text">印刷チェックページを印刷</span>
             </button>
             <button id="export-single-png-btn" type="button" class="w-full mt-2 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-200 hover:text-white font-bold py-2 px-3 rounded border border-indigo-700/80 transition-colors flex items-center justify-center gap-2 text-xs">
                 <svg class="w-3.5 h-3.5 text-[#cbfb45]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -546,10 +551,48 @@
     <!-- Storage & Preset Manager (Sprint 7) -->
     <script src="js/storage/preset-manager.js?v=sprint7-1" defer></script>
     <script src="js/storage/draft-manager.js?v=gd3-1" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
+    <script src="js/vendor/html2canvas.min.js" defer></script>
+    <script src="js/vendor/html-to-image.min.js" defer></script>
+    <script src="js/vendor/jspdf.umd.min.js" defer></script>
     <script src="js/export.js?v=print-fix-3" defer></script>
+    <script src="js/print-check.js?v=gd4-1" defer></script>
+
+    <!-- Thông báo bản mới của Service Worker (GĐ4): hiện khi có bản chờ, người dùng tự bấm nạp lại -->
+    <div id="sw-update-banner" class="hidden fixed left-1/2 -translate-x-1/2 bottom-20 md:bottom-6 z-[120] bg-[#cbfb45] text-gray-900 font-bold text-xs md:text-sm rounded-full shadow-2xl pl-4 pr-2 py-2 items-center gap-3">
+        <span id="sw_update_text">Đã có bản mới</span>
+        <button id="sw-update-reload" type="button" class="bg-gray-900 text-white rounded-full px-3 py-1.5 text-xs font-bold active:scale-95 transition-transform">Nạp lại</button>
+    </div>
+    <script>
+    (function () {
+      if (!('serviceWorker' in navigator)) return;
+      if (!/^https?:$/.test(location.protocol)) return;
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (refreshing) return;
+        refreshing = true;
+        location.reload();
+      });
+      navigator.serviceWorker.register('sw.js').then(function (reg) {
+        function showBanner() {
+          var b = document.getElementById('sw-update-banner');
+          if (!b) return;
+          b.classList.remove('hidden');
+          b.classList.add('flex');
+          document.getElementById('sw-update-reload').addEventListener('click', function () {
+            if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          });
+        }
+        if (reg.waiting && navigator.serviceWorker.controller) showBanner();
+        reg.addEventListener('updatefound', function () {
+          var nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function () {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) showBanner();
+          });
+        });
+      }).catch(function (err) { console.warn('[SW] Đăng ký thất bại:', err); });
+    })();
+    </script>
 </body>
 </html>
 
