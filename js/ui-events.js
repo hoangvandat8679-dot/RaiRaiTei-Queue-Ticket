@@ -164,12 +164,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (statusText) statusText.textContent = t('handle_compact');
                 btn.blur();
                 fitMobilePreview();
+                // Gói UX B (4/11/2026): mở Cài đặt trên mobile → mặc định chỉ hiện mục 1 cho gọn,
+                // trừ khi người dùng đã tự chọn chip trong phiên này
+                if (btn.getAttribute('data-group') === 'settings' && !userChoseChip) {
+                    const firstChip = document.querySelector('.subtab-chip[data-target="panel-1"]');
+                    if (firstChip) firstChip.click();
+                }
             }
         });
     });
 
     // 1.1 XỬ LÝ SUB-TAB CHIP BAR (Chuyển nhanh từng panel trên Mobile & PC)
     const subtabChips = document.querySelectorAll('.subtab-chip');
+    // Gói UX B (4/11/2026): nhớ khi người dùng tự tay chọn chip để không ép lại mặc định gọn
+    let userChoseChip = false;
+    subtabChips.forEach(chip => chip.addEventListener('pointerdown', () => { userChoseChip = true; }));
     subtabChips.forEach(chip => {
         chip.addEventListener('click', () => {
             const targetIds = chip.getAttribute('data-target').split(/\s+/);
@@ -469,6 +478,13 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         mobilePreviewObserver.observe(masterTicket);
         mobilePreviewObserver.observe(sidebar);
+    }
+
+    // Gói UX A (4/11/2026): trên mobile, mở sẵn khay ở tab Mẫu khi vào app
+    // để danh sách mẫu hiện ngay trong tầm mắt, không phải đoán thao tác mở khay
+    if (window.innerWidth < 768 && !sidebar.classList.contains('sheet-open')) {
+        const designBtn = document.querySelector('.cat-btn[data-group="design"]');
+        if (designBtn) designBtn.click();
     }
 
     fitMobilePreview();
