@@ -1,0 +1,17 @@
+# Chạy bộ test khi có push/PR. Đây là chuông báo, KHÔNG phải cổng chặn:
+# GitHub Pages deploy theo cơ chế riêng và không chờ workflow này.
+# Kỷ luật thật: test đỏ thì không coi việc là xong (xem KE_HOACH GĐ1 vé 1.4).
+name: test
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
