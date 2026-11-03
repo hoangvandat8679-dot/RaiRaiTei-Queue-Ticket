@@ -1,16 +1,51 @@
 /* ============================================================ */
 /* FILE: css/ticket.css                                         */
 /* ============================================================ */
-#preview-area { perspective: 1000px; flex: 1; min-height: 0; overflow: hidden; position: relative; }
-.preview-scale-wrapper { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; padding: 20px; overflow: auto;}
+#preview-area {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    position: relative;
+    background:
+        radial-gradient(ellipse at 50% 38%, rgba(30, 41, 59, 0.5) 0%, rgba(10, 14, 23, 0.98) 75%),
+        radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px) 0 0 / 24px 24px,
+        #090d14;
+}
+.preview-scale-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100%;
+    min-height: 100%;
+    padding: 32px;
+    box-sizing: border-box;
+}
 
-/* Tăng độ phóng to mặc định trên Mobile lên 1.3 để dễ nhìn hơn */
-.preview-scale { transform: scale(1.3); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); transform-origin: center center; }
+/* JS sẽ set zoom trực tiếp qua inline style */
+.preview-scale {
+    display: inline-block;
+    transition: zoom 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    border-radius: 4px;
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 45px -5px rgba(203, 251, 69, 0.06);
+}
 
-/* Tăng độ phóng to trên PC lên 2.0 để lấp đầy khoảng trống (như vùng khoanh đỏ) */
-@media (min-width: 768px) { .preview-scale { transform: scale(2.0); } }
-
-.ticket-wrapper { width: calc(var(--core-width) + (var(--cut-margin-x) * 2)); height: calc(var(--core-height) + (var(--cut-margin-y) * 2)); border: 1px dashed #999; display: flex; justify-content: center; align-items: center; background-color: white; position: relative; box-sizing: border-box; flex-shrink: 0; -webkit-print-color-adjust: exact !important; }
+.ticket-wrapper {
+    width: calc(var(--core-width) + (var(--cut-margin-x) * 2));
+    height: calc(var(--core-height) + (var(--cut-margin-y) * 2));
+    border: 1px dashed rgba(148, 163, 184, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    position: relative;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    border-radius: 3px;
+    -webkit-print-color-adjust: exact !important;
+}
 .ticket-empty { width: calc(var(--core-width) + (var(--cut-margin-x) * 2)); height: calc(var(--core-height) + (var(--cut-margin-y) * 2)); box-sizing: border-box; border: none; }
 .ticket-core { width: var(--core-width); height: var(--core-height); background-color: var(--bg-color); position: relative; overflow: hidden; box-sizing: border-box; -webkit-print-color-adjust: exact !important; }
 .ticket-bg-layer { display: var(--background-layer-display, block); position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: var(--bg-image); background-size: cover; background-position: center; opacity: var(--bg-opacity); z-index: 1; pointer-events: none; -webkit-print-color-adjust: exact !important; }
@@ -19,9 +54,29 @@
 .svg-dot { fill: none; stroke: var(--bg-color); stroke-linecap: round; stroke-dasharray: 0 calc(100 / var(--dot-density)); }
 .big-dot { stroke-width: var(--dot-size-1); }
 .small-dot { stroke-width: var(--dot-size-2); stroke-dashoffset: calc(50 / var(--dot-density)); }
-.mascot-img { position: absolute; top: var(--mascot-y); left: 50%; transform: translateX(-50%); width: var(--mascot-width); height: auto; background: transparent; object-fit: contain; z-index: 6; display: var(--mascot-display, block); }
+.mascot-img { position: absolute; top: var(--mascot-y); left: 50%; transform: translate(calc(-50% + var(--mascot-dx, 0mm)), var(--mascot-dy, 0mm)); width: var(--mascot-width); height: auto; background: transparent; object-fit: contain; z-index: 6; display: var(--mascot-display, block); }
 .ticket-content { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5; pointer-events: none; }
-.number-frame { position: absolute; top: var(--frame-y); left: 50%; transform: translateX(-50%); width: var(--frame-width); height: var(--frame-height); justify-content: center; align-items: center; border: var(--number-border-width) solid var(--number-border-color); border-radius: 1mm; background-color: var(--number-bg-color); display: var(--number-display, flex); }
-.queue-number { font-family: var(--number-font); font-size: var(--number-size); font-weight: 900; color: var(--number-color); line-height: 1; position: relative; top: var(--number-offset-y); }
-.japanese-text { display: var(--message-display, block); position: absolute; bottom: var(--msg-y); left: 50%; transform: translateX(-50%); font-family: var(--msg-font); font-weight: var(--msg-weight); font-style: var(--msg-style); font-size: var(--msg-size); color: var(--msg-color); text-align: center; line-height: 1.2; width: calc(100% - (var(--content-padding-x) * 2)); letter-spacing: -0.1px; -webkit-text-stroke: var(--msg-stroke-w) var(--msg-stroke-c); }
-.branch-name { display: var(--branch-display, block); position: absolute; bottom: var(--branch-y); left: 50%; transform: translateX(-50%); font-family: var(--branch-font); font-weight: var(--branch-weight); font-style: var(--branch-style); font-size: var(--branch-size); color: var(--branch-color); background-color: var(--branch-bg); text-align: center; width: var(--branch-width); max-width: calc(100% - (var(--content-padding-x) * 2)); padding: var(--branch-pad-y) 0; border-radius: var(--branch-radius); -webkit-text-stroke: var(--branch-stroke-w) var(--branch-stroke-c); -webkit-print-color-adjust: exact !important; }
+.number-frame { position: absolute; top: var(--frame-y); left: 50%; transform: translate(calc(-50% + var(--frame-dx, 0mm)), var(--frame-dy, 0mm)); width: var(--frame-width); height: var(--frame-height); border: var(--number-border-width) solid var(--number-border-color); border-radius: 1mm; background-color: var(--number-bg-color); display: var(--frame-display, block); box-sizing: border-box; z-index: 6; }
+.queue-number { position: absolute; top: var(--number-base-y, 40.25mm); left: 50%; transform: translate(calc(-50% + var(--number-dx, 0mm)), calc(-50% + var(--number-offset-y, 0mm) + var(--number-dy, 0mm))); font-family: var(--number-font); font-size: var(--number-size); font-weight: 900; color: var(--number-color); line-height: 1; display: var(--number-display, block); white-space: nowrap; text-align: center; z-index: 7; }
+.japanese-text { display: var(--message-display, block); position: absolute; bottom: var(--msg-y); left: 50%; transform: translate(calc(-50% + var(--msg-dx, 0mm)), var(--msg-dy, 0mm)); font-family: var(--msg-font); font-weight: var(--msg-weight); font-style: var(--msg-style); font-size: var(--msg-size); color: var(--msg-color); text-align: center; line-height: 1.2; width: calc(100% - (var(--content-padding-x) * 2)); letter-spacing: -0.1px; -webkit-text-stroke: var(--msg-stroke-w) var(--msg-stroke-c); }
+.branch-name { display: var(--branch-display, block); position: absolute; bottom: var(--branch-y); left: 50%; transform: translate(calc(-50% + var(--branch-dx, 0mm)), var(--branch-dy, 0mm)); font-family: var(--branch-font); font-weight: var(--branch-weight); font-style: var(--branch-style); font-size: var(--branch-size); color: var(--branch-color); background-color: var(--branch-bg); text-align: center; width: var(--branch-width); max-width: calc(100% - (var(--content-padding-x) * 2)); padding: var(--branch-pad-y) 0; border-radius: var(--branch-radius); -webkit-text-stroke: var(--branch-stroke-w) var(--branch-stroke-c); -webkit-print-color-adjust: exact !important; }
+
+/* ============================================================ */
+/* THERMAL PRINTER PREVIEW SIMULATION (Monochrome / Dither Mode)*/
+/* ============================================================ */
+body.thermal-simulation-mode #ticket-preview-wrapper {
+    filter: grayscale(100%) contrast(165%) brightness(95%);
+    transition: filter 0.25s ease;
+}
+
+body.thermal-simulation-mode #ticket-preview-wrapper * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+body.thermal-simulation-mode #thermal-preview-toggle-btn {
+    background-color: var(--studio-accent-yellow, #facc15) !important;
+    color: #000000 !important;
+    border-color: rgba(250, 204, 21, 0.8) !important;
+    box-shadow: 0 0 12px rgba(250, 204, 21, 0.4) !important;
+}

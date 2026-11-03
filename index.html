@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>来来亭 整理券作成ツール</title>
     <!-- Fonts & Tailwind -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/main.css?v=spring-7">
-    <link rel="stylesheet" href="css/layout.css?v=settings-nav-1">
-    <link rel="stylesheet" href="css/ticket.css?v=relative-controls-1">
+
+    <!-- Design Tokens & Cascade Layers (V2) -->
+    <link rel="stylesheet" href="css/tokens/index.css?v=v2-1">
+
+    <link rel="stylesheet" href="css/main.css?v=prestige-1">
+    <link rel="stylesheet" href="css/layout.css?v=prestige-1">
+    <link rel="stylesheet" href="css/ticket.css?v=prestige-1">
+    <link rel="stylesheet" href="css/ticket-drag.css?v=topbar-3">
     <link rel="stylesheet" href="css/print.css?v=print-fix-v1">
     <style id="dynamic-print-style"></style>
 </head>
 <body id="main-body">
     <!-- MÀN HÌNH LOADING KHI IN -->
-    <div id="print-overlay" class="fixed inset-0 bg-black/95 z-[99999] hidden flex-col justify-center items-center text-white">
+    <div id="print-overlay" class="fixed inset-0 bg-black/95 z-[99999] hidden flex-col justify-center items-center text-white" style="display: none;">
         <svg class="animate-spin h-12 w-12 text-[#cbfb45] mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
         <h2 class="text-2xl font-black text-[#cbfb45] mb-2" id="print_loading_title">印刷データを準備しています…</h2>
         <p id="print_loading_desc" class="text-sm text-gray-400 mb-6 text-center max-w-md px-4">ブラウザが印刷またはPDF保存画面を開きます。このタブを閉じないでください。</p>
@@ -25,32 +30,56 @@
     <div id="app-wrapper">
         <div id="app-container">
             <!-- HEADER -->
-            <div id="preview-header" class="relative px-4 py-3 md:px-6 md:py-4 bg-[#111] md:bg-gray-900/90 flex justify-between items-center z-10 border-b border-[#222] md:border-none shadow-md">
-                <div class="md:hidden flex items-center justify-between w-full">
-                    <button id="mobile-lang-toggle-btn" type="button" class="mobile-lang-button" aria-label="言語を切り替える（現在：日本語）">
-                        <span id="mobile-lang-icon" class="lang-icon lang-jp"></span>
-                        <span id="mobile-lang-label">JP</span>
-                    </button>
-                    <button id="mobile-print-btn" class="toolbar-icon-btn bg-[#cbfb45] text-black" aria-label="印刷 / PDF保存"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5z"></path></svg></button>
-                </div>
-                <div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
-                    <button id="history-undo" type="button" title="元に戻す" aria-label="元に戻す" class="toolbar-icon-btn disabled:opacity-30 disabled:cursor-not-allowed"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"></path></svg></button>
-                    <button id="history-redo" type="button" title="やり直す" aria-label="やり直す" class="toolbar-icon-btn disabled:opacity-30 disabled:cursor-not-allowed"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"></path></svg></button>
-                </div>
-                <h1 class="hidden md:flex text-lg text-white font-medium items-center shrink-0">
-                    <svg class="w-5 h-5 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <span id="preview_title">プレビュー</span>
+            <div id="preview-header" class="relative px-3 py-2 md:px-5 md:py-2.5 flex justify-between items-center z-10 shadow-md gap-2 md:gap-3 bg-[#0d1117] border-b border-white/5">
+                <!-- Mobile Left: Language Button -->
+                <button id="mobile-lang-toggle-btn" type="button" class="mobile-lang-button md:hidden shrink-0" aria-label="言語を切り替える（現在：日本語）">
+                    <span id="mobile-lang-icon" class="lang-icon lang-jp"></span>
+                    <span id="mobile-lang-label">JP</span>
+                </button>
+
+                <!-- Desktop Left: Studio Title -->
+                <h1 class="hidden md:flex text-sm text-gray-200 font-bold tracking-wide items-center shrink-0 gap-2 select-none">
+                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.7)]"></span>
+                    <span id="preview_title" class="font-extrabold text-white whitespace-nowrap">来来亭 整理券</span>
+                    <span class="text-[10px] text-gray-400 font-semibold px-2 py-0.5 rounded-full bg-white/5 border border-white/10 ml-1">STUDIO</span>
                 </h1>
-                <div class="hidden md:flex items-center gap-2">
-                    <span id="header-core-size" class="text-xs bg-gray-700 text-yellow-400 font-bold px-2 py-1 rounded border border-gray-600"><span id="core_size_label_header">コア</span>: 4.4x7.9cm</span>
-                    <button id="pc-top-print-btn" type="button" title="印刷 / PDF保存" aria-label="印刷 / PDF保存" class="toolbar-icon-btn"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5z"></path></svg></button>
-                    <button id="lang-toggle-btn" type="button" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded px-2 py-1.5 flex items-center justify-center transition-colors shadow-sm"><span id="current-lang-icon" class="lang-icon lang-jp"></span></button>
-                    <button id="toggle-panel-btn" type="button" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded border border-gray-600 transition-colors flex items-center shadow-sm shrink-0"><span id="text_collapse" class="text-xs font-semibold">全画面表示</span></button>
+
+                <!-- Center Controls (Visible on BOTH Mobile & Desktop) -->
+                <div class="flex items-center justify-center gap-1.5 md:gap-2.5 shrink-0 px-1">
+                    <div class="flex items-center gap-0.5 p-0.5 bg-black/40 backdrop-blur-md rounded-xl md:rounded-2xl border border-white/10 shadow-lg shrink-0">
+                        <button id="history-undo" type="button" title="元に戻す" aria-label="元に戻す" class="toolbar-icon-btn !w-8 !h-8 md:!w-9 md:!h-9 disabled:opacity-30 disabled:cursor-not-allowed">
+                            <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"></path></svg>
+                        </button>
+                        <button id="history-redo" type="button" title="やり直す" aria-label="やり直す" class="toolbar-icon-btn !w-8 !h-8 md:!w-9 md:!h-9 disabled:opacity-30 disabled:cursor-not-allowed">
+                            <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"></path></svg>
+                        </button>
+                    </div>
+                    <div id="header-drag-hint-slot" class="flex items-center shrink-0"></div>
+                </div>
+
+                <!-- Mobile Right: Print Button -->
+                <button id="mobile-print-btn" class="toolbar-icon-btn md:hidden shrink-0" aria-label="印刷 / PDF保存">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5z"></path></svg>
+                </button>
+
+                <!-- Desktop Right: Actions -->
+                <div class="hidden md:flex items-center gap-1.5 lg:gap-2 shrink-0">
+                    <span id="header-core-size" class="hidden lg:flex text-[11px] bg-yellow-400/10 text-yellow-400 font-bold px-2.5 py-1 rounded-full border border-yellow-400/30 items-center gap-1 shadow-[0_0_12px_rgba(250,204,21,0.12)] whitespace-nowrap"><span id="core_size_label_header">コア</span>: 4.30x7.80cm</span>
+                    <button id="pc-top-print-btn" type="button" title="印刷 / PDF保存" aria-label="印刷 / PDF保存" class="toolbar-icon-btn !w-9 !h-9 !bg-gradient-to-r !from-[#cbfb45] !to-[#a3e614] !text-black !border-[#cbfb45]/70 hover:!brightness-110 !shadow-[0_0_16px_rgba(203,251,69,0.35)] shrink-0"><svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5z"></path></svg></button>
+                    <button id="lang-toggle-btn" type="button" class="toolbar-icon-btn !w-9 !h-9 shrink-0"><span id="current-lang-icon" class="lang-icon lang-jp"></span></button>
+                    <button id="thermal-preview-toggle-btn" type="button" title="サーマル印刷プレビュー（白黒シミュレーション）" aria-label="サーマル印刷プレビュー" class="toolbar-icon-btn !w-auto !h-9 px-2.5 text-[11px] font-bold gap-1.5 shrink-0 whitespace-nowrap"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><span id="text_thermal_mode" class="hidden xl:inline">熱転写</span></button>
+                    <button id="toggle-panel-btn" type="button" class="toolbar-icon-btn !w-auto !h-9 px-2.5 text-[11px] font-bold gap-1.5 shrink-0 whitespace-nowrap"><svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg><span id="text_collapse" class="hidden xl:inline">全画面</span></button>
                 </div>
             </div>
 
             <!-- KHU VỰC VÉ CHÍNH -->
-            <div id="preview-area">
+            <div id="preview-area" class="relative">
+                <!-- NÚT PHÓNG TO / THU GỌN VÉ (Mobile Floating Zoom Pill) -->
+                <button id="btn-focus-preview" type="button" class="preview-focus-pill md:hidden" aria-label="拡大表示 / チケット優先" title="拡大表示">
+                    <svg class="focus-icon-zoom w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"></path></svg>
+                    <svg class="focus-icon-shrink w-3.5 h-3.5 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"></path></svg>
+                    <span id="txt_focus_preview">拡大</span>
+                </button>
                 <div class="preview-scale-wrapper custom-scrollbar">
                     <div class="preview-scale shadow-2xl ring-1 ring-gray-700 bg-white" id="ticket-preview-wrapper">
                         <div class="ticket-wrapper" id="master-ticket">
@@ -62,7 +91,8 @@
                                 </div>
                                 <div class="ticket-content">
                                     <img src="https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/mascot.png" id="mascot-preview" alt="マスコット画像" class="mascot-img">
-                                    <div class="number-frame"><div class="queue-number" id="preview-number">1</div></div>
+                                    <div class="number-frame" id="number-frame-preview"></div>
+                                    <div class="queue-number" id="preview-number">1</div>
                                     <div class="japanese-text" id="display-msg">現在、店内満席のため<br>順番にご案内いたします。<br>番号をお呼びするまで<br>お待ちください。</div>
                                     <div class="branch-name" id="display-branch">安佐南相田店</div>
                                 </div>
@@ -73,7 +103,7 @@
             </div>
             
             <!-- BOTTOM NAVBAR (Mobile) / RAIL DỌC (PC) -->
-            <div id="mobile-category-bar" class="fixed bottom-0 left-0 right-0 md:bottom-auto md:top-0 md:right-auto md:w-[76px] h-[64px] md:h-auto bg-[#101318] flex flex-row md:flex-col justify-around md:justify-start z-50 items-center md:pt-16 px-3 md:px-1 md:rounded-none rounded-t-2xl border-t border-gray-500/50 md:border-0 shadow-[0_-6px_24px_rgba(0,0,0,0.6)] md:shadow-none">
+            <div id="mobile-category-bar" class="fixed bottom-0 left-0 right-0 md:hidden h-[64px] bg-[#101318] flex flex-row justify-around z-50 items-center px-3 rounded-t-2xl border-t border-gray-500/50 shadow-[0_-6px_24px_rgba(0,0,0,0.6)]">
                 <button id="settings-back-btn" type="button" class="hidden nav-back-btn" aria-label="戻る" title="戻る"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h13.5a4.5 4.5 0 010 9H12"></path></svg></button>
                 <button class="cat-btn active text-[#cbfb45] text-[10px] font-bold shrink-0 md:w-full border-b-0 md:border-l-2 border-transparent flex flex-col items-center gap-1 px-4 py-1.5 rounded-full" data-target="panel-template" data-group="design"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"></path></svg><span id="nav_template">テンプレート</span></button>
                 <button class="cat-btn text-gray-400 text-[10px] font-bold shrink-0 md:w-full border-b-0 md:border-l-2 border-transparent transition-colors flex flex-col items-center gap-1 px-4 py-1.5 rounded-full" data-target="panel-1 panel-2 panel-3 panel-4 panel-5" data-group="settings"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg><span id="nav_settings">設定</span></button>
@@ -85,8 +115,43 @@
 
         <!-- BẢNG ĐIỀU KHIỂN (Cả PC và Điện thoại) -->
         <div id="controls-sidebar" class="custom-scrollbar">
-            <div class="flex justify-between items-center border-b border-gray-700 pb-3 mb-4 hidden md:flex">
-                <h2 class="text-lg font-bold text-gray-200" id="control_panel_title">設定パネル</h2>
+            <!-- DRAG / TOGGLE HANDLE (Mobile Drawer Height Switcher) -->
+            <div id="sheet-drag-handle" class="sheet-drag-handle md:hidden" title="タップしてパネルの高さを切替 / Chuyển đổi kích thước bảng">
+                <span class="handle-bar"></span>
+                <span class="handle-hint">
+                    <svg class="handle-icon w-3 h-3 text-[#cbfb45] transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"></path></svg>
+                    <span id="handle_status_text">チケット優先</span>
+                </span>
+            </div>
+            <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4 hidden md:flex">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#cbfb45] shadow-[0_0_8px_#cbfb45]"></span>
+                    <h2 class="text-xs font-extrabold text-gray-200 tracking-wider uppercase" id="control_panel_title">設定パネル</h2>
+                </div>
+                <span class="text-[10px] text-gray-400 font-mono bg-white/5 px-2 py-0.5 rounded border border-white/10">43×78mm</span>
+            </div>
+            
+            <!-- SUB-TABS CHIP BAR (Cả Mobile và PC) -->
+            <div id="subtab-chip-bar" class="subtab-chip-bar sticky top-0 z-20 -mx-3 md:-mx-4 px-3 md:px-4 py-2 mb-3 bg-[#0d1117]/95 backdrop-blur-md border-b border-white/10 flex items-center gap-1.5 overflow-x-auto select-none">
+                <button type="button" class="subtab-chip active shrink-0" data-target="panel-1 panel-2 panel-3 panel-4 panel-5">
+                    <span class="chip-dot"></span>
+                    <span id="chip_all">すべて</span>
+                </button>
+                <button type="button" class="subtab-chip shrink-0" data-target="panel-1">
+                    <span id="chip_size">1. サイズ</span>
+                </button>
+                <button type="button" class="subtab-chip shrink-0" data-target="panel-2">
+                    <span id="chip_border">2. 枠・シンボル</span>
+                </button>
+                <button type="button" class="subtab-chip shrink-0" data-target="panel-3">
+                    <span id="chip_number">3. 番号と枠</span>
+                </button>
+                <button type="button" class="subtab-chip shrink-0" data-target="panel-4">
+                    <span id="chip_message">4. メッセージ</span>
+                </button>
+                <button type="button" class="subtab-chip shrink-0" data-target="panel-5">
+                    <span id="chip_branch">5. 店舗名</span>
+                </button>
             </div>
             
             <!-- TAB 0: THIẾT KẾ MẪU -->
@@ -103,6 +168,21 @@
                                 <span class="template-card-preview" aria-hidden="true"></span>
                                 <span id="template_spring_name" class="template-card-name">春</span>
                                 <span id="template_spring_description" class="template-card-description">桜のデザイン</span>
+                            </button>
+                            <button id="summer-template-btn" type="button" class="template-card template-card-summer" data-template="summer">
+                                <span class="template-card-preview" aria-hidden="true"></span>
+                                <span id="template_summer_name" class="template-card-name">夏</span>
+                                <span id="template_summer_description" class="template-card-description">祭り・ひまわり</span>
+                            </button>
+                            <button id="autumn-template-btn" type="button" class="template-card template-card-autumn" data-template="autumn">
+                                <span class="template-card-preview" aria-hidden="true"></span>
+                                <span id="template_autumn_name" class="template-card-name">秋</span>
+                                <span id="template_autumn_description" class="template-card-description">紅葉・お月見</span>
+                            </button>
+                            <button id="winter-template-btn" type="button" class="template-card template-card-winter" data-template="winter">
+                                <span class="template-card-preview" aria-hidden="true"></span>
+                                <span id="template_winter_name" class="template-card-name">冬</span>
+                                <span id="template_winter_description" class="template-card-description">雪・イルミネーション</span>
                             </button>
                         </div>
                     </section>
@@ -122,8 +202,27 @@
                         <span class="tool-enable-switch" aria-hidden="true"></span>
                     </label>
 
-                    <div class="mb-3 grid grid-cols-2 gap-2 border-b border-gray-700 pb-3"><div><label class="block text-[10px] text-yellow-400 font-bold mb-1" id="core_w">コア幅 (mm)</label><input type="number" id="core-width-input" value="44.0" class="w-full bg-gray-700 text-xs text-white border border-gray-600 rounded p-1.5 text-center"></div><div><label class="block text-[10px] text-yellow-400 font-bold mb-1" id="core_h">コア高 (mm)</label><input type="number" id="core-height-input" value="79.0" class="w-full bg-gray-700 text-xs text-white border border-gray-600 rounded p-1.5 text-center"></div></div>
-                    <div class="mb-3 grid grid-cols-2 gap-2"><div><label class="block text-[10px] text-gray-400 mb-1" id="bg_color">背景色</label><input type="color" id="bg-color" value="#fcd116" class="w-full h-8 cursor-pointer rounded border border-gray-600 bg-gray-700"></div><div><label class="block text-[10px] text-gray-400 mb-1" id="bg_img">背景画像</label><input type="file" id="bg-upload" accept="image/*" class="sr-only"><label for="bg-upload" class="block w-full cursor-pointer rounded bg-gray-600 px-2 py-1.5 text-center text-[10px] font-semibold text-white hover:bg-gray-500"><span id="bg-upload-button">ファイルを選択</span></label><p id="bg-upload-name" class="mt-1 truncate text-[9px] text-gray-400">ファイルが選択されていません</p></div></div>
+                    <div class="mb-3 grid grid-cols-2 gap-2 border-b border-gray-700 pb-3"><div><label class="block text-[10px] text-yellow-400 font-bold mb-1" id="core_w">コア幅 (mm)</label><input type="number" id="core-width-input" value="43.0" class="w-full bg-gray-700 text-xs text-white border border-gray-600 rounded p-1.5 text-center"></div><div><label class="block text-[10px] text-yellow-400 font-bold mb-1" id="core_h">コア高 (mm)</label><input type="number" id="core-height-input" value="78.0" class="w-full bg-gray-700 text-xs text-white border border-gray-600 rounded p-1.5 text-center"></div></div>
+                    <div class="mb-3 grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] text-gray-400 mb-1" id="bg_color">背景色</label>
+                            <div class="color-picker-wrap">
+                                <input type="color" id="bg-color" value="#fcd116" class="w-8 h-7 cursor-pointer rounded border border-gray-600 bg-gray-700 shrink-0">
+                                <div class="quick-swatches">
+                                    <button type="button" class="swatch-btn" data-color="#fcd116" style="background:#fcd116;" title="黄"></button>
+                                    <button type="button" class="swatch-btn" data-color="#e60012" style="background:#e60012;" title="赤"></button>
+                                    <button type="button" class="swatch-btn" data-color="#ffffff" style="background:#ffffff;" title="白"></button>
+                                    <button type="button" class="swatch-btn" data-color="#111111" style="background:#111111;" title="黒"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-400 mb-1" id="bg_img">背景画像</label>
+                            <input type="file" id="bg-upload" accept="image/*" class="sr-only">
+                            <label for="bg-upload" class="block w-full cursor-pointer rounded bg-gray-600 px-2 py-1.5 text-center text-[10px] font-semibold text-white hover:bg-gray-500"><span id="bg-upload-button">ファイルを選択</span></label>
+                            <p id="bg-upload-name" class="mt-1 truncate text-[9px] text-gray-400">ファイルが選択されていません</p>
+                        </div>
+                    </div>
                     <div class="mb-3 border-b border-gray-700 pb-3"><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="bg_opacity">不透明度</span><input type="number" id="bg-opacity-val" class="num-val-input"></label><input type="range" id="bg-opacity" min="-0.2" max="0.2" step="0.05" value="0" class="w-full"></div>
                     <div class="grid grid-cols-2 gap-2 border-t border-gray-700 pt-3 mt-3"><div><label class="block text-[10px] text-gray-400 font-bold mb-1 flex justify-between"><span id="margin_x">左右余白</span><div><input type="number" id="cut-margin-x-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="cut-margin-x" min="-1" max="1" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 font-bold mb-1 flex justify-between"><span id="margin_y">上下余白</span><div><input type="number" id="cut-margin-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="cut-margin-y" min="-1" max="1" step="0.5" value="0" class="w-full"></div></div>
                 </div>
@@ -149,22 +248,70 @@
                 </div>
             </div>
 
-            <!-- TAB 3: SỐ THỨ TỰ -->
+            <!-- TAB 3: SỐ THỨ TỰ & KHUNG SỐ -->
             <details id="panel-3" class="mobile-panel bg-gray-800 p-3 rounded-lg border border-gray-700 mb-3 cursor-pointer group" open>
                 <summary class="text-xs md:text-sm font-semibold text-gray-200 uppercase flex justify-between"><span id="sec2_title">2. 整理番号と枠</span> <span class="text-gray-400 group-open:rotate-180">▼</span></summary>
                 <div class="mt-4 cursor-auto">
-                    <label class="tool-enable-row">
-                        <span id="toggle_number_label">番号と枠を表示</span>
-                        <input type="checkbox" id="number-tool-toggle" class="tool-enable-checkbox" checked>
-                        <span class="tool-enable-switch" aria-hidden="true"></span>
-                    </label>
+                    <!-- PHẦN 1: SỐ THỨ TỰ -->
+                    <div class="mb-3">
+                        <label class="tool-enable-row">
+                            <span id="toggle_number_label">番号を表示</span>
+                            <input type="checkbox" id="number-tool-toggle" class="tool-enable-checkbox" checked>
+                            <span class="tool-enable-switch" aria-hidden="true"></span>
+                        </label>
 
-                    <select id="number-font-select" class="w-full bg-gray-700 text-xs text-white rounded p-1 mb-2"><option value="'Impact', sans-serif">Impact</option><option value="'Arial Black', sans-serif">Arial Black</option><option value="'Times New Roman', 'Noto Serif JP', serif">Times New Roman</option><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select>
-                    <div class="grid grid-cols-2 gap-2 mb-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="font_size_num">サイズ</span><div><input type="number" id="number-size-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">pt</span></div></label><input type="range" id="number-size" min="-90" max="90" step="1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="num_offset">番号位置</span><div><input type="number" id="number-offset-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="number-offset-y" min="-50" max="50" step="0.5" value="0" class="w-full"></div></div>
-                    <div class="grid grid-cols-2 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_w">枠の幅</span><div><input type="number" id="frame-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-width" min="-20" max="20" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_h">枠の高さ</span><div><input type="number" id="frame-height-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-height" min="-20" max="20" step="0.5" value="0" class="w-full"></div></div>
-                    <div class="mb-2"><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_frame">上下位置</span><div><input type="number" id="frame-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-y" min="-20" max="20" step="0.5" value="0" class="w-full"></div>
-                    <div class="grid grid-cols-3 gap-2 border-t border-gray-700 pt-2 mb-2"><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_color_num">文字色</label><input type="color" id="number-color" value="#e60012" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="bg_color_num">背景色</label><input type="color" id="number-bg-color" value="#ffffff" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="border_color_num">枠線色</label><input type="color" id="number-border-color" value="#e60012" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div></div>
-                    <div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="border_w_num">枠の太さ</span><div><input type="number" id="number-border-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="number-border-width" min="-1" max="1" step="0.1" value="0" class="w-full"></div>
+                        <select id="number-font-select" class="w-full bg-gray-700 text-xs text-white rounded p-1 mb-2"><option value="'Impact', sans-serif">Impact</option><option value="'Arial Black', sans-serif">Arial Black</option><option value="'Times New Roman', 'Noto Serif JP', serif">Times New Roman</option><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select>
+                        <div class="grid grid-cols-2 gap-2 mb-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="font_size_num">サイズ</span><div><input type="number" id="number-size-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">pt</span></div></label><input type="range" id="number-size" min="-90" max="90" step="1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="num_offset">番号位置</span><div><input type="number" id="number-offset-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="number-offset-y" min="-50" max="50" step="0.5" value="0" class="w-full"></div></div>
+                        <div>
+                            <label class="block text-[9px] text-gray-400 mb-1" id="text_color_num">文字色</label>
+                            <div class="color-picker-wrap">
+                                <input type="color" id="number-color" value="#e60012" class="w-8 h-7 rounded bg-gray-700 cursor-pointer shrink-0">
+                                <div class="quick-swatches">
+                                    <button type="button" class="swatch-btn" data-color="#e60012" style="background:#e60012;" title="赤"></button>
+                                    <button type="button" class="swatch-btn" data-color="#111111" style="background:#111111;" title="黒"></button>
+                                    <button type="button" class="swatch-btn" data-color="#fcd116" style="background:#fcd116;" title="黄"></button>
+                                    <button type="button" class="swatch-btn" data-color="#ffffff" style="background:#ffffff;" title="白"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PHẦN 2: KHUNG SỐ -->
+                    <div class="border-t border-gray-700 pt-3 mt-3">
+                        <label class="tool-enable-row">
+                            <span id="toggle_frame_label">枠を表示</span>
+                            <input type="checkbox" id="frame-tool-toggle" class="tool-enable-checkbox" checked>
+                            <span class="tool-enable-switch" aria-hidden="true"></span>
+                        </label>
+
+                        <div class="grid grid-cols-2 gap-2 mb-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_w">枠の幅</span><div><input type="number" id="frame-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-width" min="-20" max="20" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_h">枠の高さ</span><div><input type="number" id="frame-height-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-height" min="-20" max="20" step="0.5" value="0" class="w-full"></div></div>
+                        <div class="mb-2"><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_frame">上下位置</span><div><input type="number" id="frame-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="frame-y" min="-20" max="20" step="0.5" value="0" class="w-full"></div>
+                        <div class="grid grid-cols-2 gap-2 mb-2">
+                            <div>
+                                <label class="block text-[9px] text-gray-400 mb-1" id="bg_color_num">背景色</label>
+                                <div class="color-picker-wrap">
+                                    <input type="color" id="number-bg-color" value="#ffffff" class="w-7 h-6 rounded bg-gray-700 cursor-pointer shrink-0">
+                                    <div class="quick-swatches">
+                                        <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#ffffff" style="background:#ffffff;" title="白"></button>
+                                        <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#fcd116" style="background:#fcd116;" title="黄"></button>
+                                        <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#111111" style="background:#111111;" title="黒"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] text-gray-400 mb-1" id="border_color_num">枠線色</label>
+                                <div class="color-picker-wrap">
+                                    <input type="color" id="number-border-color" value="#e60012" class="w-7 h-6 rounded bg-gray-700 cursor-pointer shrink-0">
+                                    <div class="quick-swatches">
+                                        <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#e60012" style="background:#e60012;" title="赤"></button>
+                                        <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#111111" style="background:#111111;" title="黒"></button>
+                                        <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#cbfb45" style="background:#cbfb45;" title="ネオン"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="border_w_num">枠の太さ</span><div><input type="number" id="number-border-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="number-border-width" min="-1" max="1" step="0.1" value="0" class="w-full"></div>
+                    </div>
                 </div>
             </details>
 
@@ -181,7 +328,29 @@
                     <textarea id="msg-input" rows="4" class="w-full bg-gray-700 text-xs text-white rounded p-2 mb-2">現在、店内満席のため&#10;順番にご案内いたします。&#10;番号をお呼びするまで&#10;お待ちください。</textarea>
                     <div class="grid grid-cols-2 gap-2 mb-2"><select id="msg-font" class="bg-gray-700 text-[10px] text-white rounded p-1"><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select><div class="flex gap-1"><select id="msg-weight" class="w-1/2 bg-gray-700 text-[10px] text-white rounded p-1"><option id="fw_normal_msg" value="400">標準</option><option id="fw_bold_msg" value="700" selected>太字</option><option id="fw_bolder_msg" value="900">極太</option></select><select id="msg-style" class="w-1/2 bg-gray-700 text-[10px] text-white rounded p-1"><option id="fs_normal_msg" value="normal" selected>標準</option><option id="fs_italic_msg" value="italic">斜体</option></select></div></div>
                     <div class="grid grid-cols-2 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="font_size_msg">サイズ</span><div><input type="number" id="msg-size-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">pt</span></div></label><input type="range" id="msg-size" min="-5" max="5" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_msg">上下位置</span><div><input type="number" id="msg-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="msg-y" min="-6" max="6" step="0.5" value="0" class="w-full"></div></div>
-                    <div class="grid grid-cols-3 gap-2 border-t border-gray-700 pt-2"><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_color_msg">文字色</label><input type="color" id="msg-color" value="#111111" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_outline_c_msg">縁色</label><input type="color" id="msg-stroke-c" value="#ffffff" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 flex flex-col items-center"><span id="text_outline_w_msg">縁太さ</span><div class="flex items-center mt-1"><input type="number" id="msg-stroke-w-val" class="num-val-input w-8 text-center" style="font-size:10px;"><span class="text-yellow-400 text-[10px]">pt</span></div></label><input type="range" id="msg-stroke-w" min="-2" max="2" step="0.1" value="0" class="w-full mt-1"></div></div>
+                    <div class="grid grid-cols-3 gap-2 border-t border-gray-700 pt-2">
+                        <div>
+                            <label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_color_msg">文字色</label>
+                            <div class="color-picker-wrap justify-center">
+                                <input type="color" id="msg-color" value="#111111" class="w-6 h-6 rounded bg-gray-700 cursor-pointer shrink-0">
+                                <div class="quick-swatches">
+                                    <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#111111" style="background:#111111;" title="黒"></button>
+                                    <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#e60012" style="background:#e60012;" title="赤"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_outline_c_msg">縁色</label>
+                            <div class="color-picker-wrap justify-center">
+                                <input type="color" id="msg-stroke-c" value="#ffffff" class="w-6 h-6 rounded bg-gray-700 cursor-pointer shrink-0">
+                                <div class="quick-swatches">
+                                    <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#ffffff" style="background:#ffffff;" title="白"></button>
+                                    <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#111111" style="background:#111111;" title="黒"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div><label class="block text-[9px] text-gray-400 mb-1 flex flex-col items-center"><span id="text_outline_w_msg">縁太さ</span><div class="flex items-center mt-1"><input type="number" id="msg-stroke-w-val" class="num-val-input w-8 text-center" style="font-size:10px;"><span class="text-yellow-400 text-[10px]">pt</span></div></label><input type="range" id="msg-stroke-w" min="-2" max="2" step="0.1" value="0" class="w-full mt-1"></div>
+                    </div>
                 </div>
             </details>
 
@@ -199,16 +368,83 @@
                     <div class="grid grid-cols-2 gap-2 mb-2"><select id="branch-font" class="bg-gray-700 text-[10px] text-white rounded p-1"><option value="'Noto Sans JP', sans-serif">Noto Sans JP</option></select><div class="flex gap-1"><select id="branch-weight" class="w-1/2 bg-gray-700 text-[10px] text-white rounded p-1"><option id="fw_normal_branch" value="400">標準</option><option id="fw_bold_branch" value="700">太字</option><option id="fw_bolder_branch" value="900" selected>極太</option></select><select id="branch-style" class="w-1/2 bg-gray-700 text-[10px] text-white rounded p-1"><option id="fs_normal_branch" value="normal" selected>標準</option><option id="fs_italic_branch" value="italic">斜体</option></select></div></div>
                     <div class="grid grid-cols-2 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="font_size_branch">サイズ</span><div><input type="number" id="branch-size-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">pt</span></div></label><input type="range" id="branch-size" min="-3" max="3" step="0.5" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pos_y_branch">上下位置</span><div><input type="number" id="branch-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="branch-y" min="-2.5" max="2.5" step="0.5" value="0" class="w-full"></div></div>
                     <div class="grid grid-cols-3 gap-2 mb-2 border-t border-gray-700 pt-2"><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="frame_w_branch">枠の幅</span><div><input type="number" id="branch-width-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">%</span></div></label><input type="range" id="branch-width" min="-10" max="10" step="1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="pad_y_branch">上下余白</span><div><input type="number" id="branch-pad-y-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="branch-pad-y" min="-3" max="3" step="0.1" value="0" class="w-full"></div><div><label class="block text-[10px] text-gray-400 mb-1 flex justify-between"><span id="radius_branch">角丸</span><div><input type="number" id="branch-radius-val" class="num-val-input w-8"><span class="text-yellow-400 ml-0.5">mm</span></div></label><input type="range" id="branch-radius" min="-3.2" max="3.2" step="0.1" value="0" class="w-full"></div></div>
-                    <div class="grid grid-cols-4 gap-1 border-t border-gray-700 pt-2"><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_color_branch">文字色</label><input type="color" id="branch-color" value="#ffffff" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="bg_color_branch">背景色</label><input type="color" id="branch-bg" value="#e60012" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_outline_c_branch">縁色</label><input type="color" id="branch-stroke-c" value="#000000" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div><div><label class="block text-[9px] text-gray-400 mb-1 flex flex-col items-center"><span id="text_outline_w_branch">縁太さ</span><div class="flex items-center mt-1"><input type="number" id="branch-stroke-w-val" class="num-val-input w-8 text-center" style="font-size:10px;"><span class="text-yellow-400 text-[10px]">pt</span></div></label><input type="range" id="branch-stroke-w" min="-2" max="2" step="0.1" value="0" class="w-full mt-1"></div></div>
+                    <div class="grid grid-cols-4 gap-1 border-t border-gray-700 pt-2">
+                        <div>
+                            <label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_color_branch">文字色</label>
+                            <div class="color-picker-wrap justify-center">
+                                <input type="color" id="branch-color" value="#ffffff" class="w-6 h-6 rounded bg-gray-700 cursor-pointer shrink-0">
+                                <div class="quick-swatches">
+                                    <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#ffffff" style="background:#ffffff;" title="白"></button>
+                                    <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#fcd116" style="background:#fcd116;" title="黄"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-400 mb-1 text-center" id="bg_color_branch">背景色</label>
+                            <div class="color-picker-wrap justify-center">
+                                <input type="color" id="branch-bg" value="#e60012" class="w-6 h-6 rounded bg-gray-700 cursor-pointer shrink-0">
+                                <div class="quick-swatches">
+                                    <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#e60012" style="background:#e60012;" title="赤"></button>
+                                    <button type="button" class="swatch-btn !w-3.5 !h-3.5" data-color="#111111" style="background:#111111;" title="黒"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div><label class="block text-[9px] text-gray-400 mb-1 text-center" id="text_outline_c_branch">縁色</label><input type="color" id="branch-stroke-c" value="#000000" class="w-full h-6 rounded bg-gray-700 cursor-pointer"></div>
+                        <div><label class="block text-[9px] text-gray-400 mb-1 flex flex-col items-center"><span id="text_outline_w_branch">縁太さ</span><div class="flex items-center mt-1"><input type="number" id="branch-stroke-w-val" class="num-val-input w-8 text-center" style="font-size:10px;"><span class="text-yellow-400 text-[10px]">pt</span></div></label><input type="range" id="branch-stroke-w" min="-2" max="2" step="0.1" value="0" class="w-full mt-1"></div>
+                    </div>
                 </div>
             </details>
 
-            <!-- TAB: ĐÃ LƯU (Lưu/tải/xóa thiết kế) -->
+            <!-- TAB: ĐÃ LƯU (Lưu/tải/xóa thiết kế & Quản lý Custom Presets) -->
             <div id="panel-saved" class="mobile-panel">
-                <div class="bg-gray-800 p-3 rounded-lg border border-gray-700 mb-6">
-                    <button id="backup-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2.5 px-4 rounded text-xs flex items-center justify-center gap-2 mb-2"><span>⬇</span><span id="btn_backup">デザインを保存（JSON）</span></button>
-                    <button id="restore-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2.5 px-4 rounded text-xs flex items-center justify-center gap-2 mb-2"><span>⬆</span><span id="btn_restore">デザインを読み込む</span></button>
-                    <button id="history-clear" type="button" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium py-2.5 px-4 rounded text-xs flex items-center justify-center gap-2"><span>🗑</span><span id="history_clear_label">履歴を消去</span></button>
+                <!-- KHỐI 1: LƯU THIẾT KẾ HIỆN TẠI -->
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 shadow-md mb-5">
+                    <h3 class="text-xs font-bold text-white mb-2 flex items-center gap-1.5" id="save_preset_section">
+                        <span>💾</span><span>現在のデザインを保存</span>
+                    </h3>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="save-preset-name" maxlength="40" placeholder="デザイン名（例：繁忙期、感謝祭…）" class="flex-1 bg-gray-900 border border-gray-600 focus:border-[#fcd116] focus:ring-1 focus:ring-[#fcd116] rounded-lg px-3 py-2 text-xs text-white placeholder-gray-500 outline-none transition-all">
+                        <button id="btn-save-current-preset" type="button" class="bg-[#fcd116] hover:bg-[#e5be13] active:scale-95 text-black font-bold py-2 px-4 rounded-lg text-xs flex items-center justify-center gap-1.5 shrink-0 transition-transform shadow-sm">
+                            <span>💾</span><span id="btn_save_current_preset">このデザインを保存</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KHỐI 2: DANH SÁCH MẪU THIẾT KẾ ĐÃ LƯU -->
+                <div class="mb-5">
+                    <div class="flex items-center justify-between mb-3 px-1">
+                        <h3 class="text-xs font-bold text-gray-200 flex items-center gap-1.5">
+                            <span>📂</span><span id="saved_presets_list_title">マイデザイン一覧</span>
+                        </h3>
+                        <span id="saved-presets-count" class="bg-gray-700 text-[#fcd116] text-[10px] font-bold px-2 py-0.5 rounded-full border border-gray-600">0</span>
+                    </div>
+                    <div id="saved-presets-container" class="space-y-3">
+                        <!-- Danh sách card do PresetManager.renderUI() kết xuất -->
+                    </div>
+                </div>
+
+                <!-- KHỐI 3: QUẢN LÝ TỆP CẤU HÌNH JSON (SAO LƯU & CHIA SẺ) -->
+                <div class="bg-gray-800/80 p-3.5 rounded-xl border border-gray-700 space-y-2 mb-6">
+                    <div class="text-[11px] font-bold text-gray-300 mb-1 flex items-center gap-1">
+                        <span>⚙️</span><span>ファイル操作・バックアップ</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <button id="btn-export-all-presets" type="button" class="w-full bg-gray-700 hover:bg-gray-600 active:scale-95 text-white font-medium py-2 px-3 rounded-lg text-[11px] flex items-center justify-center gap-1.5 transition-all">
+                            <span>⬇️</span><span id="btn_export_all_presets">全デザインを一括書き出し</span>
+                        </button>
+                        <button id="btn-import-preset-file" type="button" class="w-full bg-gray-700 hover:bg-gray-600 active:scale-95 text-white font-medium py-2 px-3 rounded-lg text-[11px] flex items-center justify-center gap-1.5 transition-all">
+                            <span>⬆️</span><span id="btn_import_preset_file">JSONファイルを読み込む</span>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-gray-700/60">
+                        <button id="btn-clear-all-presets" type="button" class="w-full bg-gray-700 hover:bg-red-700/80 active:scale-95 text-red-300 hover:text-white font-medium py-1.5 px-3 rounded-lg text-[10px] flex items-center justify-center gap-1.5 transition-all">
+                            <span>🗑️</span><span id="btn_clear_all_presets">全保存デザインを削除</span>
+                        </button>
+                        <button id="history-clear" type="button" class="w-full bg-gray-700 hover:bg-gray-600 active:scale-95 text-gray-400 hover:text-gray-200 font-medium py-1.5 px-3 rounded-lg text-[10px] flex items-center justify-center gap-1.5 transition-all">
+                            <span>⏱️</span><span id="history_clear_label">履歴を消去</span>
+                        </button>
+                    </div>
+                    <input type="file" id="preset-file-input" accept=".json,.customization,.customization.json,application/json" class="hidden">
                     <input type="file" id="restore-file" accept=".json,.customization,.customization.json,application/json" class="hidden">
                 </div>
             </div>
@@ -241,11 +477,19 @@
             </div>
 
 
-            <label class="mb-4 flex cursor-pointer items-start gap-3 rounded border border-indigo-700 bg-indigo-950/60 p-3 text-left">
+            <label class="mb-3 flex cursor-pointer items-start gap-3 rounded border border-indigo-700 bg-indigo-950/60 p-3 text-left">
                 <input id="duplex-print-toggle" type="checkbox" checked class="mt-0.5 h-4 w-4 accent-[#cbfb45]">
                 <span class="min-w-0">
                     <span id="duplex_print_label" class="block text-xs font-bold text-[#cbfb45]">In hai mặt khớp nhau</span>
                     <span id="duplex_print_hint" class="mt-1 block text-[10px] leading-relaxed text-indigo-300">In toàn bộ mặt trước, rồi in mặt sau với thứ tự cột được đảo để khớp khi lật ngang.</span>
+                </span>
+            </label>
+
+            <label class="mb-4 flex cursor-pointer items-start gap-3 rounded border border-indigo-700 bg-indigo-950/60 p-3 text-left">
+                <input id="crop-marks-toggle" type="checkbox" checked class="mt-0.5 h-4 w-4 accent-[#cbfb45]">
+                <span class="min-w-0">
+                    <span id="crop_marks_label" class="block text-xs font-bold text-[#cbfb45]">Vạch cắt chuẩn kéo/dao rọc giấy (Crop Marks)</span>
+                    <span id="crop_marks_hint" class="mt-1 block text-[10px] leading-relaxed text-indigo-300">Vẽ các đường vạch chữ thập và vạch kẻ mảnh theo lề 1.0mm giữa các con vé để cắt rời chính xác.</span>
                 </span>
             </label>
 
@@ -259,22 +503,49 @@
             <button id="generate-pdf-btn" class="w-full bg-[#cbfb45] hover:bg-[#b0df2b] text-gray-900 font-black py-3 px-4 rounded transition-transform transform active:scale-95 flex items-center justify-center text-sm">
                 <span id="generate_pdf_text">印刷 / 保存を確定</span>
             </button>
+            <button id="export-single-png-btn" type="button" class="w-full mt-2 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-200 hover:text-white font-bold py-2 px-3 rounded border border-indigo-700/80 transition-colors flex items-center justify-center gap-2 text-xs">
+                <svg class="w-3.5 h-3.5 text-[#cbfb45]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span id="export_png_text">単一チケット画像（PNG）を保存</span>
+            </button>
         </div>
     </div>
 
     <div id="print-area" style="display: none;"></div>
 
-    <script src="js/i18n.js?v=settings-nav-1&direct-pdf-v1" defer></script>
+    <!-- Độ lệch kéo thả (mm) của các mục trên vé; được lưu cùng lịch sử thiết kế -->
+    <div id="drag-offset-store" hidden aria-hidden="true">
+        <input type="number" id="drag-mascot-dx" value="0" tabindex="-1"><input type="number" id="drag-mascot-dy" value="0" tabindex="-1">
+        <input type="number" id="drag-frame-dx" value="0" tabindex="-1"><input type="number" id="drag-frame-dy" value="0" tabindex="-1">
+        <input type="number" id="drag-number-dx" value="0" tabindex="-1"><input type="number" id="drag-number-dy" value="0" tabindex="-1">
+        <input type="number" id="drag-msg-dx" value="0" tabindex="-1"><input type="number" id="drag-msg-dy" value="0" tabindex="-1">
+        <input type="number" id="drag-branch-dx" value="0" tabindex="-1"><input type="number" id="drag-branch-dy" value="0" tabindex="-1">
+    </div>
+
+    <!-- Core State & Signal Engine (V2 Modular Foundation) -->
+    <script src="js/core/signal.js?v=v2-1" defer></script>
+    <script src="js/core/store.js?v=v2-1" defer></script>
+
+    <script src="js/i18n.js?v=sep-frame-1" defer></script>
     <script src="js/layout-sync.js?v=qa-fix-1" defer></script>
     <script src="js/image-editor.js?v=cdn-2" defer></script>
     <script src="js/ui-events.js?v=settings-nav-1" defer></script>
-    <script src="js/controls.js?v=templates-1" defer></script>
-    <script src="js/templates.js?v=spring-7" defer></script>
+    <script src="js/controls.js?v=sep-frame-1" defer></script>
+    <!-- Template Registry System (V2) -->
+    <script src="js/registry/templates/standard.js?v=v2-1" defer></script>
+    <script src="js/registry/templates/spring.js?v=v2-1" defer></script>
+    <script src="js/registry/templates/summer.js?v=v2-1" defer></script>
+    <script src="js/registry/templates/autumn.js?v=v2-1" defer></script>
+    <script src="js/registry/templates/winter.js?v=v2-1" defer></script>
+    <script src="js/registry/template-registry.js?v=v2-1" defer></script>
+    <script src="js/templates.js?v=spring-coords-3" defer></script>
+    <script src="js/ticket-drag.js?v=topbar-1" defer></script>
     <script src="js/design-history.js?v=history-2" defer></script>
+    <!-- Storage & Preset Manager (Sprint 7) -->
+    <script src="js/storage/preset-manager.js?v=sprint7-1" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
-    <script src="js/export.js?v=print-fix-2" defer></script>
+    <script src="js/export.js?v=print-fix-3" defer></script>
 </body>
 </html>
 

@@ -12,21 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const springPreset = {
         'bg-opacity': 1,
-        'cut-margin-x': 0,
-        'cut-margin-y': 0,
-        'mascot-width': 67.4,
-        'mascot-y': -1.3,
+        'cut-margin-x': 1.0,
+        'cut-margin-y': 1.0,
+        'mascot-width': 67.2,
+        'mascot-y': -1.1,
         'number-size': 108,
-        'number-offset-y': 0.5,
-        'frame-width': 40.87,
-        'frame-height': 36.9,
-        'frame-y': 21.6,
+        'number-offset-y': 0.4,
+        'frame-width': 40.0,
+        'frame-height': 35.0,
+        'frame-y': 22.8,
         'msg-size': 8,
-        'msg-y': 7.7,
+        'msg-y': 6.4,
         'branch-size': 6,
-        'branch-y': 2.8,
-        'branch-width': 77,
-        'branch-pad-y': 0.7,
+        'branch-y': 2.0,
+        'branch-width': 73,
+        'branch-pad-y': 0.5,
         'branch-radius': 0
     };
 
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const selectTemplate = (name) => {
-        [springButton, standardButton].forEach((button) => {
+        document.querySelectorAll('[data-template]').forEach((button) => {
             const selected = button.dataset.template === name;
             button.classList.toggle('is-selected', selected);
             button.setAttribute('aria-pressed', String(selected));
@@ -98,6 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const activateSpring = () => {
+        if (window.TemplateRegistry && window.TemplateRegistry.apply('spring')) {
+            return;
+        }
         masterTicketInner.classList.add('spring-template');
         document.body.dataset.template = 'spring';
         /*
@@ -113,7 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.applyControlPreset) {
             window.applyControlPreset(springPreset);
         }
+        window.ticketDrag?.resetAll();
 
+        setInputValue('core-width-input', '43.0');
+        setInputValue('core-height-input', '78.0');
         setInputValue('bg-color', '#fff9f2');
         setInputValue('number-color', '#ed5793');
         setInputValue('number-bg-color', '#ffffff');
@@ -139,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setToolState('background-tool-toggle', true, true);
         setToolState('border-tool-toggle', false, true);
         setToolState('mascot-tool-toggle', true);
+        setToolState('frame-tool-toggle', true);
         setToolState('number-tool-toggle', true);
         setToolState('message-tool-toggle', true);
         setToolState('branch-tool-toggle', true);
@@ -150,6 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const activateStandard = () => {
+        if (window.TemplateRegistry && window.TemplateRegistry.apply('standard')) {
+            return;
+        }
         masterTicketInner.classList.remove('spring-template');
         delete document.body.dataset.template;
         document.body.style.removeProperty('--bg-image');
@@ -157,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.applyControlPreset) {
             window.applyControlPreset();
         }
+        window.ticketDrag?.resetAll();
 
         setInputValue('bg-color', '#fcd116');
         setInputValue('number-color', '#e60012');
@@ -172,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setToolState('background-tool-toggle', true);
         setToolState('border-tool-toggle', true);
         setToolState('mascot-tool-toggle', true);
+        setToolState('frame-tool-toggle', true);
         setToolState('number-tool-toggle', true);
         setToolState('message-tool-toggle', true);
         setToolState('branch-tool-toggle', true);

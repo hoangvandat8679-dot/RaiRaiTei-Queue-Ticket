@@ -1,0 +1,14 @@
+/**
+ * RaiRaiTei Queue Ticket Studio — Design Tokens Bundle & Cascade Layers
+ * Điểm nạp tập trung cho toàn bộ Design Tokens và phân tầng Cascade Layers
+ */
+
+/* 1. Thiết lập thứ tự ưu tiên Cascade Layers */
+@layer tokens, reset, layout, components, overrides, print;
+
+/* 2. Nhúng các Tokens con vào Layer tokens */
+@layer tokens {
+  @import url('./dimensions.css');
+  @import url('./colors.css');
+  @import url('./typography.css');
+}

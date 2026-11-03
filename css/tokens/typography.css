@@ -1,0 +1,23 @@
+/**
+ * RaiRaiTei Queue Ticket Studio — Typography Tokens
+ * Hệ thống phông chữ và tỷ lệ cỡ chữ (Scale)
+ */
+
+:root {
+  /* UI Font Stacks */
+  --font-ui-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-ui-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Ticket Number Font Stacks */
+  --font-ticket-impact: 'Impact', 'Arial Black', sans-serif;
+  --font-ticket-serif: 'Times New Roman', 'Noto Serif JP', serif;
+  --font-ticket-jp: 'Noto Sans JP', sans-serif;
+
+  /* Font Weights */
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+  --fw-black: 900;
+}

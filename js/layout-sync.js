@@ -40,8 +40,8 @@ window.parseCustomRange = function(input) {
 };
 
 window.calculateAILayout = function() {
-    const coreW = Math.min(297, Math.max(1, parseFloat(document.getElementById('core-width-input').value) || 44));
-    const coreH = Math.min(297, Math.max(1, parseFloat(document.getElementById('core-height-input').value) || 79));
+    const coreW = Math.min(297, Math.max(1, parseFloat(document.getElementById('core-width-input').value) || 43));
+    const coreH = Math.min(297, Math.max(1, parseFloat(document.getElementById('core-height-input').value) || 78));
     const bodyStyles = getComputedStyle(document.body);
     const marginX = Math.min(
         10,

@@ -1,0 +1,26 @@
+/**
+ * RaiRaiTei Queue Ticket Studio — Dimension Tokens
+ * Kích thước vật lý tiêu chuẩn cho máy in nhiệt (43mm × 78mm)
+ */
+
+:root {
+  /* Khổ in chuẩn tuyệt đối */
+  --ticket-base-width: 43mm;
+  --ticket-base-height: 78mm;
+
+  /* Khoảng hở viền cắt an toàn (1.0mm mỗi cạnh -> tổng vé 45 x 80mm) */
+  --ticket-cut-margin-x: 1.0mm;
+  --ticket-cut-margin-y: 1.0mm;
+
+  /* Vùng in an toàn (Safe Zone Margin) */
+  --ticket-safe-margin: 1.5mm;
+
+  /* Tương thích ngược với các biến cũ */
+  --core-width: var(--ticket-base-width);
+  --core-height: var(--ticket-base-height);
+  --cut-margin-x: var(--ticket-cut-margin-x);
+  --cut-margin-y: var(--ticket-cut-margin-y);
+
+  /* Bán kính bo góc vé preview */
+  --ticket-radius: 4px;
+}

@@ -13,10 +13,11 @@ body {
 
 /* Biến số chung */
 :root {
-    --core-width: 44mm;
-    --core-height: 79mm;
-    --cut-margin-x: 1mm;
-    --cut-margin-y: 1mm;
+    --core-width: 43mm;
+    --core-height: 78mm;
+    /* 1.0mm mỗi cạnh → tổng 2mm khoảng trắng an toàn, vé hoàn chỉnh = 45 x 80mm */
+    --cut-margin-x: 1.0mm;
+    --cut-margin-y: 1.0mm;
     --bg-color: #fcd116;
     --bg-opacity: 0.2;
     --border-width: 2mm;
@@ -29,6 +30,7 @@ body {
     --frame-y: 21.5mm;
     --frame-width: 39mm;
     --frame-height: 37.5mm;
+    --number-base-y: 40.25mm;
     --number-font: 'Impact';
     --number-size: 100pt;
     --number-color: #e60012;
@@ -60,42 +62,72 @@ body {
     --background-layer-display: block;
     --border-display: block;
     --mascot-display: block;
-    --number-display: flex;
+    --frame-display: block;
+    --number-display: block;
     --message-display: block;
     --branch-display: block;
 }
 
-/* Các lớp CSS Utility */
-.custom-scrollbar { overflow-y: auto; scrollbar-width: thin; scrollbar-color: #374151 #111827; }
+/* Các lớp CSS Utility & Design System Cao Cấp */
+.custom-scrollbar {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
 .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: #111827; border-radius: 99px; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background-color: #374151; border-radius: 99px; border: none; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #4b5563; }
-.num-val-input { border:none!important; text-align:right!important; font-size:11px!important; color:#cbfb45!important; font-weight:bold!important; background:transparent!important; outline:none!important; padding:0!important; margin:0!important; display:inline-block!important; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.14);
+    border-radius: 99px;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(203, 251, 69, 0.5);
+}
+
+.num-val-input {
+    border: none !important;
+    text-align: right !important;
+    font-size: 11px !important;
+    color: #cbfb45 !important;
+    font-weight: 700 !important;
+    font-family: 'Inter', ui-monospace, monospace !important;
+    font-variant-numeric: tabular-nums !important;
+    background: transparent !important;
+    outline: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline-block !important;
+}
+
+/* Stepper tăng giảm giá trị chính xác */
 .delta-stepper {
     display: inline-flex;
     align-items: stretch;
     width: 46px;
-    height: 28px;
+    height: 26px;
     overflow: hidden;
     flex: 0 0 46px;
     vertical-align: middle;
-    border: 1px solid #4b5563;
-    border-radius: 4px;
-    background: rgba(17, 24, 39, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    background: rgba(13, 17, 23, 0.85);
     box-sizing: border-box;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.15s ease;
 }
 .delta-stepper:focus-within {
     border-color: #cbfb45;
-    box-shadow: 0 0 0 1px rgba(203, 251, 69, 0.3);
+    box-shadow: 0 0 0 2px rgba(203, 251, 69, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 .delta-stepper .num-val-input {
     width: 30px !important;
     min-width: 0 !important;
     height: 100% !important;
     flex: 1 1 auto;
-    padding: 0 2px !important;
-    line-height: 26px !important;
+    padding: 0 3px !important;
+    line-height: 24px !important;
     box-sizing: border-box !important;
 }
 .delta-stepper-buttons {
@@ -103,34 +135,37 @@ body {
     width: 14px;
     flex: 0 0 14px;
     flex-direction: column;
-    border-left: 1px solid #4b5563;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 .delta-step-button {
     position: relative;
     width: 14px;
     min-width: 14px;
-    height: 13px;
-    min-height: 13px;
+    height: 12px;
+    min-height: 12px;
     padding: 0;
     border: 0;
     border-radius: 0;
-    background: #374151;
-    color: #e5e7eb;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
     cursor: pointer;
     touch-action: manipulation;
     -webkit-appearance: none;
     appearance: none;
+    transition: background-color 0.12s ease, color 0.12s ease;
 }
 .delta-step-button:first-child {
-    border-bottom: 1px solid #4b5563;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .delta-step-button:hover,
 .delta-step-button:focus-visible {
-    background: #4b5563;
+    background: rgba(203, 251, 69, 0.25);
+    color: #cbfb45;
     outline: none;
 }
 .delta-step-button:active {
     background: #cbfb45;
+    color: #0b0f17;
 }
 .delta-step-button::before {
     content: '';
@@ -149,21 +184,29 @@ body {
 .delta-step-down::before {
     border-top: 4px solid currentColor;
 }
+
+/* Toggle Switch kiểu Apple/Linear siêu đẹp */
 .tool-enable-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
     margin: 0 0 12px;
-    padding: 9px 11px;
-    border: 1px solid #4b5563;
-    border-radius: 9px;
-    background: rgba(17, 24, 39, 0.72);
-    color: #d1d5db;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 10px;
+    background: rgba(13, 17, 23, 0.65);
+    color: #e2e8f0;
     font-size: 11px;
     font-weight: 700;
+    letter-spacing: 0.02em;
     cursor: pointer;
     user-select: none;
+    transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.tool-enable-row:hover {
+    background: rgba(203, 251, 69, 0.04);
+    border-color: rgba(203, 251, 69, 0.3);
 }
 .tool-enable-checkbox {
     position: absolute;
@@ -175,30 +218,33 @@ body {
 .tool-enable-switch {
     position: relative;
     flex: 0 0 auto;
-    width: 38px;
-    height: 22px;
+    width: 36px;
+    height: 20px;
     border-radius: 999px;
-    background: #4b5563;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
-    transition: background 0.2s ease;
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    transition: background 0.2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.2s ease;
 }
 .tool-enable-switch::after {
     content: "";
     position: absolute;
-    top: 3px;
-    left: 3px;
+    top: 2px;
+    left: 2px;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #d1d5db;
-    transition: transform 0.2s ease, background 0.2s ease;
+    background: #cbd5e1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), background 0.2s ease;
 }
 .tool-enable-checkbox:checked + .tool-enable-switch {
-    background: #536579;
+    background: rgba(203, 251, 69, 0.3);
+    box-shadow: 0 0 12px rgba(203, 251, 69, 0.35);
 }
 .tool-enable-checkbox:checked + .tool-enable-switch::after {
     transform: translateX(16px);
     background: #cbfb45;
+    box-shadow: 0 0 10px rgba(203, 251, 69, 0.8), 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 .tool-enable-checkbox:focus-visible + .tool-enable-switch {
     outline: 2px solid #cbfb45;
@@ -219,7 +265,7 @@ body {
 .choice-radio:focus-visible + span {
     outline: 2px solid #cbfb45;
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 4px;
 }
 
 .lang-icon {
@@ -228,38 +274,245 @@ body {
     display: inline-block;
     flex: 0 0 auto;
     box-sizing: border-box;
-    border: 1px solid rgba(156, 163, 175, 0.65);
-    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 3px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .lang-vn { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2030%2020%22%3E%3Crect%20width%3D%2230%22%20height%3D%2220%22%20fill%3D%22%23da251d%22%2F%3E%3Cpolygon%20fill%3D%22%23ff0%22%20points%3D%2215%2C3%2016.65%2C7.73%2021.66%2C7.84%2017.68%2C10.88%2019.12%2C15.67%2015%2C12.8%2010.88%2C15.67%2012.32%2C10.88%208.34%2C7.84%2013.35%2C7.73%22%2F%3E%3C%2Fsvg%3E"); }
 .lang-jp { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2030%2020%22%3E%3Crect%20width%3D%2230%22%20height%3D%2220%22%20fill%3D%22%23fff%22%2F%3E%3Ccircle%20cx%3D%2215%22%20cy%3D%2210%22%20r%3D%226%22%20fill%3D%22%23bc002d%22%2F%3E%3C%2Fsvg%3E"); }
-input[type=range] { -webkit-appearance: none; background: transparent; cursor: pointer; height: 12px; margin-top: 4px; }
+
+/* Thanh trượt Range hiện đại với đầu nút phát sáng */
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    height: 18px;
+    margin-top: 3px;
+}
 input[type=range]:focus { outline: none; }
-input[type=range]::-webkit-slider-runnable-track { background: #374151; border-radius: 10px; height: 4px; }
-input[type=range]::-webkit-slider-thumb { border: none; height: 12px; width: 12px; border-radius: 50%; background: #9ca3af; -webkit-appearance: none; margin-top: -4px; transition: background 0.15s, transform 0.15s; }
-input[type=range]:hover::-webkit-slider-thumb { background: #d1d5db; }
-input[type=range]:active::-webkit-slider-thumb { background: #cbfb45; transform: scale(1.1); }
+input[type=range]::-webkit-slider-runnable-track {
+    background: #1e2633;
+    border-radius: 999px;
+    height: 4px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+    transition: background 0.15s ease;
+}
+input[type=range]:hover::-webkit-slider-runnable-track {
+    background: #283344;
+}
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 2px solid #0d1117;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: #cbfb45;
+    margin-top: -5px;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.3),
+        0 2px 6px rgba(0, 0, 0, 0.5),
+        0 0 10px rgba(203, 251, 69, 0.4);
+    transition: transform 0.15s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.15s ease, background 0.15s ease;
+}
+input[type=range]:hover::-webkit-slider-thumb {
+    transform: scale(1.2);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.3),
+        0 3px 8px rgba(0, 0, 0, 0.6),
+        0 0 16px rgba(203, 251, 69, 0.7);
+}
+input[type=range]:active::-webkit-slider-thumb {
+    transform: scale(1.3);
+    background: #ffffff;
+    box-shadow:
+        0 0 0 2px #cbfb45,
+        0 4px 12px rgba(0, 0, 0, 0.7),
+        0 0 22px rgba(203, 251, 69, 0.95);
+}
 
+/* Bảng chọn màu (Color Picker) phong cách cao cấp */
+input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: rgba(13, 17, 23, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 2px !important;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+input[type="color"]:hover {
+    border-color: rgba(203, 251, 69, 0.5) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 6px;
+}
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
 
+/* Định dạng toàn diện cho Bảng Điều Khiển (Sidebar) */
+#controls-sidebar details.mobile-panel,
+#controls-sidebar details {
+    background: rgba(22, 27, 34, 0.72) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 12px !important;
+    padding: 12px 14px !important;
+}
+#controls-sidebar details[open] {
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
+}
+#controls-sidebar details summary {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s ease;
+    font-size: 11.5px !important;
+    letter-spacing: 0.04em !important;
+    font-weight: 700 !important;
+}
+#controls-sidebar details summary:hover {
+    color: #ffffff !important;
+}
+
+#controls-sidebar input[type="text"],
+#controls-sidebar input[type="number"]:not(.num-val-input),
+#controls-sidebar select,
+#controls-sidebar textarea {
+    background: rgba(13, 17, 23, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    color: #f1f5f9 !important;
+    font-size: 11px !important;
+    transition: all 0.15s ease;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+#controls-sidebar input[type="text"]:focus,
+#controls-sidebar input[type="number"]:not(.num-val-input):focus,
+#controls-sidebar select:focus,
+#controls-sidebar textarea:focus {
+    border-color: #cbfb45 !important;
+    box-shadow: 0 0 0 2px rgba(203, 251, 69, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+    outline: none !important;
+}
+
+#controls-sidebar label {
+    letter-spacing: 0.02em;
+}
+
+#controls-sidebar .border-b,
+#controls-sidebar .border-t {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Các nút trong tab Lưu trữ / Tải cấu hình (Sprint 7: Custom Preset Studio) */
+#panel-saved .preset-card {
+    background: rgba(22, 27, 34, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+    transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+#panel-saved .preset-card:hover {
+    border-color: rgba(252, 209, 22, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 12px rgba(252, 209, 22, 0.15);
+    transform: translateY(-1.5px);
+}
+
+#panel-saved .preset-thumb-wrapper {
+    aspect-ratio: 43 / 78;
+    background: #111111;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+#panel-saved .preset-thumb-wrapper:hover {
+    border-color: #fcd116;
+    transform: scale(1.03);
+}
+
+#panel-saved button {
+    transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+#panel-saved button:active {
+    transform: scale(0.96);
+}
+
+#panel-saved #btn-save-current-preset {
+    background: #fcd116 !important;
+    color: #111111 !important;
+    box-shadow: 0 2px 8px rgba(252, 209, 22, 0.35) !important;
+}
+
+#panel-saved #btn-save-current-preset:hover {
+    background: #ffd83b !important;
+    box-shadow: 0 4px 14px rgba(252, 209, 22, 0.5) !important;
+}
+
+#panel-saved .btn-apply-preset {
+    background: #fcd116 !important;
+    color: #111111 !important;
+    font-weight: 700 !important;
+}
+
+#panel-saved .btn-apply-preset:hover {
+    background: #ffd83b !important;
+}
+
+/* Nút tải ảnh lên (Mascot / Background) */
+label[for="bg-upload"],
+label[for="mascot-upload"] {
+    background: rgba(30, 41, 59, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1) !important;
+}
+label[for="bg-upload"]:hover,
+label[for="mascot-upload"]:hover {
+    background: rgba(51, 65, 85, 0.9) !important;
+    border-color: rgba(203, 251, 69, 0.35) !important;
+    transform: translateY(-1px);
+}
 
 /* ============================================================ */
 /* MẪU THEO MÙA: MÙA XUÂN                                     */
 /* ============================================================ */
 .template-folder {
-    padding: 10px;
-    border: 1px solid rgba(244, 114, 182, 0.38);
-    border-radius: 10px;
-    background: linear-gradient(145deg, rgba(80, 34, 52, 0.42), rgba(31, 41, 55, 0.82));
+    padding: 12px;
+    border: 1px solid rgba(244, 114, 182, 0.35);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(80, 34, 52, 0.38), rgba(22, 27, 34, 0.85));
+    box-shadow: 0 4px 16px rgba(244, 114, 182, 0.08);
 }
 .template-folder-title {
-    margin: 0 0 8px;
+    margin: 0 0 10px;
     color: #fbcfe8;
     font-size: 11px;
     font-weight: 800;
+    letter-spacing: 0.03em;
 }
 .template-grid {
     display: grid;
@@ -269,29 +522,34 @@ input[type=range]:active::-webkit-slider-thumb { background: #cbfb45; transform:
 .template-card,
 .template-reset-button {
     width: 100%;
-    border: 1px solid #4b5563;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
     color: #f3f4f6;
-    background: #1f2937;
+    background: rgba(13, 17, 23, 0.85);
     text-align: left;
-    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    transition: border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease;
 }
 .template-card {
     display: grid;
     grid-template-columns: 46px minmax(0, 1fr);
     grid-template-rows: auto auto;
-    column-gap: 9px;
-    padding: 7px;
+    column-gap: 10px;
+    padding: 8px;
     cursor: pointer;
 }
 .template-card:hover,
 .template-card:focus-visible,
+.template-card.is-selected {
+    border-color: #f472b6;
+    box-shadow: 0 0 0 1px rgba(244, 114, 182, .35), 0 8px 20px rgba(244, 114, 182, .18);
+    outline: none;
+    transform: translateY(-1px);
+}
 .template-reset-button:hover,
 .template-reset-button:focus-visible,
-.template-card.is-selected,
 .template-reset-button.is-selected {
-    border-color: #f472b6;
-    box-shadow: 0 0 0 1px rgba(244, 114, 182, .35), 0 6px 16px rgba(244, 114, 182, .16);
+    border-color: #cbfb45;
+    box-shadow: 0 0 0 1px rgba(203, 251, 69, .35), 0 6px 16px rgba(203, 251, 69, .15);
     outline: none;
 }
 .template-card:active,
@@ -302,32 +560,74 @@ input[type=range]:active::-webkit-slider-thumb { background: #cbfb45; transform:
     grid-row: 1 / span 2;
     width: 46px;
     height: 62px;
-    border-radius: 4px;
-    border: 1px solid rgba(255,255,255,.38);
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.3);
     background: center / cover no-repeat url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-background.png');
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 .template-card-name {
     align-self: end;
     color: #fce7f3;
     font-size: 12px;
-    font-weight: 900;
+    font-weight: 800;
 }
 .template-card-description {
     align-self: start;
-    color: #d1d5db;
-    font-size: 9px;
+    color: #94a3b8;
+    font-size: 9.5px;
+    margin-top: 2px;
 }
 .template-reset-button {
-    margin-top: 9px;
-    padding: 8px 10px;
+    margin-top: 10px;
+    padding: 9px 12px;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 700;
+    text-align: center;
 }
-.ticket-core.spring-template {
-    background-color: #fff9f2;
+.ticket-core.spring-template,
+.ticket-core.summer-template,
+.ticket-core.autumn-template,
+.ticket-core.winter-template {
+    background-color: transparent;
 }
-.ticket-core.spring-template .ticket-bg-layer {
+.template-card-summer .template-card-preview {
+    background: center / cover no-repeat url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/Mu%CC%80a%20He%CC%80.svg'), linear-gradient(145deg, #fff3e0, #f97316);
+    border-color: #f97316;
+}
+.template-card-summer:hover,
+.template-card-summer:focus-visible,
+.template-card-summer.is-selected {
+    border-color: #f97316 !important;
+    box-shadow: 0 0 0 1px rgba(249, 115, 22, .4), 0 8px 20px rgba(249, 115, 22, .2) !important;
+}
+
+.template-card-autumn .template-card-preview {
+    background: center / cover no-repeat url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/Mu%CC%80a%20Thu.svg'), linear-gradient(145deg, #fff5eb, #b45309);
+    border-color: #d97706;
+}
+.template-card-autumn:hover,
+.template-card-autumn:focus-visible,
+.template-card-autumn.is-selected {
+    border-color: #d97706 !important;
+    box-shadow: 0 0 0 1px rgba(217, 119, 6, .4), 0 8px 20px rgba(217, 119, 6, .2) !important;
+}
+
+.template-card-winter .template-card-preview {
+    background: center / cover no-repeat url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/Mu%CC%80a%20%C4%90o%CC%82ng.svg'), linear-gradient(145deg, #f0f9ff, #0284c7);
+    border-color: #0284c7;
+}
+.template-card-winter:hover,
+.template-card-winter:focus-visible,
+.template-card-winter.is-selected {
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 0 1px rgba(2, 132, 199, .4), 0 8px 20px rgba(2, 132, 199, .2) !important;
+}
+
+.ticket-core.spring-template .ticket-bg-layer,
+.ticket-core.summer-template .ticket-bg-layer,
+.ticket-core.autumn-template .ticket-bg-layer,
+.ticket-core.winter-template .ticket-bg-layer {
     background-image: var(--bg-image, url('https://cdn.jsdelivr.net/gh/hoangvandat8679-dot/assets-images@main/spring-background.png'));
     background-position: center;
     background-size: 100% 100%;
@@ -335,7 +635,13 @@ input[type=range]:active::-webkit-slider-thumb { background: #cbfb45; transform:
     opacity: 1 !important;
 }
 .ticket-core.spring-template .marquee-border,
-.ticket-core.spring-template .marquee-dots {
+.ticket-core.spring-template .marquee-dots,
+.ticket-core.summer-template .marquee-border,
+.ticket-core.summer-template .marquee-dots,
+.ticket-core.autumn-template .marquee-border,
+.ticket-core.autumn-template .marquee-dots,
+.ticket-core.winter-template .marquee-border,
+.ticket-core.winter-template .marquee-dots {
     display: none !important;
 }
 .ticket-core.spring-template .number-frame {
@@ -348,7 +654,7 @@ input[type=range]:active::-webkit-slider-thumb { background: #cbfb45; transform:
     background-size: 100% 100% !important;
 }
 .ticket-core.spring-template .queue-number {
-    z-index: 1;
+    z-index: 7;
     color: #ed5793;
     font-weight: 700;
 }
@@ -359,9 +665,290 @@ input[type=range]:active::-webkit-slider-thumb { background: #cbfb45; transform:
     background-repeat: no-repeat !important;
     background-position: center !important;
     background-size: 100% 100% !important;
-    line-height: 1.1;
+    color: #ffffff !important;
 }
+
+/* ============================================================ */
+/* ĐỒNG BỘ TÁCH LỚP CHO CÁC MẪU MÙA (HẠ, THU, ĐÔNG)            */
+/* Sử dụng khung số, mascot và banner nghệ thuật gốc từ SVG     */
+/* Loại bỏ hoàn toàn sự đè chồng kép (Duplicate Stacking)       */
+/* ============================================================ */
+.ticket-core.summer-template .number-frame,
+.ticket-core.autumn-template .number-frame,
+.ticket-core.winter-template .number-frame {
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.ticket-core.summer-template .mascot-wrap,
+.ticket-core.autumn-template .mascot-wrap,
+.ticket-core.winter-template .mascot-wrap {
+    display: none !important;
+}
+
+.ticket-core.summer-template .branch-name,
+.ticket-core.autumn-template .branch-name,
+.ticket-core.winter-template .branch-name {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    font-weight: 900;
+}
+
+.ticket-core.summer-template .queue-number {
+    z-index: 7;
+    color: #d90012 !important;
+    font-weight: 900;
+}
+.ticket-core.summer-template .ticket-msg {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    font-weight: 700;
+}
+
+.ticket-core.autumn-template .queue-number {
+    z-index: 7;
+    color: #e10000 !important;
+    font-weight: 900;
+}
+.ticket-core.autumn-template .ticket-msg {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    font-weight: 700;
+}
+
+.ticket-core.winter-template .queue-number {
+    z-index: 7;
+    color: #d80000 !important;
+    font-weight: 900;
+}
+.ticket-core.winter-template .ticket-msg {
+    color: #0f172a !important;
+    font-weight: 700;
+}
+
+/* ============================================================ */
+/* MÀN HÌNH POPUP XUẤT FILE IN / PDF                           */
+/* ============================================================ */
+#export-modal {
+    background: rgba(0, 0, 0, 0.78) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+}
+#export-modal > div {
+    background: rgba(15, 20, 29, 0.96) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 20px !important;
+    box-shadow:
+        0 25px 60px -10px rgba(0, 0, 0, 0.85),
+        0 0 40px rgba(203, 251, 69, 0.08) !important;
+}
+#export-modal label.hover\:bg-indigo-800 {
+    background: rgba(10, 14, 23, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 10px !important;
+    transition: all 0.15s ease !important;
+}
+#export-modal label.hover\:bg-indigo-800:hover {
+    background: rgba(30, 41, 59, 0.7) !important;
+    border-color: rgba(203, 251, 69, 0.3) !important;
+}
+#export-modal input[type="number"],
+#export-modal input[type="text"] {
+    background: rgba(10, 14, 23, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 10px !important;
+    transition: all 0.2s ease !important;
+}
+#export-modal input[type="number"]:focus,
+#export-modal input[type="text"]:focus {
+    border-color: #cbfb45 !important;
+    box-shadow: 0 0 0 2px rgba(203, 251, 69, 0.25) !important;
+}
+#export-modal .bg-indigo-950\/60 {
+    background: rgba(10, 14, 23, 0.6) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+}
+#export-modal .bg-indigo-950\/50 {
+    background: rgba(10, 14, 23, 0.5) !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+    border-radius: 12px !important;
+}
+#generate-pdf-btn {
+    background: linear-gradient(135deg, #d4ff4e 0%, #a8e81e 100%) !important;
+    color: #0b0f17 !important;
+    border: 1px solid rgba(203, 251, 69, 0.8) !important;
+    font-weight: 800 !important;
+    box-shadow:
+        0 4px 20px rgba(203, 251, 69, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+    border-radius: 12px !important;
+    transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1) !important;
+}
+#generate-pdf-btn:hover {
+    transform: translateY(-1px) scale(1.01) !important;
+    box-shadow:
+        0 6px 25px rgba(203, 251, 69, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+#generate-pdf-btn:active {
+    transform: scale(0.97) !important;
+}
+
 @media (max-width: 767px) {
-    .template-folder { padding: 8px; }
+    .template-folder { padding: 10px; }
     .template-card-preview { width: 42px; height: 57px; }
 }
+
+/* ============================================================ */
+/* SUBTAB CHIP NAVIGATION (Mobile & PC)                         */
+/* ============================================================ */
+.subtab-chip-bar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-x;
+}
+.subtab-chip-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.subtab-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    height: 32px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.subtab-chip:hover {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+.subtab-chip:active {
+    transform: scale(0.96);
+}
+
+.subtab-chip.active {
+    color: #0b0f17;
+    background: #cbfb45;
+    border-color: #cbfb45;
+    font-weight: 800;
+    box-shadow: 0 0 14px rgba(203, 251, 69, 0.35);
+}
+
+.subtab-chip .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.8;
+}
+
+/* ============================================================ */
+/* BỘ CHẤM MÀU NHANH THƯƠNG HIỆU (Quick Brand Color Swatches)  */
+/* ============================================================ */
+.color-picker-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.quick-swatches {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: nowrap;
+}
+
+.swatch-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    padding: 0;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.swatch-btn:hover {
+    transform: scale(1.2);
+    border-color: #ffffff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.swatch-btn:active {
+    transform: scale(0.92);
+}
+
+/* ============================================================ */
+/* NÚT RESET TỪNG KHỐI (Panel Reset Button)                    */
+/* ============================================================ */
+.panel-reset-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.panel-reset-btn:hover {
+    color: #cbfb45;
+    background: rgba(203, 251, 69, 0.12);
+    border-color: rgba(203, 251, 69, 0.35);
+}
+
+.panel-reset-btn:active {
+    transform: scale(0.95);
+}
+
+.panel-reset-btn svg {
+    width: 10px;
+    height: 10px;
+}
+
+/* ============================================================ */
+/* TOUCH-FRIENDLY SLIDERS                                       */
+/* ============================================================ */
+input[type="range"] {
+    touch-action: pan-x;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    cursor: pointer;
+}
+
+@media (max-width: 767px) {
+    input[type="range"]::-webkit-slider-thumb {
+        width: 24px !important;
+        height: 24px !important;
+    }
+}
+

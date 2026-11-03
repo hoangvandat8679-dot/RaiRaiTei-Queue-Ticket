@@ -103,60 +103,77 @@ document.addEventListener('DOMContentLoaded', () => {
     const masterTicket = document.getElementById('master-ticket');
     let mobileFitFrame = 0;
 
+    const previewScaleEl = document.querySelector('.preview-scale');
+
     const fitMobilePreview = () => {
         cancelAnimationFrame(mobileFitFrame);
 
         mobileFitFrame = requestAnimationFrame(() => {
-            if (window.innerWidth >= 768) {
-                appContainer.style.removeProperty(
-                    '--mobile-preview-height'
+            requestAnimationFrame(() => {
+                if (window.innerWidth >= 768) {
+                    // --- PC: tính scale để ticket vừa khít preview area ---
+                    appContainer.style.removeProperty('--mobile-preview-height');
+
+                    const previewRect = previewArea.getBoundingClientRect();
+                    const availableW = Math.max(120, previewRect.width);
+                    const availableH = Math.max(120, previewRect.height);
+
+                    // Đọc kích thước core từ CSS custom properties (mm)
+                    const bodyStyles = getComputedStyle(document.body);
+                    const coreWmm = parseFloat(bodyStyles.getPropertyValue('--core-width'))  || 43;
+                    const coreHmm = parseFloat(bodyStyles.getPropertyValue('--core-height')) || 78;
+                    // 1mm = 3.7795275591px tại 96 DPI
+                    const PX_PER_MM = 3.7795275591;
+                    const ticketW = coreWmm * PX_PER_MM;
+                    const ticketH = coreHmm * PX_PER_MM;
+
+                    const pad = 64;
+                    // Giới hạn ticket chiếm tối đa 78% chiều nhỏ hơn → nền tối luôn hiện ra xung quanh
+                    const fillRatio = 0.78;
+                    const scale = Math.max(
+                        0.5,
+                        Math.min(
+                            (availableW - pad) / ticketW * fillRatio,
+                            (availableH - pad) / ticketH * fillRatio,
+                            3.0
+                        )
+                    );
+                    // Set zoom trực tiếp → zoom thay đổi layout size thật → không bị clip
+                    if (previewScaleEl) previewScaleEl.style.zoom = scale.toFixed(4);
+                    document.body.style.setProperty('--ticket-scale', scale.toFixed(4));
+                    return;
+                }
+
+                // --- Mobile ---
+                const previewRect = previewArea.getBoundingClientRect();
+                const categoryRect = categoryBar.getBoundingClientRect();
+                const sheetIsOpen = sidebar.classList.contains('sheet-open');
+                const isFocusMode = document.body.classList.contains('preview-focus-active');
+
+                let visibleBottom = categoryRect.top;
+                if (sheetIsOpen && !isFocusMode) {
+                    visibleBottom = categoryRect.top - sidebar.offsetHeight;
+                } else if (sheetIsOpen && isFocusMode) {
+                    visibleBottom = categoryRect.top - 36; // chỉ để lộ thanh bar ở đáy
+                }
+                const availableHeight = Math.max(160, visibleBottom - previewRect.top);
+                const availableWidth  = Math.max(120, previewArea.clientWidth);
+                const ticketWidth  = Math.max(1, masterTicket.offsetWidth);
+                const ticketHeight = Math.max(1, masterTicket.offsetHeight);
+
+                const pad = 12; // Tối ưu padding để vé hiển thị to và rõ nét nhất
+                const scale = Math.max(
+                    0.50,
+                    Math.min(
+                        (availableWidth  - pad) / ticketWidth,
+                        (availableHeight - pad) / ticketHeight,
+                        2.2
+                    )
                 );
-                appContainer.style.removeProperty(
-                    '--mobile-ticket-scale'
-                );
-                return;
-            }
 
-            const previewRect = previewArea.getBoundingClientRect();
-            const categoryRect = categoryBar.getBoundingClientRect();
-            const sheetIsOpen =
-                sidebar.classList.contains('sheet-open');
-            const visibleBottom = sheetIsOpen
-                ? categoryRect.top - sidebar.offsetHeight
-                : categoryRect.top;
-            const availableHeight = Math.max(
-                120,
-                visibleBottom - previewRect.top
-            );
-            const availableWidth = Math.max(
-                120,
-                previewArea.clientWidth
-            );
-            const ticketWidth = Math.max(1, masterTicket.offsetWidth);
-            const ticketHeight = Math.max(1, masterTicket.offsetHeight);
-
-            /*
-              Chừa 16 px ở trên và dưới để đường cắt không nằm dưới
-              bóng của thanh tab hoặc sát mép màn hình Safari.
-            */
-            const safePadding = 32;
-            const scale = Math.max(
-                0.35,
-                Math.min(
-                    (availableWidth - safePadding) / ticketWidth,
-                    (availableHeight - safePadding) / ticketHeight,
-                    1.8
-                )
-            );
-
-            appContainer.style.setProperty(
-                '--mobile-preview-height',
-                availableHeight + 'px'
-            );
-            appContainer.style.setProperty(
-                '--mobile-ticket-scale',
-                scale.toFixed(4)
-            );
+                appContainer.style.setProperty('--mobile-preview-height', availableHeight + 'px');
+                if (previewScaleEl) previewScaleEl.style.zoom = scale.toFixed(4);
+            });
         });
     };
     
@@ -172,7 +189,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeMobileSheet = () => {
         applySettingsMode(false);
-        sidebar.classList.remove('sheet-open');
+        sidebar.classList.remove('sheet-open', 'sheet-expanded');
+        document.body.classList.remove('preview-focus-active');
+        const focusBtn = document.getElementById('btn-focus-preview');
+        if (focusBtn) {
+            focusBtn.classList.remove('active');
+            const zoomIcon = focusBtn.querySelector('.focus-icon-zoom');
+            const shrinkIcon = focusBtn.querySelector('.focus-icon-shrink');
+            const txtEl = document.getElementById('txt_focus_preview');
+            if (zoomIcon) zoomIcon.classList.remove('hidden');
+            if (shrinkIcon) shrinkIcon.classList.add('hidden');
+            if (txtEl) txtEl.textContent = window.t('txt_focus_preview');
+        }
         appContainer.classList.remove('pushed-up');
         catBtns.forEach(b => {
             b.classList.remove('text-[#cbfb45]', 'border-[#cbfb45]', 'bg-[#cbfb45]/10');
@@ -215,9 +243,77 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (window.innerWidth < 768) {
+                sidebar.classList.remove('sheet-expanded'); // Luôn trở về mặc định 32dvh khi chuyển tab
                 sidebar.classList.add('sheet-open');
                 appContainer.classList.add('pushed-up');
+                const statusText = document.getElementById('handle_status_text');
+                if (statusText) statusText.textContent = window.t('handle_compact');
+                btn.blur();
                 fitMobilePreview();
+            }
+        });
+    });
+
+    // 1.1 XỬ LÝ SUB-TAB CHIP BAR (Chuyển nhanh từng panel trên Mobile & PC)
+    const subtabChips = document.querySelectorAll('.subtab-chip');
+    subtabChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            const targetIds = chip.getAttribute('data-target').split(/\s+/);
+            subtabChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            if (targetIds.length === 1 && window.innerWidth >= 768) {
+                // Trên PC: cuộn mượt đến panel đó nếu đang mở
+                const targetEl = document.getElementById(targetIds[0]);
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            } else if (window.innerWidth < 768) {
+                // Trên Mobile: ẩn các panel khác, chỉ bật panel được chọn
+                sidebar.classList.remove('sheet-expanded'); // Luôn trở về mặc định 32dvh khi chuyển sub-tab
+                const statusText = document.getElementById('handle_status_text');
+                if (statusText) statusText.textContent = window.t('handle_compact');
+                chip.blur();
+                sidebar.scrollTop = 0;
+                panels.forEach(p => {
+                    if (p.id === 'panel-template' || p.id === 'panel-saved') return;
+                    if (targetIds.includes(p.id)) {
+                        p.classList.add('active-panel');
+                    } else {
+                        p.classList.remove('active-panel');
+                    }
+                });
+                fitMobilePreview();
+            }
+        });
+    });
+
+    // Chỉ mở rộng Drawer khi gõ chữ (input text/textarea) để bàn phím ảo không che
+    sidebar.addEventListener('focusin', (e) => {
+        if (e.target.matches('input[type="text"], textarea')) {
+            sidebar.classList.add('input-focused');
+            fitMobilePreview();
+        }
+    });
+    sidebar.addEventListener('focusout', (e) => {
+        if (e.target.matches('input[type="text"], textarea')) {
+            sidebar.classList.remove('input-focused');
+            fitMobilePreview();
+        }
+    });
+
+    // 1.2 BỘ CHẤM MÀU NHANH (Quick Color Swatches 1 chạm đổi màu)
+    document.querySelectorAll('.swatch-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const color = btn.getAttribute('data-color');
+            const wrap = btn.closest('.color-picker-wrap');
+            if (!wrap || !color) return;
+            const input = wrap.querySelector('input[type="color"]');
+            if (input) {
+                input.value = color;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
     });
@@ -228,7 +324,75 @@ document.addEventListener('DOMContentLoaded', () => {
         closeMobileSheet();
     });
 
-    previewArea.addEventListener('click', () => {
+    // 1.3 XỬ LÝ NÚT PHÓNG TO VÉ (Mobile Focus Pill)
+    const focusBtn = document.getElementById('btn-focus-preview');
+    if (focusBtn) {
+        focusBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isFocus = document.body.classList.toggle('preview-focus-active');
+            focusBtn.classList.toggle('active', isFocus);
+
+            const zoomIcon = focusBtn.querySelector('.focus-icon-zoom');
+            const shrinkIcon = focusBtn.querySelector('.focus-icon-shrink');
+            const txtEl = document.getElementById('txt_focus_preview');
+
+            if (isFocus) {
+                if (zoomIcon) zoomIcon.classList.add('hidden');
+                if (shrinkIcon) shrinkIcon.classList.remove('hidden');
+                if (txtEl) txtEl.textContent = window.t('txt_focus_restore');
+            } else {
+                if (zoomIcon) zoomIcon.classList.remove('hidden');
+                if (shrinkIcon) shrinkIcon.classList.add('hidden');
+                if (txtEl) txtEl.textContent = window.t('txt_focus_preview');
+            }
+            fitMobilePreview();
+        });
+    }
+
+    // 1.4 XỬ LÝ THANH KÉO ĐỔI KÍCH THƯỚC DRAWER (Sheet Drag Handle)
+    const sheetHandle = document.getElementById('sheet-drag-handle');
+    if (sheetHandle) {
+        sheetHandle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (document.body.classList.contains('preview-focus-active')) {
+                document.body.classList.remove('preview-focus-active');
+                if (focusBtn) {
+                    focusBtn.classList.remove('active');
+                    const zoomIcon = focusBtn.querySelector('.focus-icon-zoom');
+                    const shrinkIcon = focusBtn.querySelector('.focus-icon-shrink');
+                    const txtEl = document.getElementById('txt_focus_preview');
+                    if (zoomIcon) zoomIcon.classList.remove('hidden');
+                    if (shrinkIcon) shrinkIcon.classList.add('hidden');
+                    if (txtEl) txtEl.textContent = window.t('txt_focus_preview');
+                }
+            } else {
+                sidebar.classList.toggle('sheet-expanded');
+            }
+            const isExp = sidebar.classList.contains('sheet-expanded');
+            const statusText = document.getElementById('handle_status_text');
+            if (statusText) {
+                statusText.textContent = window.t(isExp ? 'handle_expanded' : 'handle_compact');
+            }
+            fitMobilePreview();
+        });
+    }
+
+    previewArea.addEventListener('click', (e) => {
+        if (e.target.closest('#btn-focus-preview')) return;
+        if (document.body.classList.contains('preview-focus-active')) {
+            document.body.classList.remove('preview-focus-active');
+            if (focusBtn) {
+                focusBtn.classList.remove('active');
+                const zoomIcon = focusBtn.querySelector('.focus-icon-zoom');
+                const shrinkIcon = focusBtn.querySelector('.focus-icon-shrink');
+                const txtEl = document.getElementById('txt_focus_preview');
+                if (zoomIcon) zoomIcon.classList.remove('hidden');
+                if (shrinkIcon) shrinkIcon.classList.add('hidden');
+                if (txtEl) txtEl.textContent = window.t('txt_focus_preview');
+            }
+            fitMobilePreview();
+            return;
+        }
         if(window.innerWidth < 768 && sidebar.classList.contains('sheet-open')) {
             closeMobileSheet();
         }
@@ -317,6 +481,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.getElementById('close-export-modal').addEventListener('click', closeModal);
     exportModal.addEventListener('click', (e) => { if(e.target === exportModal) closeModal(); });
+
+    // TẢI ẢNH PNG VÉ ĐƠN
+    const exportPngBtn = document.getElementById('export-single-png-btn');
+    if (exportPngBtn) {
+        exportPngBtn.addEventListener('click', async () => {
+            if (window.exportTicketPng) {
+                exportPngBtn.disabled = true;
+                const oldText = exportPngBtn.innerHTML;
+                exportPngBtn.innerHTML = '<span>生成中…</span>';
+                try {
+                    await window.exportTicketPng(3.5);
+                } finally {
+                    exportPngBtn.disabled = false;
+                    exportPngBtn.innerHTML = oldText;
+                }
+            }
+        });
+    }
+
+    // BẬT / TẮT CHẾ ĐỘ XEM TRƯỚC MÁY IN NHIỆT (Thermal Simulation)
+    const thermalBtn = document.getElementById('thermal-preview-toggle-btn');
+    if (thermalBtn) {
+        thermalBtn.addEventListener('click', () => {
+            if (window.toggleThermalPreview) {
+                window.toggleThermalPreview();
+            }
+        });
+    }
 
     // RESIZER CHO PC
     const appWrapper = document.getElementById('app-wrapper'); 

@@ -1,0 +1,35 @@
+/**
+ * RaiRaiTei Queue Ticket Studio — Color Tokens
+ * Bảng màu hệ thống Studio và các mẫu vé in nhiệt
+ */
+
+:root {
+  /* Studio UI Theme (Dark Luxury Canvas) */
+  --studio-bg: #090d12;
+  --studio-surface: #121820;
+  --studio-surface-card: #18202c;
+  --studio-surface-hover: #1e293b;
+  --studio-border: rgba(255, 255, 255, 0.08);
+  --studio-border-strong: rgba(255, 255, 255, 0.15);
+
+  --studio-accent-yellow: #facc15;
+  --studio-accent-glow: rgba(250, 204, 21, 0.35);
+  --studio-accent-lime: #cbfb45;
+  --studio-accent-spring: #ff65a3;
+
+  --studio-text-primary: #f8fafc;
+  --studio-text-secondary: #94a3b8;
+  --studio-text-muted: #64748b;
+
+  /* Standard Ticket Palette (RaiRaiTei Chuẩn) */
+  --ticket-std-yellow: #fcd116;
+  --ticket-std-red: #e60012;
+  --ticket-std-dark: #111111;
+  --ticket-std-white: #ffffff;
+
+  /* Spring Ticket Palette (RaiRaiTei Mùa Xuân) */
+  --ticket-spring-cream: #fff9f2;
+  --ticket-spring-pink: #ed5793;
+  --ticket-spring-pink-dark: #ec5a8b;
+  --ticket-spring-gold: #d5ad45;
+}

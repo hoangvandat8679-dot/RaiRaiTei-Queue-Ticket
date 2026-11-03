@@ -1,15 +1,38 @@
 function waitForPaintFrames(frameCount = 2) {
     return new Promise((resolve) => {
-        const nextFrame = (remaining) => {
+        let remaining = frameCount;
+        let finished = false;
+
+        const done = () => {
+            if (finished) return;
+            finished = true;
+            resolve();
+        };
+
+        // Fallback: đảm bảo luôn hoàn thành sau tối đa 40ms, không bao giờ treo tab background
+        const fallbackTimer = setTimeout(done, Math.max(25, frameCount * 20));
+
+        const nextFrame = () => {
+            if (finished) return;
+            remaining--;
             if (remaining <= 0) {
-                resolve();
+                clearTimeout(fallbackTimer);
+                done();
                 return;
             }
 
-            requestAnimationFrame(() => nextFrame(remaining - 1));
+            if (document.hidden) {
+                setTimeout(nextFrame, 16);
+            } else {
+                requestAnimationFrame(nextFrame);
+            }
         };
 
-        nextFrame(frameCount);
+        if (document.hidden) {
+            setTimeout(nextFrame, 16);
+        } else {
+            requestAnimationFrame(nextFrame);
+        }
     });
 }
 
@@ -20,8 +43,13 @@ async function waitForPrintImages(root) {
         images.map(async (img) => {
             if (!img.complete) {
                 await new Promise((resolve) => {
-                    img.addEventListener('load', resolve, { once: true });
-                    img.addEventListener('error', resolve, { once: true });
+                    const timer = setTimeout(resolve, 2000);
+                    const finish = () => {
+                        clearTimeout(timer);
+                        resolve();
+                    };
+                    img.addEventListener('load', finish, { once: true });
+                    img.addEventListener('error', finish, { once: true });
                 });
             }
 
@@ -30,7 +58,10 @@ async function waitForPrintImages(root) {
                 typeof img.decode === 'function'
             ) {
                 try {
-                    await img.decode();
+                    await Promise.race([
+                        img.decode(),
+                        new Promise((r) => setTimeout(r, 1000))
+                    ]);
                 } catch (decodeError) {
                     // A loaded image can still be drawn when decode() is unavailable.
                 }
@@ -68,11 +99,16 @@ async function waitForCssBackgroundImages(root) {
 
     await Promise.all(
         Array.from(urls).map((url) => new Promise((resolve) => {
+            const timer = setTimeout(resolve, 2000);
+            const finish = () => {
+                clearTimeout(timer);
+                resolve();
+            };
             const probe = new Image();
 
             probe.crossOrigin = 'anonymous';
-            probe.onload = resolve;
-            probe.onerror = resolve;
+            probe.onload = finish;
+            probe.onerror = finish;
             probe.src = url;
         }))
     );
@@ -104,13 +140,17 @@ async function renderVisibleTicketCanvas(
     const pixelRatio = getPdfRasterScale();
 
     if (window.htmlToImage && window.htmlToImage.toCanvas) {
-        return window.htmlToImage.toCanvas(ticketElement, {
-            backgroundColor: '#ffffff',
-            pixelRatio,
-            cacheBust: false,
-            skipAutoScale: true,
-            fontEmbedCSS
-        });
+        try {
+            return await window.htmlToImage.toCanvas(ticketElement, {
+                backgroundColor: '#ffffff',
+                pixelRatio,
+                cacheBust: false,
+                skipAutoScale: true,
+                fontEmbedCSS
+            });
+        } catch (err) {
+            console.warn('htmlToImage toCanvas failed, falling back to html2canvas', err);
+        }
     }
 
     if (window.html2canvas) {
@@ -128,7 +168,7 @@ async function renderVisibleTicketCanvas(
     throw new Error(window.t('error_ticket_library'));
 }
 
-async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
+async function buildPrintPdfBlob(ticketsToPrint, orientation, layout, pdfTab = null) {
     const JsPDF = window.jspdf && window.jspdf.jsPDF;
 
     if (!JsPDF) {
@@ -146,6 +186,7 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
     const pageHeight = orientation === 'landscape' ? 210 : 297;
     const printableWidth = pageWidth - 10;
     const duplex = isDuplexPrintEnabled();
+    const cropMarks = isCropMarksEnabled();
     const duplexHeaderSpace = duplex ? 18 : 0;
     const printableHeight = pageHeight - 10 - duplexHeaderSpace;
     const startX =
@@ -165,7 +206,10 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
 
     try {
         if (document.fonts && document.fonts.ready) {
-            await document.fonts.ready;
+            await Promise.race([
+                document.fonts.ready,
+                new Promise((resolve) => setTimeout(resolve, 1500))
+            ]);
         }
 
         await waitForPrintImages(masterTicket);
@@ -178,10 +222,13 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
           lại của trang) — đúng lỗi thấy ở số 10–12 khi in mẫu Mùa Xuân.
         */
         previewNumber.textContent = '0123456789';
-        await waitForPaintFrames(2);
+        await waitForPaintFrames(1);
 
         if (document.fonts && document.fonts.ready) {
-            await document.fonts.ready;
+            await Promise.race([
+                document.fonts.ready,
+                new Promise((resolve) => setTimeout(resolve, 1500))
+            ]);
         }
 
         let fontEmbedCSS;
@@ -191,8 +238,10 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
             window.htmlToImage.getFontEmbedCSS
         ) {
             try {
-                fontEmbedCSS =
-                    await window.htmlToImage.getFontEmbedCSS(masterTicket);
+                fontEmbedCSS = await Promise.race([
+                    window.htmlToImage.getFontEmbedCSS(masterTicket),
+                    new Promise((resolve) => setTimeout(() => resolve(''), 1500))
+                ]);
             } catch (fontError) {
                 console.warn('Không thể nhúng phông chữ:', fontError);
             }
@@ -208,7 +257,7 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
         );
         warmupCanvas.width = 1;
         warmupCanvas.height = 1;
-        await waitForPaintFrames(2);
+        await waitForPaintFrames(1);
 
         const pdf = new JsPDF({
             orientation,
@@ -276,15 +325,24 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
                         );
                     }
 
-                    await waitForPaintFrames(2);
+                    if (pdfTab && !pdfTab.closed) {
+                        try {
+                            const desc = pdfTab.document.getElementById('pdf-status-desc');
+                            const bar = pdfTab.document.getElementById('pdf-status-bar');
+                            if (desc) desc.textContent = `${completedTickets} / ${totalCaptures} vé`;
+                            if (bar) bar.style.width = `${Math.round((completedTickets / totalCaptures) * 100)}%`;
+                        } catch (tabErr) {}
+                    }
+
+                    await waitForPaintFrames(1);
                     const canvas = await renderVisibleTicketCanvas(
                         masterTicket,
                         fontEmbedCSS
                     );
 
                     pdf.addImage(
-                        canvas.toDataURL('image/png'),
-                        'PNG',
+                        canvas.toDataURL('image/jpeg', 0.92),
+                        'JPEG',
                         startX + column * ticketW,
                         startY + row * ticketH,
                         ticketW,
@@ -295,6 +353,19 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
 
                     canvas.width = 1;
                     canvas.height = 1;
+                }
+
+                if (cropMarks) {
+                    drawPdfCropMarks(pdf, {
+                        startX,
+                        startY,
+                        bestCols,
+                        bestRows,
+                        ticketW,
+                        ticketH,
+                        pageWidth,
+                        pageHeight
+                    });
                 }
             }
 
@@ -308,6 +379,18 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
             const row = Math.floor(cellIndex / bestCols);
 
             if (pageIndex > activePage) {
+                if (cropMarks) {
+                    drawPdfCropMarks(pdf, {
+                        startX,
+                        startY,
+                        bestCols,
+                        bestRows,
+                        ticketW,
+                        ticketH,
+                        pageWidth,
+                        pageHeight
+                    });
+                }
                 pdf.addPage('a4', orientation);
                 activePage = pageIndex;
             }
@@ -331,7 +414,16 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
                 );
             }
 
-            await waitForPaintFrames(2);
+            if (pdfTab && !pdfTab.closed) {
+                try {
+                    const desc = pdfTab.document.getElementById('pdf-status-desc');
+                    const bar = pdfTab.document.getElementById('pdf-status-bar');
+                    if (desc) desc.textContent = `${index + 1} / ${ticketsToPrint.length} vé`;
+                    if (bar) bar.style.width = `${Math.round(((index + 1) / ticketsToPrint.length) * 100)}%`;
+                } catch (tabErr) {}
+            }
+
+            await waitForPaintFrames(1);
 
             const canvas = await renderVisibleTicketCanvas(
                 masterTicket,
@@ -339,8 +431,8 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
             );
 
             pdf.addImage(
-                canvas.toDataURL('image/png'),
-                'PNG',
+                canvas.toDataURL('image/jpeg', 0.92),
+                'JPEG',
                 startX + column * ticketW,
                 startY + row * ticketH,
                 ticketW,
@@ -351,6 +443,19 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout) {
 
             canvas.width = 1;
             canvas.height = 1;
+        }
+
+        if (cropMarks) {
+            drawPdfCropMarks(pdf, {
+                startX,
+                startY,
+                bestCols,
+                bestRows,
+                ticketW,
+                ticketH,
+                pageWidth,
+                pageHeight
+            });
         }
 
         return pdf.output('blob');
@@ -378,6 +483,107 @@ function isMobilePrintDevice() {
 function isDuplexPrintEnabled() {
     const toggle = document.getElementById('duplex-print-toggle');
     return Boolean(toggle && toggle.checked);
+}
+
+function isCropMarksEnabled() {
+    const toggle = document.getElementById('crop-marks-toggle');
+    return toggle ? Boolean(toggle.checked) : true;
+}
+
+/*
+  Vẽ vạch cắt chuẩn máy in (Crop Marks / Cut Marks):
+  Kế thừa kỹ thuật công nghiệp in nhãn từ sebastian-software/asn-label-maker.
+  - Vạch ticks 3mm ở 4 biên ngoài lưới vé (cách biên vé 1mm).
+  - Vạch chữ thập '+' 3mm tại các giao điểm góc giữa các con vé liền kề.
+  Giúp người dùng đặt thước nối 2 vạch và rọc/cắt 1 nhát chuẩn 100%.
+*/
+function drawPdfCropMarks(pdf, options) {
+    const {
+        startX,
+        startY,
+        bestCols,
+        bestRows,
+        ticketW,
+        ticketH
+    } = options;
+    const gridW = bestCols * ticketW;
+    const gridH = bestRows * ticketH;
+
+    if (pdf.saveGraphicsState) pdf.saveGraphicsState();
+    pdf.setDrawColor(120, 120, 120);
+    pdf.setLineWidth(0.15);
+
+    // 1. Ticks ở mép trên và mép dưới (Top & Bottom ticks)
+    for (let c = 0; c <= bestCols; c++) {
+        const x = startX + c * ticketW;
+        pdf.line(x, startY - 4, x, startY - 1);
+        pdf.line(x, startY + gridH + 1, x, startY + gridH + 4);
+    }
+
+    // 2. Ticks ở mép trái và mép phải (Left & Right ticks)
+    for (let r = 0; r <= bestRows; r++) {
+        const y = startY + r * ticketH;
+        pdf.line(startX - 4, y, startX - 1, y);
+        pdf.line(startX + gridW + 1, y, startX + gridW + 4, y);
+    }
+
+    // 3. Dấu chữ thập '+' tại các giao điểm bên trong
+    for (let c = 1; c < bestCols; c++) {
+        const cx = startX + c * ticketW;
+        for (let r = 1; r < bestRows; r++) {
+            const cy = startY + r * ticketH;
+            pdf.line(cx - 1.5, cy, cx + 1.5, cy);
+            pdf.line(cx, cy - 1.5, cx, cy + 1.5);
+        }
+    }
+
+    if (pdf.restoreGraphicsState) pdf.restoreGraphicsState();
+}
+
+function generateCropMarksSvg(options) {
+    const {
+        startX,
+        startY,
+        bestCols,
+        bestRows,
+        ticketW,
+        ticketH,
+        pageWidth,
+        pageHeight
+    } = options;
+    const gridW = bestCols * ticketW;
+    const gridH = bestRows * ticketH;
+    let lines = '';
+
+    const addLine = (x1, y1, x2, y2) => {
+        lines += `<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}" stroke="#787878" stroke-width="0.18" stroke-linecap="square" />`;
+    };
+
+    // 1. Ticks ở mép trên và mép dưới (Top & Bottom ticks)
+    for (let c = 0; c <= bestCols; c++) {
+        const x = startX + c * ticketW;
+        addLine(x, startY - 4, x, startY - 1);
+        addLine(x, startY + gridH + 1, x, startY + gridH + 4);
+    }
+
+    // 2. Ticks ở mép trái và mép phải (Left & Right ticks)
+    for (let r = 0; r <= bestRows; r++) {
+        const y = startY + r * ticketH;
+        addLine(startX - 4, y, startX - 1, y);
+        addLine(startX + gridW + 1, y, startX + gridW + 4, y);
+    }
+
+    // 3. Dấu chữ thập '+' tại các giao điểm bên trong
+    for (let c = 1; c < bestCols; c++) {
+        const cx = startX + c * ticketW;
+        for (let r = 1; r < bestRows; r++) {
+            const cy = startY + r * ticketH;
+            addLine(cx - 1.5, cy, cx + 1.5, cy);
+            addLine(cx, cy - 1.5, cx, cy + 1.5);
+        }
+    }
+
+    return `<svg class="crop-marks-svg" viewBox="0 0 ${pageWidth} ${pageHeight}" xmlns="http://www.w3.org/2000/svg">${lines}</svg>`;
 }
 
 /*
@@ -454,18 +660,78 @@ function createPrintTicketCellHTML(ticketInnerTemplate, ticketNumber) {
         return '<div class="ticket-empty duplex-placeholder" aria-hidden="true"></div>';
     }
 
+    const numberText = String(ticketNumber);
+    const shrink = getNumberShrinkFactor(numberText);
+
+    // Thay thế số thứ tự trong thẻ số queue-number / preview-number (bảo toàn class, style và co số dài)
     const cellHTML = ticketInnerTemplate.replace(
-        /<div class="queue-number"[^>]*>.*?<\/div>/,
-        `<div class="queue-number">${ticketNumber}</div>`
+        /(<div[^>]*\b(?:queue-number|preview-number)\b[^>]*>)([\s\S]*?)(<\/div>)/i,
+        (match, openTag, oldContent, closeTag) => {
+            let updatedOpenTag = openTag;
+            if (shrink < 1) {
+                if (/style=["'][^"']*["']/i.test(updatedOpenTag)) {
+                    updatedOpenTag = updatedOpenTag.replace(
+                        /style=(["'])([^"']*)(\1)/i,
+                        (m, q1, styleVal, q2) => {
+                            const trimmed = styleVal.trim().replace(/;$/, '');
+                            return `style=${q1}${trimmed}; font-size: calc(var(--number-size) * ${shrink}) !important;${q2}`;
+                        }
+                    );
+                } else {
+                    updatedOpenTag = updatedOpenTag.replace(
+                        />$/,
+                        ` style="font-size: calc(var(--number-size) * ${shrink}) !important;">`
+                    );
+                }
+            }
+            return `${updatedOpenTag}${numberText}${closeTag}`;
+        }
     );
 
     return `<div class="ticket-wrapper">${cellHTML}</div>`;
 }
 
-function buildPrintPagesHTML(ticketsToPrint, layout, duplex = false) {
-    const { totalPerPage } = layout;
+function buildPrintPagesHTML(
+    ticketsToPrint,
+    layout,
+    duplex = false,
+    cropMarks = false,
+    orientation = 'portrait'
+) {
+    const {
+        bestCols,
+        bestRows,
+        totalPerPage,
+        ticketW,
+        ticketH
+    } = layout;
+    const pageWidth = orientation === 'landscape' ? 297 : 210;
+    const pageHeight = orientation === 'landscape' ? 210 : 297;
+    const printableWidth = pageWidth - 10;
+    const duplexHeaderSpace = duplex ? 18 : 0;
+    const printableHeight = pageHeight - 10 - duplexHeaderSpace;
+    const startX =
+        5 + Math.max(0, (printableWidth - bestCols * ticketW) / 2);
+    const startY =
+        5 + duplexHeaderSpace +
+        Math.max(0, (printableHeight - bestRows * ticketH) / 2);
+
     const ticketInnerTemplate =
         document.getElementById('master-ticket-inner').outerHTML;
+
+    const cropSvg = cropMarks
+        ? generateCropMarksSvg({
+            startX,
+            startY,
+            bestCols,
+            bestRows,
+            ticketW,
+            ticketH,
+            pageWidth,
+            pageHeight
+        })
+        : '';
+    const cropClass = cropMarks ? ' has-crop-marks' : '';
 
     if (duplex) {
         return buildDuplexPrintPlan(ticketsToPrint, layout)
@@ -484,9 +750,10 @@ function buildPrintPagesHTML(ticketsToPrint, layout, duplex = false) {
                     )
                     .join('');
 
-                return '<section class="a4-print-page duplex-print-page">' +
+                return '<section class="a4-print-page duplex-print-page' + cropClass + '">' +
                     '<header class="print-side-title">' + title + '</header>' +
                     '<div class="a4-print-grid">' + cells + '</div>' +
+                    cropSvg +
                     '</section>';
             })
             .join('');
@@ -498,7 +765,7 @@ function buildPrintPagesHTML(ticketsToPrint, layout, duplex = false) {
 
     for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
         printHTML +=
-            '<section class="a4-print-page">' +
+            '<section class="a4-print-page' + cropClass + '">' +
             '<div class="a4-print-grid">';
 
         for (let cellIndex = 0; cellIndex < totalPerPage; cellIndex++) {
@@ -513,7 +780,7 @@ function buildPrintPagesHTML(ticketsToPrint, layout, duplex = false) {
             }
         }
 
-        printHTML += '</div></section>';
+        printHTML += '</div>' + cropSvg + '</section>';
     }
 
     return printHTML;
@@ -580,10 +847,13 @@ async function printDesktopInIsolatedFrame(
         .map((node) => node.outerHTML)
         .join('\n');
     const duplex = isDuplexPrintEnabled();
+    const cropMarks = isCropMarksEnabled();
     const printHTML = buildPrintPagesHTML(
         ticketsToPrint,
         layout,
-        duplex
+        duplex,
+        cropMarks,
+        orientation
     );
     const directPrintStyles = `
         @page {
@@ -614,6 +884,7 @@ async function printDesktopInIsolatedFrame(
 
         .a4-print-page {
             display: block !important;
+            position: relative !important;
             width: ${pageWidth}mm !important;
             min-width: ${pageWidth}mm !important;
             max-width: ${pageWidth}mm !important;
@@ -630,6 +901,20 @@ async function printDesktopInIsolatedFrame(
             break-after: auto !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
+        }
+
+        .crop-marks-svg {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: ${pageWidth}mm !important;
+            height: ${pageHeight}mm !important;
+            pointer-events: none !important;
+            z-index: 99 !important;
+        }
+
+        .has-crop-marks .ticket-wrapper {
+            box-shadow: inset 0 0 0 0.25mm rgba(120, 120, 120, 0.35) !important;
         }
 
         .a4-print-page + .a4-print-page {
@@ -849,17 +1134,80 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            const duplex = isDuplexPrintEnabled();
             const pdfTab = window.open('', '_blank');
 
             if (pdfTab) {
-                pdfTab.document.write(
-                    '<meta name="viewport" content="width=device-width">' +
-                    '<body style="margin:0;background:#111;color:#fff;' +
-                    'font-family:-apple-system,sans-serif;display:flex;' +
-                    'min-height:100vh;align-items:center;' +
-                    'justify-content:center;text-align:center;padding:24px">' +
-                    '<p>' + window.t('pdf_wait') + '</p></body>'
-                );
+                const totalTarget = duplex ? ticketsToPrint.length * 2 : ticketsToPrint.length;
+                pdfTab.document.write(`<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xuất File In PDF - RaiRaiTei</title>
+    <style>
+        body {
+            margin: 0;
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #1e293b;
+            padding: 32px 24px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 18px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        h2 { margin: 0 0 8px; font-size: 1.2rem; font-weight: 700; color: #f1f5f9; }
+        p { margin: 0 0 18px; color: #94a3b8; font-size: 0.9rem; line-height: 1.4; }
+        .progress-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.2s ease;
+        }
+        .status-desc { font-size: 0.88rem; font-weight: 600; color: #38bdf8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h2>Đang tạo PDF A4...</h2>
+        <p>Vui lòng giữ tab này mở trong quá trình xử lý.</p>
+        <div class="progress-track"><div class="progress-bar" id="pdf-status-bar"></div></div>
+        <div class="status-desc" id="pdf-status-desc">0 / ${totalTarget} vé</div>
+    </div>
+</body>
+</html>`);
                 pdfTab.document.close();
             }
 
@@ -867,13 +1215,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 const pdfBlob = await buildPrintPdfBlob(
                     ticketsToPrint,
                     orientation,
-                    layout
+                    layout,
+                    pdfTab
                 );
                 const pdfUrl = URL.createObjectURL(pdfBlob);
 
-                if (pdfTab) {
-                    pdfTab.location.replace(pdfUrl);
-                    pdfTab.focus();
+                if (pdfTab && !pdfTab.closed) {
+                    try {
+                        pdfTab.document.title = 'RaiRaiTei-Tickets.pdf';
+                        pdfTab.document.body.innerHTML = `
+                            <style>
+                                html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:#0f172a; }
+                                .mobile-pdf-bar {
+                                    position: fixed; top: 0; left: 0; right: 0; height: 54px;
+                                    background: #1e293b; display: flex; align-items: center; justify-content: space-between;
+                                    padding: 0 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); z-index: 100;
+                                    border-bottom: 1px solid rgba(255,255,255,0.1);
+                                }
+                                .mobile-pdf-bar span { color: #f8fafc; font-weight: 600; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+                                .mobile-pdf-bar a {
+                                    background: #2563eb; color: #ffffff; text-decoration: none; font-weight: 700;
+                                    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                                    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+                                }
+                                iframe { width: 100%; height: calc(100% - 54px); margin-top: 54px; border: none; background: #334155; }
+                            </style>
+                            <div class="mobile-pdf-bar">
+                                <span>📄 RaiRaiTei-Tickets.pdf</span>
+                                <a href="${pdfUrl}" download="RaiRaiTei-Tickets.pdf">Tải PDF Về Máy</a>
+                            </div>
+                            <iframe src="${pdfUrl}" type="application/pdf"></iframe>
+                        `;
+                        pdfTab.focus();
+                    } catch (tabNavError) {
+                        pdfTab.location.href = pdfUrl;
+                    }
                 } else {
                     alert(window.t('popup_blocked_notice'));
 
@@ -1009,4 +1385,131 @@ document.addEventListener('DOMContentLoaded', () => {
             window.designHistory.capture();
         }
     });
+
+    /**
+    /**
+     * Thuật toán Floyd-Steinberg Dithering:
+     * Khử răng cưa đơn sắc (1-bit monochrome error diffusion)
+     * Tái tạo ảnh giống 100% bản in nhiệt vật lý 203 DPI của máy in hóa đơn.
+     */
+    function applyFloydSteinbergDithering(canvas) {
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const imgData = ctx.getImageData(0, 0, width, height);
+        const data = imgData.data;
+
+        const gray = new Float32Array(width * height);
+        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            gray[j] = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+        }
+
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const idx = y * width + x;
+                const oldVal = gray[idx];
+                const newVal = oldVal < 128 ? 0 : 255;
+                gray[idx] = newVal;
+                const err = oldVal - newVal;
+
+                if (x + 1 < width) {
+                    gray[idx + 1] += err * (7 / 16);
+                }
+                if (x - 1 >= 0 && y + 1 < height) {
+                    gray[(y + 1) * width + (x - 1)] += err * (3 / 16);
+                }
+                if (y + 1 < height) {
+                    gray[(y + 1) * width + x] += err * (5 / 16);
+                }
+                if (x + 1 < width && y + 1 < height) {
+                    gray[(y + 1) * width + (x + 1)] += err * (1 / 16);
+                }
+            }
+        }
+
+        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            const val = gray[j] < 128 ? 0 : 255;
+            data[i] = val;
+            data[i + 1] = val;
+            data[i + 2] = val;
+            data[i + 3] = 255;
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+        return canvas;
+    }
+
+    /**
+     * Xuất ảnh vé đơn chiếc độ phân giải cao (Super-sampled High-Res PNG)
+     * Thích hợp cho máy in nhiệt đơn lẻ hoặc chia sẻ
+     */
+    window.exportTicketPng = async function (scale = 3.5) {
+        const ticketNode = document.getElementById('master-ticket-inner');
+        if (!ticketNode) return null;
+
+        try {
+            await waitForPrintImages(ticketNode);
+            await waitForCssBackgroundImages(ticketNode);
+
+            const isThermal = document.body.classList.contains('thermal-simulation-mode');
+            let outCanvas = null;
+
+            if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
+                outCanvas = await window.htmlToImage.toCanvas(ticketNode, {
+                    pixelRatio: scale,
+                    backgroundColor: '#ffffff'
+                });
+            } else if (window.html2canvas) {
+                outCanvas = await window.html2canvas(ticketNode, {
+                    scale: scale,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+            }
+
+            if (outCanvas) {
+                if (isThermal) {
+                    applyFloydSteinbergDithering(outCanvas);
+                }
+
+                const dataUrl = outCanvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `rairaitei-ticket-${isThermal ? 'thermal-' : ''}${Date.now()}.png`;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                return true;
+            }
+        } catch (err) {
+            console.error('[ExportTicketPng] Lỗi xuất ảnh:', err);
+        }
+        return false;
+    };
+
+    /**
+     * Chuyển đổi chế độ mô phỏng máy in nhiệt đơn sắc (Thermal Monochrome Simulation)
+     */
+    window.toggleThermalPreview = function (forceState) {
+        const body = document.body;
+        const nextState = typeof forceState === 'boolean' 
+            ? forceState 
+            : !body.classList.contains('thermal-simulation-mode');
+        
+        body.classList.toggle('thermal-simulation-mode', nextState);
+        if (window.ticketStore && window.ticketStore.studio && window.ticketStore.studio.showThermalMonochrome) {
+            window.ticketStore.studio.showThermalMonochrome.set(nextState);
+        }
+
+        const btn = document.getElementById('thermal-preview-toggle-btn');
+        if (btn) {
+            btn.classList.toggle('is-active', nextState);
+            btn.setAttribute('aria-pressed', String(nextState));
+        }
+        return nextState;
+    };
+
+    window.isCropMarksEnabled = isCropMarksEnabled;
+    window.drawPdfCropMarks = drawPdfCropMarks;
+    window.generateCropMarksSvg = generateCropMarksSvg;
 });

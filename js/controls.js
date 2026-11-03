@@ -37,9 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
             enabledDisplay: 'block'
         },
         {
+            id: 'frame-tool-toggle',
+            property: '--frame-display',
+            enabledDisplay: 'block'
+        },
+        {
             id: 'number-tool-toggle',
             property: '--number-display',
-            enabledDisplay: 'flex'
+            enabledDisplay: 'block'
         },
         {
             id: 'message-tool-toggle',
@@ -362,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const coreWInput = document.getElementById('core-width-input'); const coreHInput = document.getElementById('core-height-input');
     function updateCoreSize() {
-        const w = Math.min(297, Math.max(1, parseFloat(coreWInput.value) || 44)); const h = Math.min(297, Math.max(1, parseFloat(coreHInput.value) || 79));
+        const w = Math.min(297, Math.max(1, parseFloat(coreWInput.value) || 43)); const h = Math.min(297, Math.max(1, parseFloat(coreHInput.value) || 78));
         coreWInput.value = w.toFixed(1); coreHInput.value = h.toFixed(1);
         document.body.style.setProperty('--core-width', w + 'mm'); document.body.style.setProperty('--core-height', h + 'mm');
         const headerCoreLabel = document.getElementById('core_size_label_header');

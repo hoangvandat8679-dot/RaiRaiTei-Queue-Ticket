@@ -18,6 +18,8 @@ window.translations = {
         history_undo_label: '元に戻す',
         history_redo_label: 'やり直す',
         text_collapse: '全画面表示',
+        text_thermal_mode: '熱転写',
+        export_png_text: '単一チケット画像（PNG）を保存',
         control_panel_title: '設定パネル',
         core_size_label: '本体',
         nav_template: 'テンプレート設計',
@@ -26,16 +28,29 @@ window.translations = {
         nav_number: '番号枠',
         nav_message: 'メッセージ',
         nav_branch: '店舗名',
+        chip_all: 'すべて',
+        chip_size: '1. サイズ',
+        chip_border: '2. 枠・シンボル',
+        chip_number: '3. 番号と枠',
+        chip_message: '4. メッセージ',
+        chip_branch: '5. 店舗名',
         template_design_title: 'テンプレート設計',
         template_design_status: '開発中',
         seasonal_template_title: '季節のテンプレート',
         template_spring_name: '春',
         template_spring_description: '桜のデザイン',
+        template_summer_name: '夏',
+        template_summer_description: '祭り・ひまわり',
+        template_autumn_name: '秋',
+        template_autumn_description: '紅葉・お月見',
+        template_winter_name: '冬',
+        template_winter_description: '雪・イルミネーション',
         template_standard_name: '標準デザインに戻す',
         toggle_bg_label: '背景を表示',
         toggle_border_label: '枠線とLEDを表示',
         toggle_mascot_label: 'マスコットを表示',
-        toggle_number_label: '番号と枠を表示',
+        toggle_number_label: '番号を表示',
+        toggle_frame_label: '番号枠を表示',
         toggle_message_label: 'メッセージを表示',
         toggle_branch_label: '店舗名を表示',
         sec1_title: '1. サイズ・背景',
@@ -140,7 +155,38 @@ window.translations = {
         processing: '処理中…',
         in_app_browser_warning: '{browser}内のブラウザからは直接印刷できません。このページをSafariまたはChromeで開いてから、もう一度お試しください。',
         in_app_browser_generic: '現在のアプリ',
-        popup_blocked_notice: 'PDF表示がブロックされました。PDFファイルをダウンロードします。'
+        popup_blocked_notice: 'PDF表示がブロックされました。PDFファイルをダウンロードします。',
+        txt_focus_preview: '拡大',
+        txt_focus_restore: '戻す',
+        handle_compact: 'チケット優先',
+        handle_expanded: 'パネル展開中',
+        saved_presets_title: '保存済みデザイン',
+        save_preset_section: '現在のデザインを保存',
+        save_preset_placeholder: 'デザイン名（例：繁忙期、感謝祭…）',
+        btn_save_current_preset: 'このデザインを保存',
+        saved_presets_list_title: 'マイデザイン一覧',
+        preset_empty_title: '保存されたデザインはありません',
+        preset_empty_desc: 'お好みのデザインを作成し、名前を入力して「このデザインを保存」を押してください。',
+        btn_export_all_presets: '全デザインを一括書き出し（JSON）',
+        btn_import_preset_file: 'JSONファイルから読み込む',
+        btn_clear_all_presets: '全保存デザインを削除',
+        preset_btn_apply: '適用',
+        preset_default_name: 'カスタムデザイン',
+        preset_imported_name: 'インポートデザイン',
+        preset_save_success: '保存完了！',
+        preset_confirm_delete: 'デザイン「{name}」を削除してもよろしいですか？',
+        preset_confirm_clear_all: '警告：保存されたすべてのデザインを完全に削除しますか？',
+        preset_prompt_rename: '新しいデザイン名を入力してください：',
+        preset_import_success: '{count}件のデザインを正常に読み込みました！',
+        preset_import_invalid: '有効なデザインデータが見つかりませんでした。',
+        preset_import_error: 'JSONファイルの読み込み中にエラーが発生しました。',
+        storage_quota_full: 'ブラウザの保存容量がいっぱいです。不要なデザインを削除してください。',
+        preset_apply_tooltip: 'このデザインを読み込む',
+        preset_rename_tooltip: '名前を変更',
+        preset_export_tooltip: 'JSONとして保存',
+        preset_delete_tooltip: '削除',
+        crop_marks_label: '裁断ガイド線（トンボ・Crop Marks）',
+        crop_marks_hint: 'ハサミやカッターでキレイに切り離せるよう、各チケットの境界に裁断マークを配置します。'
     },
     vn: {
         document_title: 'Công cụ tạo phiếu thứ tự RaiRaiTei',
@@ -150,6 +196,8 @@ window.translations = {
         history_undo_label: 'Hoàn tác',
         history_redo_label: 'Làm lại',
         text_collapse: 'Toàn màn hình',
+        text_thermal_mode: 'In nhiệt',
+        export_png_text: 'Tải ảnh vé đơn (PNG)',
         control_panel_title: 'Bảng điều khiển',
         core_size_label: 'Lõi vé',
         nav_template: 'Thiết kế mẫu',
@@ -158,16 +206,29 @@ window.translations = {
         nav_number: 'Khung số',
         nav_message: 'Lời nhắn',
         nav_branch: 'Tên chi nhánh',
+        chip_all: 'Tất cả',
+        chip_size: '1. Kích thước & Nền',
+        chip_border: '2. Viền & Linh vật',
+        chip_number: '3. Số thứ tự & Khung',
+        chip_message: '4. Lời nhắn',
+        chip_branch: '5. Tên quán',
         template_design_title: 'Thiết kế mẫu',
         template_design_status: 'đang phát triển',
         seasonal_template_title: 'Mẫu Theo Mùa',
         template_spring_name: 'Mùa Xuân',
         template_spring_description: 'Thiết kế hoa anh đào',
+        template_summer_name: 'Mùa Hè',
+        template_summer_description: 'Lễ hội & Hướng dương',
+        template_autumn_name: 'Mùa Thu',
+        template_autumn_description: 'Lá đỏ & Ngắm trăng',
+        template_winter_name: 'Mùa Đông',
+        template_winter_description: 'Tuyết & Ánh sáng',
         template_standard_name: 'Quay về thiết kế gốc',
         toggle_bg_label: 'Bật nền',
         toggle_border_label: 'Bật viền & đèn',
         toggle_mascot_label: 'Bật biểu tượng',
-        toggle_number_label: 'Bật số & khung',
+        toggle_number_label: 'Bật số thứ tự',
+        toggle_frame_label: 'Bật khung số',
         toggle_message_label: 'Bật lời nhắn',
         toggle_branch_label: 'Bật tên chi nhánh',
         sec1_title: '1. Kích thước & nền',
@@ -272,7 +333,38 @@ window.translations = {
         processing: 'Đang xử lý…',
         in_app_browser_warning: 'Không thể in trực tiếp trong trình duyệt của {browser}. Vui lòng mở trang này bằng Safari hoặc Chrome rồi thử lại.',
         in_app_browser_generic: 'ứng dụng hiện tại',
-        popup_blocked_notice: 'Trình duyệt đã chặn cửa sổ PDF. Tệp PDF sẽ được tải xuống.'
+        popup_blocked_notice: 'Trình duyệt đã chặn cửa sổ PDF. Tệp PDF sẽ được tải xuống.',
+        txt_focus_preview: 'Phóng to',
+        txt_focus_restore: 'Thu nhỏ',
+        handle_compact: 'Xem vé lớn',
+        handle_expanded: 'Bảng mở rộng',
+        saved_presets_title: 'Mẫu thiết kế đã lưu',
+        save_preset_section: 'Lưu thiết kế hiện tại',
+        save_preset_placeholder: 'Tên mẫu (VD: Giờ cao điểm, Tết…)',
+        btn_save_current_preset: 'Lưu mẫu này',
+        saved_presets_list_title: 'Danh sách mẫu của bạn',
+        preset_empty_title: 'Chưa có mẫu nào được lưu',
+        preset_empty_desc: 'Tùy chỉnh vé theo ý muốn, đặt tên và nhấn "Lưu mẫu này" ở trên để lưu vào bộ sưu tập.',
+        btn_export_all_presets: 'Xuất toàn bộ mẫu (JSON)',
+        btn_import_preset_file: 'Nạp từ file JSON',
+        btn_clear_all_presets: 'Xóa tất cả mẫu đã lưu',
+        preset_btn_apply: 'Nạp',
+        preset_default_name: 'Mẫu tùy chỉnh',
+        preset_imported_name: 'Mẫu nhập',
+        preset_save_success: 'Đã lưu thành công!',
+        preset_confirm_delete: 'Bạn có chắc chắn muốn xóa mẫu "{name}"?',
+        preset_confirm_clear_all: 'CẢNH BÁO: Bạn có chắc chắn muốn xóa TẤT CẢ các mẫu đã lưu?',
+        preset_prompt_rename: 'Nhập tên mới cho mẫu:',
+        preset_import_success: 'Đã nạp thành công {count} mẫu thiết kế!',
+        preset_import_invalid: 'Không tìm thấy dữ liệu mẫu hợp lệ!',
+        preset_import_error: 'Lỗi khi đọc file JSON! Vui lòng kiểm tra lại.',
+        storage_quota_full: 'Bộ nhớ trình duyệt đã đầy! Hãy xóa bớt một số mẫu cũ.',
+        preset_apply_tooltip: 'Nhấn để nạp mẫu này',
+        preset_rename_tooltip: 'Đổi tên',
+        preset_export_tooltip: 'Tải file JSON',
+        preset_delete_tooltip: 'Xóa',
+        crop_marks_label: 'Vạch cắt chuẩn kéo/dao rọc giấy (Crop Marks)',
+        crop_marks_hint: 'Vẽ vạch chữ thập và vạch kẻ mảnh theo lề 1.0mm giữa các con vé để cắt rời chính xác từng milimet.'
     }
 };
 
@@ -323,11 +415,18 @@ window.applyTranslations = function() {
         'seasonal_template_title',
         'template_spring_name',
         'template_spring_description',
+        'template_summer_name',
+        'template_summer_description',
+        'template_autumn_name',
+        'template_autumn_description',
+        'template_winter_name',
+        'template_winter_description',
         'template_standard_name',
         'toggle_bg_label',
         'toggle_border_label',
         'toggle_mascot_label',
         'toggle_number_label',
+        'toggle_frame_label',
         'toggle_message_label',
         'toggle_branch_label',
         'sec1_title',
@@ -410,7 +509,27 @@ window.applyTranslations = function() {
         'info_size_label',
         'info_per_page_label',
         'info_total_label',
-        'generate_pdf_text'
+        'generate_pdf_text',
+        'export_png_text',
+        'text_thermal_mode',
+        'chip_all',
+        'chip_size',
+        'chip_border',
+        'chip_number',
+        'chip_message',
+        'chip_branch',
+        'txt_focus_preview',
+        'saved_presets_title',
+        'save_preset_section',
+        'btn_save_current_preset',
+        'saved_presets_list_title',
+        'btn_export_all_presets',
+        'btn_import_preset_file',
+        'btn_clear_all_presets',
+        'preset_empty_title',
+        'preset_empty_desc',
+        'crop_marks_label',
+        'crop_marks_hint'
     ];
 
     textElementIds.forEach((id) => {
@@ -421,6 +540,21 @@ window.applyTranslations = function() {
 
         if (element) element.textContent = window.t(key);
     });
+
+    const presetNameInput = document.getElementById('save-preset-name');
+    if (presetNameInput) {
+        presetNameInput.placeholder = window.t('save_preset_placeholder');
+    }
+
+    if (window.PresetManager && typeof window.PresetManager.renderUI === 'function') {
+        window.PresetManager.renderUI();
+    }
+
+    const handleStatusEl = document.getElementById('handle_status_text');
+    if (handleStatusEl) {
+        const isExp = document.getElementById('controls-sidebar')?.classList.contains('sheet-expanded');
+        handleStatusEl.textContent = window.t(isExp ? 'handle_expanded' : 'handle_compact');
+    }
 
     document.documentElement.lang =
         window.currentLang === 'jp' ? 'ja' : 'vi';
@@ -437,9 +571,9 @@ window.applyTranslations = function() {
 
     if (headerCoreSize) {
         const width =
-            parseFloat(document.getElementById('core-width-input').value) || 44;
+            parseFloat(document.getElementById('core-width-input').value) || 43;
         const height =
-            parseFloat(document.getElementById('core-height-input').value) || 79;
+            parseFloat(document.getElementById('core-height-input').value) || 78;
         const headerTextNode = Array.from(headerCoreSize.childNodes)
             .find((node) => node.nodeType === Node.TEXT_NODE);
 

@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'background-tool-toggle',
             'border-tool-toggle',
             'mascot-tool-toggle',
+            'frame-tool-toggle',
             'number-tool-toggle',
             'message-tool-toggle',
             'branch-tool-toggle',
@@ -116,17 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
         historyState.applying = true;
 
         try {
-            if (design.template === 'spring') {
-                const springButton = document.getElementById(
-                    'spring-template-btn'
-                );
-
+            if (window.TemplateRegistry && typeof window.TemplateRegistry.apply === 'function') {
+                window.TemplateRegistry.apply(design.template || 'standard');
+            } else if (design.template === 'spring') {
+                const springButton = document.getElementById('spring-template-btn');
                 if (springButton) springButton.click();
             } else {
-                const standardButton = document.getElementById(
-                    'standard-template-btn'
-                );
-
+                const standardButton = document.getElementById('standard-template-btn');
                 if (standardButton) standardButton.click();
             }
 
