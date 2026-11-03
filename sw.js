@@ -6,7 +6,7 @@
  * thị banner "Đã có bản mới — Nạp lại" thay vì tự đổi giữa ca làm.
  * Tên cache có phiên bản: bản mới tạo cache mới, bản cũ bị dọn ở activate.
  */
-const CACHE_NAME = 'rairaitei-shell-v2';
+const CACHE_NAME = 'rairaitei-shell-v3';
 const PRECACHE = ["./","assets/images/mascot.png","assets/images/templates/spring-background.png","assets/images/templates/spring-branch-ribbon.png","assets/images/templates/spring-number-frame.png","assets/images/templates/thumbs/autumn.webp","assets/images/templates/thumbs/spring.webp","assets/images/templates/thumbs/summer.webp","assets/images/templates/thumbs/winter.webp","assets/templates/autumn.svg","assets/templates/summer.svg","assets/templates/winter.svg","css/fonts.css","css/layout.css","css/main.css","css/print.css","css/tailwind.css","css/templates.css","css/ticket-drag.css","css/ticket.css","css/tokens/colors.css","css/tokens/dimensions.css","css/tokens/index.css","css/tokens/typography.css","index.html","js/app.js","js/controls.js","js/core/signal.js","js/core/store.js","js/design-history.js","js/i18n.js","js/image-editor.js","js/layout-sync.js","js/print/cropmarks.js","js/print/layout.js","js/print/preflight.js","js/print/print-mobile.js","js/print/print-pc.js","js/print/print.js","js/print/raster.js","js/registry/template-registry.js","js/registry/templates/autumn.js","js/registry/templates/spring.js","js/registry/templates/standard.js","js/registry/templates/summer.js","js/registry/templates/winter.js","js/state-schema.js","js/storage/draft-manager.js","js/storage/preset-manager.js","js/ticket-drag.js","js/ui-events.js","js/vendor/html-to-image.min.js","js/vendor/html2canvas.min.js","js/vendor/jspdf.umd.min.js"];
 
 self.addEventListener('install', (event) => {
@@ -16,7 +16,9 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => Promise.all(PRECACHE.map((url) =>
-        cache.add(url).catch((err) => console.warn('[SW] Bỏ qua tệp không nạp được:', url, err))
+        // cache:'reload' — bỏ qua HTTP cache của GitHub Pages (max-age
+        // 600 giây) để bản mới không nạp nhầm tệp của bản cũ ngay sau deploy.
+        cache.add(new Request(url, { cache: 'reload' })).catch((err) => console.warn('[SW] Bỏ qua tệp không nạp được:', url, err))
       )))
   );
 });

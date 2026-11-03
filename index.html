@@ -545,7 +545,7 @@
         refreshing = true;
         location.reload();
       });
-      navigator.serviceWorker.register('sw.js').then(function (reg) {
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
         function showBanner() {
           var b = document.getElementById('sw-update-banner');
           if (!b) return;
