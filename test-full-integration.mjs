@@ -57,9 +57,10 @@ for (const tid of ['spring', 'summer', 'autumn', 'winter', 'standard']) {
 
 // 5. Kiểm tra CSS styling cho các mẫu mùa
 const cssContent = fs.readFileSync('css/main.css', 'utf8');
+const templatesCssContent = fs.readFileSync('css/templates.css', 'utf8');
 for (const tid of ['summer', 'autumn', 'winter']) {
-  assert(cssContent.includes(`.template-card-${tid}`), `css/main.css có style card preview cho ${tid}`);
-  assert(cssContent.includes(`.ticket-core.${tid}-template`), `css/main.css có style ticket-core cho ${tid}`);
+  assert(templatesCssContent.includes(`.template-card-${tid}`), `css/templates.css có style card preview cho ${tid}`);
+  assert(templatesCssContent.includes(`.ticket-core.${tid}-template`), `css/templates.css có style ticket-core cho ${tid}`);
 }
 
 // 6. Kiểm tra thuật toán Floyd-Steinberg Dithering trong js/print (trước đây là export.js)
