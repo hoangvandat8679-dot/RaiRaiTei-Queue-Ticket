@@ -16,6 +16,7 @@ export const WinterTemplate = {
   datasetTemplate: 'winter',
   bgImage: "url('../assets/templates/winter.svg')",
   mascotImage: 'assets/images/templates/winter-mascot.png',
+  msgLineHeight: 1.01,
 
   // Preset thông số phần tử chuẩn xác theo lớp vector
   preset: {
@@ -29,12 +30,12 @@ export const WinterTemplate = {
     'frame-width': 36.2,
     'frame-height': 35.7,
     'frame-y': 21.8,
-    'msg-size': 6.4,
-    'msg-y': 8.0,
-    'branch-size': 6.5,
+    'msg-size': 7.3,
+    'msg-y': 8.15,
+    'branch-size': 5.3,
     'branch-y': 3.8,
     'branch-width': 75,
-    'branch-pad-y': 0.15,
+    'branch-pad-y': 0.4,
     'branch-radius': 1.4
   },
 
