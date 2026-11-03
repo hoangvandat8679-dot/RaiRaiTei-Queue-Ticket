@@ -1,5 +1,7 @@
 import { imageState } from './image-editor.js';
 import { TemplateRegistry } from './registry/template-registry.js';
+import { ticketStore } from './core/store.js';
+import { validateDesign, extractLegacyDragOffsets, normalizeDragOffsets } from './state-schema.js';
 
 // designHistory hình thành trong DOMContentLoaded — export object ổn định,
 // các phương thức thật được gán khi DOM sẵn sàng (cùng mẫu controls/ticket-drag).
@@ -102,6 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
             historyState.images.mascot = imageState.currentMascotBase64;
         }
 
+        // Độ lệch kéo thả lấy từ ticketStore (R3) — không còn input ẩn.
+        const snap = ticketStore.actions.getSnapshot();
+        design.dragOffsets = {};
+        for (const [key, val] of Object.entries(snap.elements)) {
+            design.dragOffsets[key] = { dx: val.dx, dy: val.dy };
+        }
+
         return design;
     };
 
@@ -119,12 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const SUPPORTED_DESIGN_VERSION = 1;
 
     const applyDesign = (design) => {
-        if (
-            !design ||
-            design.format !== 'rairaitei-design' ||
-            typeof design !== 'object' ||
-            (design.version != null && Number(design.version) > SUPPORTED_DESIGN_VERSION)
-        ) {
+        // Cổng nhận theo lược đồ trạng thái (R3): sai định dạng/kiểu dữ
+        // liệu/phiên bản mới hơn thì từ chối nguyên vẹn, không áp nửa vời.
+        if (!design || typeof design !== 'object' || !validateDesign(design).ok) {
             return false;
         }
 
@@ -218,6 +224,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (mascotImg) {
                     mascotImg.src = design.mascotImage;
                 }
+            }
+
+            // Độ lệch kéo thả: định dạng mới ở design.dragOffsets; tệp cũ
+            // nằm trong controls dạng drag-<key>-dx/dy (trích xuất tương thích).
+            const offsets = design.dragOffsets
+                ? normalizeDragOffsets(design.dragOffsets)
+                : extractLegacyDragOffsets(design.controls || {});
+            if (offsets) {
+                ticketStore.actions.applySnapshot({ elements: offsets });
             }
 
             if (design.mascotType === 'default' || design.mascotType === 'custom') {
@@ -335,6 +350,9 @@ document.addEventListener('DOMContentLoaded', () => {
             scheduleCapture();
         }
     });
+
+    // Kéo thả không qua input nữa (R3): nghe tín hiệu đổi thiết kế riêng.
+    document.addEventListener('rairaitei:design-changed', scheduleCapture);
 
     const clearBtn = document.getElementById('history-clear');
     const downloadBtn = document.getElementById('history-download');

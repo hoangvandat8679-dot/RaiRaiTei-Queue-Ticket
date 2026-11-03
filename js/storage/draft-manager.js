@@ -120,6 +120,7 @@ function init() {
   setTimeout(restoreDraft, 400);
   document.addEventListener('input', scheduleSave);
   document.addEventListener('change', scheduleSave);
+  document.addEventListener('rairaitei:design-changed', scheduleSave);
   // Đổi ngôn ngữ: vẽ lại nhãn trạng thái.
   document.addEventListener('rairaitei:language-changed', renderStatus);
 }

@@ -1,7 +1,8 @@
 /**
  * RaiRaiTei Queue Ticket Studio — Central Ticket Store
- * Single Source of Truth sử dụng TicketSignal
- * Đi kèm Adapter 2 chiều tương thích 100% với hệ thống DOM input cũ (#drag-offset-store)
+ * Single Source of Truth sử dụng TicketSignal.
+ * Từ R3 store là nơi duy nhất giữ độ lệch kéo thả; không còn adapter
+ * hai chiều với input ẩn trong DOM (đã tháo cùng đợt R3).
  */
 
 import { signal, effect } from './signal.js';
@@ -48,20 +49,12 @@ const studio = {
   showSafeZone: signal(true)
 };
 
-// Cờ chống đệ quy giữa Store và DOM Adapter
-let isInternalSync = false;
-
 // 2. Các Actions hỗ trợ thao tác an toàn
 const actions = {
   setElementOffset(name, dx, dy) {
     if (!elements[name]) return;
-    isInternalSync = true;
-    try {
-      if (typeof dx === 'number') elements[name].dx.set(dx);
-      if (typeof dy === 'number') elements[name].dy.set(dy);
-    } finally {
-      isInternalSync = false;
-    }
+    if (typeof dx === 'number') elements[name].dx.set(dx);
+    if (typeof dy === 'number') elements[name].dy.set(dy);
   },
 
   setElementScale(name, scale) {
@@ -90,8 +83,7 @@ const actions = {
 
   applySnapshot(snap) {
     if (!snap) return;
-    isInternalSync = true;
-    try {
+    {
       if (snap.templateId) templateId.set(snap.templateId);
       if (snap.elements) {
         for (const [key, data] of Object.entries(snap.elements)) {
@@ -104,73 +96,13 @@ const actions = {
           }
         }
       }
-    } finally {
-      isInternalSync = false;
     }
   }
 };
-
-// 3. Adapter Tương Thích Ngược 2 Chiều với #drag-offset-store
-function initLegacyDOMAdapter() {
-  const fieldMapping = [
-    { key: 'frame', xId: 'drag-frame-dx', yId: 'drag-frame-dy' },
-    { key: 'number', xId: 'drag-number-dx', yId: 'drag-number-dy' },
-    { key: 'mascot', xId: 'drag-mascot-dx', yId: 'drag-mascot-dy' },
-    { key: 'msg', xId: 'drag-msg-dx', yId: 'drag-msg-dy' },
-    { key: 'branch', xId: 'drag-branch-dx', yId: 'drag-branch-dy' }
-  ];
-
-  fieldMapping.forEach(({ key, xId, yId }) => {
-    const xInput = document.getElementById(xId);
-    const yInput = document.getElementById(yId);
-
-    // (A) Khi Store đổi -> Tự động ghi lại vào input DOM để code cũ đọc được
-    effect(() => {
-      const dx = elements[key].dx.get();
-      const dy = elements[key].dy.get();
-
-      if (isInternalSync) return;
-
-      if (xInput && parseFloat(xInput.value) !== dx) {
-        xInput.value = dx;
-      }
-      if (yInput && parseFloat(yInput.value) !== dy) {
-        yInput.value = dy;
-      }
-    });
-
-    // (B) Khi code cũ ghi vào input DOM hoặc dispatch sự kiện -> Cập nhật ngược vào Store
-    const onDOMInput = () => {
-      if (isInternalSync) return;
-      const dx = xInput ? parseFloat(xInput.value) || 0 : 0;
-      const dy = yInput ? parseFloat(yInput.value) || 0 : 0;
-      actions.setElementOffset(key, dx, dy);
-    };
-
-    if (xInput) {
-      xInput.addEventListener('input', onDOMInput);
-      xInput.addEventListener('change', onDOMInput);
-    }
-    if (yInput) {
-      yInput.addEventListener('input', onDOMInput);
-      yInput.addEventListener('change', onDOMInput);
-    }
-  });
-
-  console.log('✅ [TicketStore] Legacy DOM Adapter đã kích hoạt thành công (Two-way sync sẵn sàng).');
-}
-
-// Tự động kích hoạt adapter khi DOM sẵn sàng
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initLegacyDOMAdapter);
-} else {
-  initLegacyDOMAdapter();
-}
 
 export const ticketStore = {
   templateId,
   elements,
   studio,
-  actions,
-  initLegacyDOMAdapter
+  actions
 };

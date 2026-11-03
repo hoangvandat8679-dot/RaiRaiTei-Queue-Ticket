@@ -119,5 +119,19 @@ try {
 } catch (e) { pdfOk = false; }
 check('drawPdfCropMarks vẽ lên jsPDF thật không lỗi, PDF có nội dung', pdfOk);
 
+// --- G. R3: store là nguồn duy nhất cho độ lệch kéo thả + cổng schema ---
+console.log('\nG. Hợp nhất store + state-schema (R3):');
+const store = window.RaiRaiTeiApp.ticketStore;
+check('không còn input ẩn drag-offset trong DOM', !d.getElementById('drag-mascot-dx'));
+store.actions.setElementOffset('mascot', 5, -3);
+const collected = window.RaiRaiTeiApp.designHistory.collect();
+check('collect ghi dragOffsets từ store', collected.dragOffsets && collected.dragOffsets.mascot.dx === 5 && collected.dragOffsets.mascot.dy === -3, JSON.stringify(collected.dragOffsets && collected.dragOffsets.mascot));
+check('biến CSS --mascot-dx bám theo store', d.body.style.getPropertyValue('--mascot-dx') === '5mm', d.body.style.getPropertyValue('--mascot-dx'));
+check('apply design có dragOffsets -> store nhận', window.RaiRaiTeiApp.designHistory.apply({ format: 'rairaitei-design', version: 1, template: 'standard', dragOffsets: { branch: { dx: 2, dy: 2 } } }) === true && store.elements.branch.dx.peek() === 2);
+check('apply tệp cũ (drag-* trong controls) vẫn chạy', window.RaiRaiTeiApp.designHistory.apply({ format: 'rairaitei-design', template: 'standard', controls: { 'drag-msg-dx': 7, 'drag-msg-dy': -2 } }) === true && store.elements.msg.dx.peek() === 7 && store.elements.msg.dy.peek() === -2);
+check('schema chặn controls sai kiểu', window.RaiRaiTeiApp.designHistory.apply({ format: 'rairaitei-design', controls: { 'core-width-input': 'không-phải-số' } }) === false);
+check('validateDesign báo lỗi version mới hơn', window.RaiRaiTeiApp.validateDesign({ format: 'rairaitei-design', version: 99 }).ok === false);
+store.actions.applySnapshot({ elements: { mascot: { dx: 0, dy: 0 }, branch: { dx: 0, dy: 0 }, msg: { dx: 0, dy: 0 } } });
+
 console.log('\n==================================================');
 process.exit(summary() > 0 ? 1 : 0);

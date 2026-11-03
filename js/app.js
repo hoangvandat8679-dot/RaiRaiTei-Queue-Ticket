@@ -17,6 +17,7 @@ import { applyControlPreset } from './controls.js';
 import { TemplateRegistry } from './registry/template-registry.js';
 import { ticketDrag } from './ticket-drag.js';
 import { designHistory } from './design-history.js';
+import { validateDesign, DESIGN_SCHEMA } from './state-schema.js';
 import { PresetManager } from './storage/preset-manager.js';
 import { DraftManager } from './storage/draft-manager.js';
 import { exportTicketPng, toggleThermalPreview, isCropMarksEnabled, drawPdfCropMarks, generateCropMarksSvg, isMobilePrintDevice } from './print/print.js';
@@ -37,6 +38,8 @@ window.RaiRaiTeiApp = {
     TemplateRegistry,
     ticketDrag,
     designHistory,
+    validateDesign,
+    DESIGN_SCHEMA,
     PresetManager,
     DraftManager,
     exportTicketPng,

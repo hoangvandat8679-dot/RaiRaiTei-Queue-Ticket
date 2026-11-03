@@ -348,46 +348,6 @@
    "crop-marks-toggle": {
     "v": true,
     "dis": false
-   },
-   "drag-mascot-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-mascot-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dy": {
-    "v": "0",
-    "dis": false
    }
   },
   "bodyTemplate": null,
@@ -772,46 +732,6 @@
    },
    "crop-marks-toggle": {
     "v": true,
-    "dis": false
-   },
-   "drag-mascot-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-mascot-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dy": {
-    "v": "0",
     "dis": false
    }
   },
@@ -1202,46 +1122,6 @@
    "crop-marks-toggle": {
     "v": true,
     "dis": false
-   },
-   "drag-mascot-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-mascot-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dy": {
-    "v": "0",
-    "dis": false
    }
   },
   "bodyTemplate": "summer",
@@ -1630,46 +1510,6 @@
    },
    "crop-marks-toggle": {
     "v": true,
-    "dis": false
-   },
-   "drag-mascot-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-mascot-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dy": {
-    "v": "0",
     "dis": false
    }
   },
@@ -2060,46 +1900,6 @@
    "crop-marks-toggle": {
     "v": true,
     "dis": false
-   },
-   "drag-mascot-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-mascot-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dy": {
-    "v": "0",
-    "dis": false
    }
   },
   "bodyTemplate": "winter",
@@ -2489,46 +2289,6 @@
    "crop-marks-toggle": {
     "v": true,
     "dis": false
-   },
-   "drag-mascot-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-mascot-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dy": {
-    "v": "0",
-    "dis": false
    }
   },
   "bodyTemplate": "spring",
@@ -2917,46 +2677,6 @@
    },
    "crop-marks-toggle": {
     "v": true,
-    "dis": false
-   },
-   "drag-mascot-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-mascot-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-frame-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-number-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-msg-dy": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dx": {
-    "v": "0",
-    "dis": false
-   },
-   "drag-branch-dy": {
-    "v": "0",
     "dis": false
    }
   },
