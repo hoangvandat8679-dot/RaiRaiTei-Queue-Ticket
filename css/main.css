@@ -691,7 +691,11 @@ label[for="mascot-upload"]:hover {
 .ticket-core.summer-template .branch-name,
 .ticket-core.autumn-template .branch-name,
 .ticket-core.winter-template .branch-name {
-    background: transparent !important;
+    /* Rai Aide 3/11/2026: bỏ ép nền trong suốt. Artwork SVG (588x984) bị
+       letterbox trên lõi vé 43x78mm nên không phủ tới chân vé, nơi tên quán
+       neo 2mm từ đáy — nền trong suốt khiến chữ trắng vô hình trên nền vé
+       sáng. Dải tên quán dùng lại màu cấu hình của từng mẫu
+       (var(--branch-bg) từ .branch-name gốc), không đè lên artwork. */
     border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
