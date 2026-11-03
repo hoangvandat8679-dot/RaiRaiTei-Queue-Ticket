@@ -16,6 +16,7 @@ export const SummerTemplate = {
   datasetTemplate: 'summer',
   bgImage: "url('../assets/templates/summer.svg')",
   mascotImage: 'assets/images/templates/summer-mascot.png',
+  msgLineHeight: 1.16,
 
   // Preset thông số phần tử chuẩn xác theo lớp vector
   preset: {
@@ -30,11 +31,11 @@ export const SummerTemplate = {
     'frame-height': 35.9,
     'frame-y': 21.5,
     'msg-size': 6.4,
-    'msg-y': 8.0,
-    'branch-size': 6.5,
+    'msg-y': 8.2,
+    'branch-size': 5.3,
     'branch-y': 3.5,
     'branch-width': 76,
-    'branch-pad-y': 0.15,
+    'branch-pad-y': 0.4,
     'branch-radius': 1.4
   },
 

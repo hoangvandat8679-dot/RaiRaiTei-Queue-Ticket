@@ -126,6 +126,14 @@ const TemplateRegistry = {
       document.body.style.removeProperty('--bg-image');
     }
 
+    // 2b. Khoảng cách dòng thông điệp riêng của mẫu (bản vẽ gốc nén dòng
+    // chặt hơn mặc định 1.2; mẫu không khai báo thì trở về mặc định CSS).
+    if (tpl.msgLineHeight) {
+      document.body.style.setProperty('--msg-line-height', String(tpl.msgLineHeight));
+    } else {
+      document.body.style.removeProperty('--msg-line-height');
+    }
+
     // 3. Áp dụng Presets thông số
     applyControlPreset(tpl.preset || undefined);
 
