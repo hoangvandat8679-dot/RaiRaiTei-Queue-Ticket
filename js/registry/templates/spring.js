@@ -13,7 +13,7 @@ export const SpringTemplate = {
   badge: 'SPRING',
   bodyClass: 'spring-template',
   datasetTemplate: 'spring',
-  bgImage: "url('assets/images/templates/spring-background.png')",
+  bgImage: "url('../assets/images/templates/spring-background.png')",
 
   // Preset thông số phần tử chuẩn xác
   preset: {
@@ -55,9 +55,11 @@ export const SpringTemplate = {
 
   // Phông chữ Mùa Xuân
   fonts: {
-    'number-font-select': "'Times New Roman', 'Noto Serif JP', serif",
-    'msg-font': "'Noto Sans JP', sans-serif",
-    'branch-font': "'Noto Sans JP', sans-serif"
+    'number-font-select': "'Impact', 'Anton', sans-serif",
+    'msg-font': "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
+    'msg-weight': '900',
+    'branch-font': "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
+    'branch-weight': '900'
   },
 
   // Trạng thái bật/tắt các công cụ (Tool Toggles)

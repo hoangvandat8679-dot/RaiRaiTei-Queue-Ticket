@@ -33,7 +33,9 @@ export const StandardTemplate = {
   fonts: {
     'number-font-select': "'Impact', 'Anton', sans-serif",
     'msg-font': "'Noto Sans JP', sans-serif",
-    'branch-font': "'Noto Sans JP', sans-serif"
+    'msg-weight': '700',
+    'branch-font': "'Noto Sans JP', sans-serif",
+    'branch-weight': '900'
   },
 
   // Trạng thái bật/tắt các công cụ (Tool Toggles)

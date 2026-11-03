@@ -14,7 +14,7 @@ export const SummerTemplate = {
   badge: 'SUMMER',
   bodyClass: 'summer-template',
   datasetTemplate: 'summer',
-  bgImage: "url('assets/templates/summer.svg')",
+  bgImage: "url('../assets/templates/summer.svg')",
 
   // Preset thông số phần tử chuẩn xác theo lớp vector
   preset: {
@@ -23,18 +23,18 @@ export const SummerTemplate = {
     'cut-margin-y': 1.0,
     'mascot-width': 67,
     'mascot-y': -1.0,
-    'number-size': 110,
-    'number-offset-y': 0.0,
+    'number-size': 74,
+    'number-offset-y': -1.3,
     'frame-width': 34.0,
-    'frame-height': 36.0,
-    'frame-y': 21.3,
-    'msg-size': 7.5,
-    'msg-y': 7.0,
+    'frame-height': 32.2,
+    'frame-y': 23.3,
+    'msg-size': 6.4,
+    'msg-y': 11.0,
     'branch-size': 6.5,
-    'branch-y': 2.0,
-    'branch-width': 73,
-    'branch-pad-y': 0.5,
-    'branch-radius': 0
+    'branch-y': 7.3,
+    'branch-width': 71,
+    'branch-pad-y': 0.15,
+    'branch-radius': 1.4
   },
 
   // Kích thước vé
@@ -48,24 +48,26 @@ export const SummerTemplate = {
     'bg-color': '#fffbe8',
     'number-color': '#d90012',
     'number-bg-color': '#ffffff',
-    'number-border-color': '#ff9900',
-    'msg-color': '#111111',
+    'number-border-color': '#d90012',
+    'msg-color': '#ffffff',
     'branch-color': '#ffffff',
-    'branch-bg': '#d90012'
+    'branch-bg': '#db0010'
   },
 
   // Phông chữ Mùa Hè
   fonts: {
     'number-font-select': "'Impact', 'Anton', sans-serif",
-    'msg-font': "'Noto Sans JP', sans-serif",
-    'branch-font': "'Noto Sans JP', sans-serif"
+    'msg-font': "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
+    'msg-weight': '900',
+    'branch-font': "'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif",
+    'branch-weight': '900'
   },
 
   // Trạng thái bật/tắt các công cụ (Tool Toggles)
   tools: {
     'background-tool-toggle': { checked: true, disabled: false },
     'border-tool-toggle': { checked: false, disabled: true },
-    'mascot-tool-toggle': { checked: true, disabled: false },
+    'mascot-tool-toggle': { checked: false, disabled: false },
     'frame-tool-toggle': { checked: true, disabled: false },
     'number-tool-toggle': { checked: true, disabled: false },
     'message-tool-toggle': { checked: true, disabled: false },
