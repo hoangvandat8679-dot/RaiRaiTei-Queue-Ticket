@@ -122,7 +122,7 @@
     "dis": false
    },
    "number-font-select": {
-    "v": "'Impact', sans-serif",
+    "v": "'Impact', 'Anton', sans-serif",
     "dis": false
    },
    "number-size-val": {
@@ -888,7 +888,7 @@
     "dis": false
    },
    "number-font-select": {
-    "v": "'Impact', sans-serif",
+    "v": "'Impact', 'Anton', sans-serif",
     "dis": false
    },
    "number-size-val": {
@@ -1658,7 +1658,7 @@
     "dis": false
    },
    "number-font-select": {
-    "v": "'Impact', sans-serif",
+    "v": "'Impact', 'Anton', sans-serif",
     "dis": false
    },
    "number-size-val": {
@@ -2428,7 +2428,7 @@
     "dis": false
    },
    "number-font-select": {
-    "v": "'Impact', sans-serif",
+    "v": "'Impact', 'Anton', sans-serif",
     "dis": false
    },
    "number-size-val": {
