@@ -1,7 +1,8 @@
 # Nhật ký thay đổi — RaiRaiTei Queue Ticket
 
-## Bản sau lễ 2026 (lên sóng từ 9/11/2026, sau lễ kỷ niệm)
-Hoàn thiện toàn repo theo kế hoạch đã duyệt 3/11/2026 (GĐ1–GĐ4 + thiết kế lại R0–R5). Hành vi người dùng giữ nguyên — đối chiếu bằng snapshot trạng thái + computed style toàn phần và bộ test hành vi 43 mục, tất cả đạt.
+## Bản sau lễ 2026 (lên sóng từ 4/11/2026 theo quyết định nghiệm thu sớm của Đạt)
+Hoàn thiện toàn repo theo kế hoạch đã duyệt 3/11/2026 (GĐ1–GĐ4 + thiết kế lại R0–R5). Hành vi người dùng giữ nguyên — đối chiếu bằng snapshot trạng thái + computed style toàn phần và bộ test hành vi 50 mục, tất cả đạt.
+- **Sửa lỗi thật tìm thấy ở vòng rà soát cuối (4/11):** xuất PNG đơn và xem trước in nhiệt từng chết lặng vì một handler cũ tham chiếu nút đã bị gỡ khỏi giao diện — đã xóa hẳn cụm sao lưu/khôi phục cũ (hệ preset là cơ chế thay thế, vẫn nhập được tệp thiết kế cũ qua nút Nhập JSON) và thêm test ghim "khởi động không có lỗi" + bấm thử hộp thoại in. Bổ sung 4 khóa dịch JP/VN còn thiếu (nút In trang kiểm tra, 3 thông báo lỗi của hệ preset). Service Worker: tiền nạp từng tệp thay cho addAll nguyên tử (một tệp lỗi không còn giết toàn bộ vỏ offline) + chủ động kiểm tra bản mới mỗi khi quay lại tab. Chặn trần diện tích canvas khi xuất ảnh/PDF để Safari iOS cũ không trả trang trắng.
 - **Dữ liệu bền:** tự lưu bản nháp khi đang chỉnh (khôi phục khi mở lại app, có nút Về mặc định); preset chống tràn bộ nhớ trình duyệt (cảnh báo ở 80%, chặn khi đầy); tệp thiết kế có cổng phiên bản — tệp của app mới hơn được báo rõ thay vì nạp hỏng.
 - **In tin cậy:** trang kiểm tra in (thước mm, đường 100 mm, khung vé 43×78, dấu căn hai mặt) cho cả PC và điện thoại; hộp thoại in tự kiểm tra thư viện/ảnh trước khi cho bấm in.
 - **Offline:** app chạy được khi mất mạng sau lần mở đầu (Service Worker); có thông báo "Đã có bản mới — Nạp lại" thay vì tự đổi giữa ca.

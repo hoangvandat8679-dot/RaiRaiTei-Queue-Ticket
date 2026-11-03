@@ -355,8 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('rairaitei:design-changed', scheduleCapture);
 
     const clearBtn = document.getElementById('history-clear');
-    const downloadBtn = document.getElementById('history-download');
-    const restoreInput = document.getElementById('restore-file');
 
     [
         'history-undo',
@@ -377,14 +375,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (clearBtn) clearBtn.addEventListener('click', clearHistory);
-
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
-            const backupBtn = document.getElementById('backup-btn');
-
-            if (backupBtn) backupBtn.click();
-        });
-    }
 
     historyState.undo.push(collectDesign());
     updateButtons();

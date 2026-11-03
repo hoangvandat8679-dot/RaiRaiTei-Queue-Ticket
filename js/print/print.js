@@ -9,7 +9,7 @@ import { calculateAILayout, parseCustomRange, layoutConfig } from '../layout-syn
 import { designHistory } from '../design-history.js';
 import { ticketStore } from '../core/store.js';
 import { guardInAppBrowserForPrint } from '../ui-events.js';
-import { waitForPrintImages, waitForCssBackgroundImages } from './raster.js';
+import { waitForPrintImages, waitForCssBackgroundImages, clampRasterScale } from './raster.js';
 import { isDuplexPrintEnabled } from './layout.js';
 import { buildPrintPdfBlob, isMobilePrintDevice } from './print-mobile.js';
 import { printDesktopInIsolatedFrame } from './print-pc.js';
@@ -257,112 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /*
-      Lưu thiết kế dưới dạng tệp tùy chỉnh nhỏ gọn (JSON) thay vì chụp
-      toàn bộ trang HTML: không còn nhúng source ứng dụng nên không thể
-      dùng tệp để truy cập/sửa code, đồng thời dễ nhập lại sau này.
-      Bộ thu thập/áp dụng dùng chung với undo/redo (design-history.js).
-    */
-    document.getElementById('backup-btn').addEventListener('click', async (e) => {
-        const btn = e.currentTarget;
-        const originalText = btn.innerHTML;
-        const buttonLabel = document.getElementById('btn_backup');
 
-        if (buttonLabel) {
-            buttonLabel.textContent = t('processing');
-        } else {
-            btn.textContent = t('processing');
-        }
-
-        btn.disabled = true;
-        btn.classList.add('opacity-50', 'cursor-not-allowed');
-
-        try {
-            const design = designHistory
-                ? designHistory.collect()
-                : null;
-
-            if (!design) {
-                throw new Error('design history module unavailable');
-            }
-
-            const blob = new Blob([JSON.stringify(design, null, 2)], {
-                type: 'application/json;charset=utf-8'
-            });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-
-            a.href = url;
-
-            const d = new Date();
-            const timeStr =
-                `${d.getFullYear()}` +
-                `${('0' + (d.getMonth() + 1)).slice(-2)}` +
-                `${('0' + d.getDate()).slice(-2)}`;
-
-            a.download = `Ticket_Design_${timeStr}.customization.json`;
-
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error(error);
-            alert(t('error_backup_create'));
-        } finally {
-            btn.disabled = false;
-
-            if (applyTranslations) {
-                applyTranslations();
-            } else {
-                btn.innerHTML = originalText;
-            }
-
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-    });
-
-    /*
-      Nhập lại tệp tùy chỉnh (.customization.json): áp dụng qua bộ dùng
-      chung của design-history (có xác thực định dạng/màu/font), rồi ghi
-      vào lịch sử để undo/redo hoạt động nhất quán.
-    */
-    const restoreInput = document.getElementById('restore-file');
-
-    document.getElementById('restore-btn').addEventListener('click', () => {
-        restoreInput.value = '';
-        restoreInput.click();
-    });
-
-    restoreInput.addEventListener('change', async () => {
-        const file = restoreInput.files && restoreInput.files[0];
-
-        if (!file) return;
-
-        let design = null;
-
-        try {
-            design = JSON.parse(await file.text());
-        } catch (error) {
-            console.error(error);
-        }
-
-        const applied =
-            design && designHistory
-                ? designHistory.apply(design)
-                : false;
-
-        if (!applied) {
-            alert(t('error_backup_create'));
-            return;
-        }
-
-        if (designHistory) {
-            designHistory.capture();
-        }
-    });
-
-    /**
     /**
      * Thuật toán Floyd-Steinberg Dithering:
      * Khử răng cưa đơn sắc (1-bit monochrome error diffusion)
@@ -422,6 +317,8 @@ document.addEventListener('DOMContentLoaded', () => {
     printExportsImpl.exportTicketPng = async function (scale = 3.5) {
         const ticketNode = document.getElementById('master-ticket-inner');
         if (!ticketNode) return null;
+
+        scale = clampRasterScale(ticketNode, scale);
 
         try {
             await waitForPrintImages(ticketNode);

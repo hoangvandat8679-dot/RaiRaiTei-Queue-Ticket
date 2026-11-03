@@ -2,7 +2,7 @@
 // jsdom bằng đúng mã nguồn của repo — CSS/JS local được nội tuyến như
 // trang thật, script ngoài (http) bị bỏ. Mọi test hành vi/snapshot
 // dùng chung bộ nạp này để kết quả so sánh được với nhau.
-import { JSDOM } from 'jsdom';
+import { JSDOM, VirtualConsole } from 'jsdom';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -34,10 +34,15 @@ export async function loadApp(root, settleMs = 1200) {
             return '<script>' + fs.readFileSync(path.join(root, p), 'utf8') + '</script>';
         } catch { return ''; }
     });
-    const dom = new JSDOM(html, { url: 'http://localhost/', runScripts: 'dangerously', pretendToBeVisual: true });
+    // Thu mọi lỗi chạy trang (jsdomError) để test khẳng định được
+    // "khởi động không có lỗi" — ghim cả lớp lỗi handler chết dây chuyền.
+    const pageErrors = [];
+    const virtualConsole = new VirtualConsole();
+    virtualConsole.on('jsdomError', (e) => pageErrors.push(String((e && e.detail && e.detail.message) || e.message || e)));
+    const dom = new JSDOM(html, { url: 'http://localhost/', runScripts: 'dangerously', pretendToBeVisual: true, virtualConsole });
     const { window } = dom;
     await new Promise(r => setTimeout(r, settleMs));
-    return { dom, window, document: window.document };
+    return { dom, window, document: window.document, pageErrors };
 }
 
 export function makeChecker(label) {

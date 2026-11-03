@@ -450,7 +450,6 @@
                         </button>
                     </div>
                     <input type="file" id="preset-file-input" accept=".json,.customization,.customization.json,application/json" class="hidden">
-                    <input type="file" id="restore-file" accept=".json,.customization,.customization.json,application/json" class="hidden">
                 </div>
             </div>
         </div>
@@ -563,6 +562,12 @@
           nw.addEventListener('statechange', function () {
             if (nw.state === 'installed' && navigator.serviceWorker.controller) showBanner();
           });
+        });
+        // Trình duyệt giới hạn tự kiểm tra bản mới (Chrome: tối đa 1 lần/24 giờ).
+        // Mỗi lần nhân viên quay lại tab thì chủ động hỏi một lần — bản mới
+        // tới tay quán sớm hơn mà không tự ý thay giữa ca (vẫn qua banner).
+        document.addEventListener('visibilitychange', function () {
+          if (document.visibilityState === 'visible') reg.update().catch(function () {});
         });
       }).catch(function (err) { console.warn('[SW] Đăng ký thất bại:', err); });
     })();

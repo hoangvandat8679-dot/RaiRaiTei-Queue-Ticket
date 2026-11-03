@@ -329,10 +329,6 @@
     "v": "",
     "dis": false
    },
-   "restore-file": {
-    "v": "",
-    "dis": false
-   },
    "print-quantity": {
     "v": "30",
     "dis": false
@@ -711,10 +707,6 @@
     "dis": false
    },
    "preset-file-input": {
-    "v": "",
-    "dis": false
-   },
-   "restore-file": {
     "v": "",
     "dis": false
    },
@@ -1103,10 +1095,6 @@
     "v": "",
     "dis": false
    },
-   "restore-file": {
-    "v": "",
-    "dis": false
-   },
    "print-quantity": {
     "v": "30",
     "dis": false
@@ -1489,10 +1477,6 @@
     "dis": false
    },
    "preset-file-input": {
-    "v": "",
-    "dis": false
-   },
-   "restore-file": {
     "v": "",
     "dis": false
    },
@@ -1881,10 +1865,6 @@
     "v": "",
     "dis": false
    },
-   "restore-file": {
-    "v": "",
-    "dis": false
-   },
    "print-quantity": {
     "v": "30",
     "dis": false
@@ -2270,10 +2250,6 @@
     "v": "",
     "dis": false
    },
-   "restore-file": {
-    "v": "",
-    "dis": false
-   },
    "print-quantity": {
     "v": "30",
     "dis": false
@@ -2656,10 +2632,6 @@
     "dis": false
    },
    "preset-file-input": {
-    "v": "",
-    "dis": false
-   },
-   "restore-file": {
     "v": "",
     "dis": false
    },

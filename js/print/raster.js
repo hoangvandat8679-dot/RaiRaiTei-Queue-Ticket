@@ -131,11 +131,27 @@ function getPdfRasterScale() {
     return 3.75;
 }
 
+// Trần diện tích canvas an toàn cho Safari iOS (giới hạn ~16,7 triệu
+// điểm ảnh; máy cũ còn thấp hơn): vượt trần thì thư viện trả canvas
+// rỗng lặng lẽ và PDF thành trang trắng. Giảm hệ số phóng cho vừa.
+const MAX_CANVAS_PIXELS = 12_000_000;
+
+function clampRasterScale(element, scale) {
+    const rect = element && element.getBoundingClientRect ? element.getBoundingClientRect() : null;
+    const w = rect ? rect.width : 0;
+    const h = rect ? rect.height : 0;
+
+    if (!w || !h) return scale;
+
+    const area = w * h * scale * scale;
+    return area > MAX_CANVAS_PIXELS ? Math.max(1, Math.sqrt(MAX_CANVAS_PIXELS / (w * h))) : scale;
+}
+
 async function renderVisibleTicketCanvas(
     ticketElement,
     fontEmbedCSS
 ) {
-    const pixelRatio = getPdfRasterScale();
+    const pixelRatio = clampRasterScale(ticketElement, getPdfRasterScale());
 
     if (window.htmlToImage && window.htmlToImage.toCanvas) {
         try {
@@ -184,4 +200,4 @@ function renderDuplexSideTitleCanvas(title) {
     return canvas;
 }
 
-export { waitForPaintFrames, waitForPrintImages, waitForCssBackgroundImages, renderVisibleTicketCanvas, renderDuplexSideTitleCanvas };
+export { waitForPaintFrames, waitForPrintImages, waitForCssBackgroundImages, renderVisibleTicketCanvas, renderDuplexSideTitleCanvas, clampRasterScale };

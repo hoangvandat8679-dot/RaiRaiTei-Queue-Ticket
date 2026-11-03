@@ -17,7 +17,7 @@ const { check, summary } = makeChecker('TEST HÀNH VI');
 const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 // --- Dựng app qua bộ nạp dùng chung (tests/lib/load-app.mjs) ---
-const { window, document: d } = await loadApp(root);
+const { window, document: d, pageErrors } = await loadApp(root);
 
 // --- A. Dải tên quán phải nhìn thấy được ở cả 5 mẫu ---
 // (bắt lại đúng lỗi 3/11/2026: Hạ/Thu/Đông bị ép nền trong suốt + chữ trắng)
@@ -132,6 +132,23 @@ check('apply tệp cũ (drag-* trong controls) vẫn chạy', window.RaiRaiTeiAp
 check('schema chặn controls sai kiểu', window.RaiRaiTeiApp.designHistory.apply({ format: 'rairaitei-design', controls: { 'core-width-input': 'không-phải-số' } }) === false);
 check('validateDesign báo lỗi version mới hơn', window.RaiRaiTeiApp.validateDesign({ format: 'rairaitei-design', version: 99 }).ok === false);
 store.actions.applySnapshot({ elements: { mascot: { dx: 0, dy: 0 }, branch: { dx: 0, dy: 0 }, msg: { dx: 0, dy: 0 } } });
+
+// H) Khởi động sạch + mọi nút bấm đều được nối dây (ghim lỗi 4/11:
+// handler backup-btn tham chiếu phần tử đã bị gỡ khỏi HTML, ném lỗi
+// giữa handler DOMContentLoaded của print.js và làm chết thầm lặng
+// cả xuất PNG đơn lẫn xem trước in nhiệt đăng ký phía sau nó).
+console.log('\n— H) Khởi động & nối dây nút bấm');
+check('không có lỗi null/addEventListener lúc khởi động', !pageErrors.some(e => /addEventListener|Cannot read properties of null/.test(e)), pageErrors.join(' ; ').slice(0, 200));
+check('hàm xuất PNG đơn đã được nối (không phải null)', typeof window.RaiRaiTeiApp.exportTicketPng === 'function');
+let pngThrew = '';
+try { await window.RaiRaiTeiApp.exportTicketPng(1); } catch (e) { pngThrew = String(e && e.message || e); }
+check('gọi xuất PNG không văng lỗi "is not a function"', !/is not a function/.test(pngThrew), pngThrew.slice(0, 120));
+check('nút xem trước in nhiệt có trong trang', !!d.getElementById('thermal-preview-toggle-btn'));
+d.getElementById('mobile-print-btn').click();
+check('bấm nút in (mobile) mở được hộp thoại xuất bản in', !d.getElementById('export-modal').classList.contains('hidden'));
+check('mở hộp thoại in có chạy kiểm tra trước in (preflight hiện diện)', !!d.getElementById('preflight-status'));
+d.getElementById('close-export-modal').click();
+check('đóng hộp thoại in được', d.getElementById('export-modal').classList.contains('hidden'));
 
 console.log('\n==================================================');
 process.exit(summary() > 0 ? 1 : 0);
