@@ -38,15 +38,14 @@ const server = http.createServer((req, res) => {
   
   res.writeHead(200, {
     'Content-Type': contentType,
-    'Access-Control-Allow-Origin': '*',
     'Cache-Control': 'no-cache'
   });
   
   fs.createReadStream(filePath).pipe(res);
 });
 
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '127.0.0.1', () => { // GĐ4 vé 4.3: chỉ nghe localhost, bỏ CORS * — server này chỉ để phát triển
   console.log(`🚀 RaiRaiTei Studio Server đang chạy tại:`);
   console.log(`👉 Local:   http://localhost:${PORT}/`);
-  console.log(`👉 Network: http://127.0.0.1:${PORT}/`);
+  console.log(`👉 Chỉ máy này truy cập được (127.0.0.1) — không mở ra mạng LAN.`);
 });
