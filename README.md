@@ -37,7 +37,6 @@ node tests/test-sprint8-cropmarks.mjs
 
 ## Ghi chú phát hành
 
-- Bản lễ kỷ niệm 7–8/11/2026: tag `le-2026-ban-chinh`. Bản dự phòng: tag `le-2026-ban-du-phong`.
 - Mọi thay đổi đều qua kiểm chứng trên bản live sau khi GitHub Pages deploy.
 
 ## Dành cho người phát triển
