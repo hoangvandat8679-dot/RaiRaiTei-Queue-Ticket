@@ -83,6 +83,26 @@ window.calculateAILayout();
 const cfg2 = window.layoutConfig;
 check('vé 100x100 (+lề cắt 1mm = 102): 1 cột x 2 hàng = 2 vé/trang, dọc thắng khi hòa', cfg2.totalPerPage === 2 && cfg2.bestCols === 1 && cfg2.bestRows === 2 && cfg2.orientation === 'portrait', JSON.stringify(cfg2));
 
+// --- D. GĐ3: bản nháp tự lưu, cổng version, ước lượng bộ nhớ ---
+console.log('\nD. Dữ liệu bền (GĐ3):');
+check('design có version > 1 bị từ chối', window.designHistory.apply({ format: 'rairaitei-design', version: 99, template: 'standard' }) === false);
+check('design không ghi version (bản cũ) vẫn được nhận', window.designHistory.apply({ format: 'rairaitei-design', template: 'standard' }) === true);
+check('PresetManager.estimateStorageUsage trả về số >= 0', typeof window.PresetManager.estimateStorageUsage === 'function' && window.PresetManager.estimateStorageUsage() >= 0);
+const branchBg = d.getElementById('branch-bg');
+branchBg.value = '#123456';
+branchBg.dispatchEvent(new window.Event('input', { bubbles: true }));
+await new Promise(r => setTimeout(r, 1400));
+const draftRaw = window.localStorage.getItem('rairaitei_draft_v1');
+let draftOk = false, draftVal = null;
+try { const parsed = JSON.parse(draftRaw); draftOk = parsed.format === 'rairaitei-draft' && parsed.version === 1; draftVal = parsed.design.colors['branch-bg']; } catch (e) { /* draftOk giữ false */ }
+check('sau khi sửa, bản nháp được tự lưu đúng định dạng', draftOk, String(draftRaw).slice(0, 80));
+check('bản nháp chụp đúng giá trị vừa sửa (branch-bg = #123456)', draftVal === '#123456', String(draftVal));
+branchBg.value = '#e60012';
+branchBg.dispatchEvent(new window.Event('input', { bubbles: true }));
+check('DraftManager.restoreNow khôi phục được bản nháp', window.DraftManager.restoreNow() === true);
+check('giá trị trở lại như bản nháp sau khôi phục', d.getElementById('branch-bg').value === '#123456', d.getElementById('branch-bg').value);
+window.DraftManager.clear();
+
 console.log('\n==================================================');
 console.log(`TEST HÀNH VI: ${pass} ĐẠT / ${fail} LỖI`);
 if (failures.length) console.log('Lỗi ở:', failures.join(' | '));

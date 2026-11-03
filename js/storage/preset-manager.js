@@ -58,9 +58,40 @@
   /**
    * Ghi danh sách presets vào localStorage
    */
-  function saveToStorage(presets) {
+  // GĐ3 vé 3.2: ước lượng dung lượng localStorage (ký tự x 2 byte UTF-16).
+  // Hạn mức bảo thủ 5 MB — mức phổ biến của trình duyệt di động.
+  const QUOTA_LIMIT_BYTES = 5 * 1024 * 1024;
+  function estimateStorageUsage() {
+    let bytes = 0;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(presets));
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key) || '';
+        bytes += (key.length + value.length) * 2;
+      }
+    } catch (e) { /* localStorage không khả dụng: coi như 0 */ }
+    return bytes;
+  }
+
+  function saveToStorage(presets) {
+    const payload = JSON.stringify(presets);
+    // Chặn trước khi ghi nếu dự kiến vượt hạn mức — không để lỗi lặng lẽ.
+    try {
+      const currentRaw = localStorage.getItem(STORAGE_KEY) || '';
+      const projected = estimateStorageUsage()
+        - (STORAGE_KEY.length + currentRaw.length) * 2
+        + (STORAGE_KEY.length + payload.length) * 2;
+      if (projected > QUOTA_LIMIT_BYTES) {
+        showAlert(global.t ? global.t('storage_quota_full') : 'Bộ nhớ trình duyệt đã đầy! Hãy xóa bớt một số mẫu cũ.');
+        return false;
+      }
+      if (projected > QUOTA_LIMIT_BYTES * 0.8 && !sessionStorage.getItem('rairaitei_quota_warned')) {
+        sessionStorage.setItem('rairaitei_quota_warned', '1');
+        showAlert(global.t ? global.t('storage_quota_warning') : 'Bộ nhớ trình duyệt đã dùng trên 80%. Nên xóa bớt mẫu cũ hoặc xuất JSON để giải phóng.');
+      }
+    } catch (e) { /* không ước lượng được thì vẫn thử ghi như cũ */ }
+    try {
+      localStorage.setItem(STORAGE_KEY, payload);
       return true;
     } catch (e) {
       console.error('[PresetManager] Lỗi khi lưu localStorage (có thể đầy bộ nhớ):', e);
@@ -121,7 +152,32 @@
     return null;
   }
 
+  // Thu nhỏ thumbnail nếu vượt ngưỡng: vẽ lại lên canvas 90x164, JPEG 0,72.
+  async function capThumbnailSize(dataUrl) {
+    if (!dataUrl || dataUrl.length <= 40000) return dataUrl;
+    try {
+      const img = new Image();
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = dataUrl;
+      });
+      const canvas = document.createElement('canvas');
+      canvas.width = 90;
+      canvas.height = 164;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return dataUrl;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const shrunk = canvas.toDataURL('image/jpeg', 0.72);
+      return shrunk.length < dataUrl.length ? shrunk : dataUrl;
+    } catch (e) {
+      return dataUrl;
+    }
+  }
+
   const PresetManager = {
+    // GĐ3 vé 3.2: cho UI/test biết dung lượng đang dùng
+    estimateStorageUsage,
     /**
      * Lấy toàn bộ danh sách presets
      */
@@ -154,8 +210,8 @@
         throw new Error('Không thể thu thập dữ liệu thiết kế từ designHistory!');
       }
 
-      // 2. Tự động sinh thumbnail
-      const thumbnail = await generateThumbnail();
+      // 2. Tự động sinh thumbnail (giới hạn ~40K ký tự ~ 30 KB ảnh — GĐ3 vé 3.2)
+      const thumbnail = await capThumbnailSize(await generateThumbnail());
 
       // 3. Đóng gói Preset Object
       const newPreset = {
@@ -312,6 +368,17 @@
     async importFromJsonString(jsonString) {
       try {
         const data = JSON.parse(jsonString);
+        // GĐ3 vé 3.3: tệp của phiên bản app MỚI hơn -> báo rõ, không nhập hỏng.
+        const supported = (global.designHistory && global.designHistory.SUPPORTED_VERSION) || 1;
+        const fileVersion = Math.max(
+          Number(data.version) || 0,
+          Number(data.design && data.design.version) || 0,
+          ...(Array.isArray(data.presets) ? data.presets.map(p => Number(p.design && p.design.version) || 0) : [])
+        );
+        if (fileVersion > supported) {
+          showAlert(global.t ? global.t('preset_import_newer') : 'Tệp này được tạo bởi phiên bản app mới hơn. Hãy cập nhật app rồi thử lại.');
+          return false;
+        }
         let importedCount = 0;
         const currentList = loadFromStorage();
 

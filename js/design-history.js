@@ -105,11 +105,17 @@ document.addEventListener('DOMContentLoaded', () => {
         input.dispatchEvent(new Event(eventName, { bubbles: true }));
     };
 
+    // Phiên bản định dạng thiết kế mà bản app này đọc được (GĐ3 vé 3.3).
+    // Tệp không ghi version = bản cũ (v0) vẫn nhận; version lớn hơn = tệp
+    // của app mới hơn, từ chối rõ ràng thay vì áp dụng hỏng.
+    const SUPPORTED_DESIGN_VERSION = 1;
+
     const applyDesign = (design) => {
         if (
             !design ||
             design.format !== 'rairaitei-design' ||
-            typeof design !== 'object'
+            typeof design !== 'object' ||
+            (design.version != null && Number(design.version) > SUPPORTED_DESIGN_VERSION)
         ) {
             return false;
         }
@@ -360,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.designHistory = {
         collect: collectDesign,
         apply: applyDesign,
-        capture
+        capture,
+        SUPPORTED_VERSION: SUPPORTED_DESIGN_VERSION
     };
 });
