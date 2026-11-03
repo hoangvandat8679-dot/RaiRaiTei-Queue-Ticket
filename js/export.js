@@ -1,3 +1,16 @@
+import { t, applyTranslations } from './i18n.js';
+import { calculateAILayout, parseCustomRange, layoutConfig } from './layout-sync.js';
+import { designHistory } from './design-history.js';
+import { ticketStore } from './core/store.js';
+import { guardInAppBrowserForPrint } from './ui-events.js';
+
+// Hai hàm dưới đây hình thành trong DOMContentLoaded — export wrapper ổn định
+// (cùng mẫu controls/ticket-drag/design-history).
+const printExportsImpl = { exportTicketPng: null, toggleThermalPreview: null };
+export async function exportTicketPng(...args) { return printExportsImpl.exportTicketPng(...args); }
+export function toggleThermalPreview(...args) { return printExportsImpl.toggleThermalPreview(...args); }
+export { isCropMarksEnabled, drawPdfCropMarks, generateCropMarksSvg, isMobilePrintDevice };
+
 function waitForPaintFrames(frameCount = 2) {
     return new Promise((resolve) => {
         let remaining = frameCount;
@@ -165,14 +178,14 @@ async function renderVisibleTicketCanvas(
         });
     }
 
-    throw new Error(window.t('error_ticket_library'));
+    throw new Error(t('error_ticket_library'));
 }
 
 async function buildPrintPdfBlob(ticketsToPrint, orientation, layout, pdfTab = null) {
     const JsPDF = window.jspdf && window.jspdf.jsPDF;
 
     if (!JsPDF) {
-        throw new Error(window.t('error_pdf_library'));
+        throw new Error(t('error_pdf_library'));
     }
 
     const {
@@ -279,7 +292,7 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout, pdfTab = n
                     pdf.addPage('a4', orientation);
                 }
 
-                const sideTitle = window.t(
+                const sideTitle = t(
                     page.side === 'front'
                         ? 'print_side_front'
                         : 'print_side_back'
@@ -316,7 +329,7 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout, pdfTab = n
                     completedTickets++;
 
                     if (loadingTitle) {
-                        loadingTitle.textContent = window.t(
+                        loadingTitle.textContent = t(
                             'progress_ticket',
                             {
                                 current: completedTickets,
@@ -405,7 +418,7 @@ async function buildPrintPdfBlob(ticketsToPrint, orientation, layout, pdfTab = n
                     : '';
 
             if (loadingTitle) {
-                loadingTitle.textContent = window.t(
+                loadingTitle.textContent = t(
                     'progress_ticket',
                     {
                         current: index + 1,
@@ -736,7 +749,7 @@ function buildPrintPagesHTML(
     if (duplex) {
         return buildDuplexPrintPlan(ticketsToPrint, layout)
             .map((page) => {
-                const title = window.t(
+                const title = t(
                     page.side === 'front'
                         ? 'print_side_front'
                         : 'print_side_back'
@@ -1048,13 +1061,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('generate-pdf-btn').addEventListener('click', async () => {
         try {
             if (
-                window.guardInAppBrowserForPrint &&
-                !window.guardInAppBrowserForPrint()
+                guardInAppBrowserForPrint &&
+                !guardInAppBrowserForPrint()
             ) {
                 return;
             }
 
-            window.calculateAILayout();
+            calculateAILayout();
 
             const {
                 bestCols,
@@ -1063,7 +1076,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 orientation,
                 ticketW,
                 ticketH
-            } = window.layoutConfig;
+            } = layoutConfig;
 
             const modeRadio = document.querySelector(
                 'input[name="print-mode"]:checked'
@@ -1081,7 +1094,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ticketsToPrint.push(i);
                 }
             } else {
-                ticketsToPrint = window.parseCustomRange(
+                ticketsToPrint = parseCustomRange(
                     document.getElementById('print-custom').value
                 );
             }
@@ -1089,7 +1102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalTickets = ticketsToPrint.length;
 
             if (totalTickets === 0) {
-                alert(window.t('error_invalid_quantity'));
+                alert(t('error_invalid_quantity'));
                 return;
             }
 
@@ -1099,7 +1112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 bestCols < 1 ||
                 bestRows < 1
             ) {
-                alert(window.t('error_ticket_too_large'));
+                alert(t('error_ticket_too_large'));
                 return;
             }
 
@@ -1251,7 +1264,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         pdfTab.location.href = pdfUrl;
                     }
                 } else {
-                    alert(window.t('popup_blocked_notice'));
+                    alert(t('popup_blocked_notice'));
 
                     const link = document.createElement('a');
                     link.href = pdfUrl;
@@ -1277,7 +1290,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error(error);
-            alert(window.t('error_pdf_create'));
+            alert(t('error_pdf_create'));
         }
     });
 
@@ -1293,17 +1306,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const buttonLabel = document.getElementById('btn_backup');
 
         if (buttonLabel) {
-            buttonLabel.textContent = window.t('processing');
+            buttonLabel.textContent = t('processing');
         } else {
-            btn.textContent = window.t('processing');
+            btn.textContent = t('processing');
         }
 
         btn.disabled = true;
         btn.classList.add('opacity-50', 'cursor-not-allowed');
 
         try {
-            const design = window.designHistory
-                ? window.designHistory.collect()
+            const design = designHistory
+                ? designHistory.collect()
                 : null;
 
             if (!design) {
@@ -1332,12 +1345,12 @@ document.addEventListener('DOMContentLoaded', () => {
             URL.revokeObjectURL(url);
         } catch (error) {
             console.error(error);
-            alert(window.t('error_backup_create'));
+            alert(t('error_backup_create'));
         } finally {
             btn.disabled = false;
 
-            if (window.applyTranslations) {
-                window.applyTranslations();
+            if (applyTranslations) {
+                applyTranslations();
             } else {
                 btn.innerHTML = originalText;
             }
@@ -1372,17 +1385,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const applied =
-            design && window.designHistory
-                ? window.designHistory.apply(design)
+            design && designHistory
+                ? designHistory.apply(design)
                 : false;
 
         if (!applied) {
-            alert(window.t('error_backup_create'));
+            alert(t('error_backup_create'));
             return;
         }
 
-        if (window.designHistory) {
-            window.designHistory.capture();
+        if (designHistory) {
+            designHistory.capture();
         }
     });
 
@@ -1443,7 +1456,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Xuất ảnh vé đơn chiếc độ phân giải cao (Super-sampled High-Res PNG)
      * Thích hợp cho máy in nhiệt đơn lẻ hoặc chia sẻ
      */
-    window.exportTicketPng = async function (scale = 3.5) {
+    printExportsImpl.exportTicketPng = async function (scale = 3.5) {
         const ticketNode = document.getElementById('master-ticket-inner');
         if (!ticketNode) return null;
 
@@ -1490,15 +1503,15 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Chuyển đổi chế độ mô phỏng máy in nhiệt đơn sắc (Thermal Monochrome Simulation)
      */
-    window.toggleThermalPreview = function (forceState) {
+    printExportsImpl.toggleThermalPreview = function (forceState) {
         const body = document.body;
         const nextState = typeof forceState === 'boolean' 
             ? forceState 
             : !body.classList.contains('thermal-simulation-mode');
         
         body.classList.toggle('thermal-simulation-mode', nextState);
-        if (window.ticketStore && window.ticketStore.studio && window.ticketStore.studio.showThermalMonochrome) {
-            window.ticketStore.studio.showThermalMonochrome.set(nextState);
+        if (ticketStore && ticketStore.studio && ticketStore.studio.showThermalMonochrome) {
+            ticketStore.studio.showThermalMonochrome.set(nextState);
         }
 
         const btn = document.getElementById('thermal-preview-toggle-btn');
@@ -1509,7 +1522,5 @@ document.addEventListener('DOMContentLoaded', () => {
         return nextState;
     };
 
-    window.isCropMarksEnabled = isCropMarksEnabled;
-    window.drawPdfCropMarks = drawPdfCropMarks;
-    window.generateCropMarksSvg = generateCropMarksSvg;
+
 });

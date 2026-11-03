@@ -1,3 +1,11 @@
+import { imageState } from './image-editor.js';
+import { TemplateRegistry } from './registry/template-registry.js';
+
+// designHistory hình thành trong DOMContentLoaded — export object ổn định,
+// các phương thức thật được gán khi DOM sẵn sàng (cùng mẫu controls/ticket-drag).
+const designHistoryImpl = { collect: null, apply: null, capture: null, SUPPORTED_VERSION: 1 };
+export const designHistory = designHistoryImpl;
+
 /* ============================================================ */
 /* FILE: js/design-history.js                                    */
 /* Undo/redo + thư mục thiết kế (tải lên/xuống) dùng chung       */
@@ -84,14 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
             design.mascotType = mascotType.value;
         }
 
-        if (window.currentBgBase64) {
-            design.backgroundImage = window.currentBgBase64;
-            historyState.images.bg = window.currentBgBase64;
+        if (imageState.currentBgBase64) {
+            design.backgroundImage = imageState.currentBgBase64;
+            historyState.images.bg = imageState.currentBgBase64;
         }
 
-        if (window.currentMascotBase64) {
-            design.mascotImage = window.currentMascotBase64;
-            historyState.images.mascot = window.currentMascotBase64;
+        if (imageState.currentMascotBase64) {
+            design.mascotImage = imageState.currentMascotBase64;
+            historyState.images.mascot = imageState.currentMascotBase64;
         }
 
         return design;
@@ -123,8 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
         historyState.applying = true;
 
         try {
-            if (window.TemplateRegistry && typeof window.TemplateRegistry.apply === 'function') {
-                window.TemplateRegistry.apply(design.template || 'standard');
+            if (TemplateRegistry && typeof TemplateRegistry.apply === 'function') {
+                TemplateRegistry.apply(design.template || 'standard');
             } else if (design.template === 'spring') {
                 const springButton = document.getElementById('spring-template-btn');
                 if (springButton) springButton.click();
@@ -193,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (typeof design.backgroundImage === 'string') {
-                window.currentBgBase64 = design.backgroundImage;
+                imageState.currentBgBase64 = design.backgroundImage;
                 document.body.style.setProperty(
                     '--bg-image',
                     `url('${design.backgroundImage}')`
@@ -204,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 typeof design.mascotImage === 'string' &&
                 design.mascotImage.startsWith('data:image/')
             ) {
-                window.currentMascotBase64 = design.mascotImage;
+                imageState.currentMascotBase64 = design.mascotImage;
                 const mascotImg = document.getElementById('mascot-preview');
 
                 if (mascotImg) {
@@ -363,10 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
     historyState.undo.push(collectDesign());
     updateButtons();
 
-    window.designHistory = {
-        collect: collectDesign,
-        apply: applyDesign,
-        capture,
-        SUPPORTED_VERSION: SUPPORTED_DESIGN_VERSION
-    };
+    designHistoryImpl.collect = collectDesign;
+    designHistoryImpl.apply = applyDesign;
+    designHistoryImpl.capture = capture;
+    designHistoryImpl.SUPPORTED_VERSION = SUPPORTED_DESIGN_VERSION;
 });

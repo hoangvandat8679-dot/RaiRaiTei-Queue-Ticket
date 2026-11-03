@@ -39,7 +39,7 @@ for (const id of ['standard', 'spring', 'summer', 'autumn', 'winter']) {
 
 // --- B. parseCustomRange với các chuỗi biên ---
 console.log('\nB. parseCustomRange:');
-const p = window.parseCustomRange;
+const p = window.RaiRaiTeiApp.parseCustomRange;
 check('rỗng -> []', eq(p(''), []));
 check('khoảng đơn giản', eq(p('1-3'), [1, 2, 3]));
 check('trùng nhau được gộp và sắp xếp', eq(p('3;1;3;2'), [1, 2, 3]));
@@ -56,21 +56,21 @@ console.log('\nC. calculateAILayout:');
 const setVal = (id2, v) => { const el = d.getElementById(id2); el.value = v; el.dispatchEvent(new window.Event('input', { bubbles: true })); };
 setVal('core-width-input', '43');
 setVal('core-height-input', '78');
-window.calculateAILayout();
-const cfg = window.layoutConfig;
+window.RaiRaiTeiApp.calculateAILayout();
+const cfg = window.RaiRaiTeiApp.layoutConfig;
 check('vé 43x78: tổng = cột x hàng', cfg.totalPerPage === cfg.bestCols * cfg.bestRows, JSON.stringify(cfg));
 check('vé 43x78 mặc định: 12 vé/trang, hướng dọc (khớp bản live)', cfg.totalPerPage === 12 && cfg.orientation === 'portrait', JSON.stringify(cfg));
 setVal('core-width-input', '100');
 setVal('core-height-input', '100');
-window.calculateAILayout();
-const cfg2 = window.layoutConfig;
+window.RaiRaiTeiApp.calculateAILayout();
+const cfg2 = window.RaiRaiTeiApp.layoutConfig;
 check('vé 100x100 (+lề cắt 1mm = 102): 1 cột x 2 hàng = 2 vé/trang, dọc thắng khi hòa', cfg2.totalPerPage === 2 && cfg2.bestCols === 1 && cfg2.bestRows === 2 && cfg2.orientation === 'portrait', JSON.stringify(cfg2));
 
 // --- D. GĐ3: bản nháp tự lưu, cổng version, ước lượng bộ nhớ ---
 console.log('\nD. Dữ liệu bền (GĐ3):');
-check('design có version > 1 bị từ chối', window.designHistory.apply({ format: 'rairaitei-design', version: 99, template: 'standard' }) === false);
-check('design không ghi version (bản cũ) vẫn được nhận', window.designHistory.apply({ format: 'rairaitei-design', template: 'standard' }) === true);
-check('PresetManager.estimateStorageUsage trả về số >= 0', typeof window.PresetManager.estimateStorageUsage === 'function' && window.PresetManager.estimateStorageUsage() >= 0);
+check('design có version > 1 bị từ chối', window.RaiRaiTeiApp.designHistory.apply({ format: 'rairaitei-design', version: 99, template: 'standard' }) === false);
+check('design không ghi version (bản cũ) vẫn được nhận', window.RaiRaiTeiApp.designHistory.apply({ format: 'rairaitei-design', template: 'standard' }) === true);
+check('PresetManager.estimateStorageUsage trả về số >= 0', typeof window.RaiRaiTeiApp.PresetManager.estimateStorageUsage === 'function' && window.RaiRaiTeiApp.PresetManager.estimateStorageUsage() >= 0);
 const branchBg = d.getElementById('branch-bg');
 branchBg.value = '#123456';
 branchBg.dispatchEvent(new window.Event('input', { bubbles: true }));
@@ -82,9 +82,9 @@ check('sau khi sửa, bản nháp được tự lưu đúng định dạng', dra
 check('bản nháp chụp đúng giá trị vừa sửa (branch-bg = #123456)', draftVal === '#123456', String(draftVal));
 branchBg.value = '#e60012';
 branchBg.dispatchEvent(new window.Event('input', { bubbles: true }));
-check('DraftManager.restoreNow khôi phục được bản nháp', window.DraftManager.restoreNow() === true);
+check('DraftManager.restoreNow khôi phục được bản nháp', window.RaiRaiTeiApp.DraftManager.restoreNow() === true);
 check('giá trị trở lại như bản nháp sau khôi phục', d.getElementById('branch-bg').value === '#123456', d.getElementById('branch-bg').value);
-window.DraftManager.clear();
+window.RaiRaiTeiApp.DraftManager.clear();
 
 // --- E. GĐ4: preflight trước in ---
 console.log('\nE. Kiểm tra trước in (GĐ4):');
@@ -93,28 +93,28 @@ d.querySelectorAll('#ticket-preview-wrapper img').forEach((img) => {
   Object.defineProperty(img, 'complete', { value: true, configurable: true });
   Object.defineProperty(img, 'naturalWidth', { value: 100, configurable: true });
 });
-check('PrintCheck sẵn sàng với đủ 3 thư viện local', !!(window.PrintCheck && window.PrintCheck.runPrintPreflight().ok));
-window.refreshPreflightUI();
+check('PrintCheck sẵn sàng với đủ 3 thư viện local', !!(window.RaiRaiTeiApp.PrintCheck && window.RaiRaiTeiApp.PrintCheck.runPrintPreflight().ok));
+window.RaiRaiTeiApp.refreshPreflightUI();
 check('preflight đạt: nút in được bật, hộp cảnh báo ẩn', !d.getElementById('generate-pdf-btn').disabled && d.getElementById('preflight-status').classList.contains('hidden'));
 const savedH2C = window.html2canvas;
 window.html2canvas = undefined;
-window.refreshPreflightUI();
+window.RaiRaiTeiApp.refreshPreflightUI();
 check('thiếu thư viện: nút in bị khóa + hiện lý do', d.getElementById('generate-pdf-btn').disabled && !d.getElementById('preflight-status').classList.contains('hidden') && d.getElementById('preflight-status').textContent.includes('html2canvas'));
 window.html2canvas = savedH2C;
-window.refreshPreflightUI();
+window.RaiRaiTeiApp.refreshPreflightUI();
 check('đủ lại thư viện: nút in mở lại', !d.getElementById('generate-pdf-btn').disabled);
-check('hàm in trang kiểm tra tồn tại', typeof window.printTestPage === 'function');
+check('hàm in trang kiểm tra tồn tại', typeof window.RaiRaiTeiApp.printTestPage === 'function');
 
 // --- F. R0: đường in — crop marks + dàn trang ---
 console.log('\nF. Đường in (R0):');
-const svg = window.generateCropMarksSvg({ startX: 5, startY: 5, bestCols: 4, bestRows: 3, ticketW: 45, ticketH: 80, pageWidth: 210, pageHeight: 297 });
+const svg = window.RaiRaiTeiApp.generateCropMarksSvg({ startX: 5, startY: 5, bestCols: 4, bestRows: 3, ticketW: 45, ticketH: 80, pageWidth: 210, pageHeight: 297 });
 const lineCount = (svg.match(/<line /g) || []).length;
 check('crop marks SVG: 4x3 ô -> 30 vạch (ticks + chữ thập)', lineCount === 30, String(lineCount));
 check('crop marks SVG: viewBox đúng khổ A4 210x297', svg.includes('viewBox="0 0 210 297"'));
 let pdfOk = false;
 try {
   const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
-  window.drawPdfCropMarks(doc, { startX: 5, startY: 5, bestCols: 4, bestRows: 3, ticketW: 45, ticketH: 80, pageWidth: 210, pageHeight: 297 });
+  window.RaiRaiTeiApp.drawPdfCropMarks(doc, { startX: 5, startY: 5, bestCols: 4, bestRows: 3, ticketW: 45, ticketH: 80, pageWidth: 210, pageHeight: 297 });
   pdfOk = doc.output('blob').size > 1000;
 } catch (e) { pdfOk = false; }
 check('drawPdfCropMarks vẽ lên jsPDF thật không lỗi, PDF có nội dung', pdfOk);

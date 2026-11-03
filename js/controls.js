@@ -1,3 +1,11 @@
+import { calculateAILayout } from './layout-sync.js';
+import { translations, currentLang } from './i18n.js';
+
+// applyControlPreset cần trạng thái đóng kín (controls/controlBindings) chỉ có
+// sau DOMContentLoaded — module giữ một hàm triển khai nội bộ, export wrapper.
+let applyControlPresetImpl = () => {};
+export function applyControlPreset(preset = {}) { applyControlPresetImpl(preset); }
+
 /* ============================================================ */
 /* FILE: js/controls.js                                         */
 /* ============================================================ */
@@ -240,9 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (
                 definition.affectsLayout &&
-                window.calculateAILayout
+                calculateAILayout
             ) {
-                window.calculateAILayout();
+                calculateAILayout();
             }
 
             return roundedDelta;
@@ -347,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Một mẫu có thể thay đổi các giá trị chuẩn mà không làm mất
       nguyên tắc: giữa thanh trượt luôn là 0.
     */
-    window.applyControlPreset = (preset = {}) => {
+    applyControlPresetImpl = (preset = {}) => {
         controls.forEach((definition) => {
             const value = Object.prototype.hasOwnProperty.call(
                 preset,
@@ -371,11 +379,11 @@ document.addEventListener('DOMContentLoaded', () => {
         coreWInput.value = w.toFixed(1); coreHInput.value = h.toFixed(1);
         document.body.style.setProperty('--core-width', w + 'mm'); document.body.style.setProperty('--core-height', h + 'mm');
         const headerCoreLabel = document.getElementById('core_size_label_header');
-        if (headerCoreLabel) { headerCoreLabel.textContent = window.translations[window.currentLang]['core_size_label']; const headerTextNode = Array.from(document.getElementById('header-core-size').childNodes).find(node => node.nodeType === Node.TEXT_NODE); if (headerTextNode) headerTextNode.nodeValue = `: ${(w/10).toFixed(2)}x${(h/10).toFixed(2)}cm`; }
-        window.calculateAILayout();
+        if (headerCoreLabel) { headerCoreLabel.textContent = translations[currentLang]['core_size_label']; const headerTextNode = Array.from(document.getElementById('header-core-size').childNodes).find(node => node.nodeType === Node.TEXT_NODE); if (headerTextNode) headerTextNode.nodeValue = `: ${(w/10).toFixed(2)}x${(h/10).toFixed(2)}cm`; }
+        calculateAILayout();
     }
     coreWInput.addEventListener('input', updateCoreSize); coreHInput.addEventListener('input', updateCoreSize);
     updateCoreSize();
-    document.getElementById('print-quantity').addEventListener('input', (e) => { let qty = parseInt(e.target.value, 10); if (!Number.isFinite(qty)) qty = 1; e.target.value = Math.min(5000, Math.max(1, qty)); window.calculateAILayout(); });
+    document.getElementById('print-quantity').addEventListener('input', (e) => { let qty = parseInt(e.target.value, 10); if (!Number.isFinite(qty)) qty = 1; e.target.value = Math.min(5000, Math.max(1, qty)); calculateAILayout(); });
 });
 

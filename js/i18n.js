@@ -1,4 +1,7 @@
-window.currentLang = (() => {
+import { PresetManager } from './storage/preset-manager.js';
+import { calculateAILayout } from './layout-sync.js';
+
+export let currentLang = (() => {
     try {
         const savedLanguage = localStorage.getItem('rairaitei-language');
         return savedLanguage === 'vn' || savedLanguage === 'jp'
@@ -9,7 +12,7 @@ window.currentLang = (() => {
     }
 })();
 
-window.translations = {
+export const translations = {
     jp: {
         document_title: '来来亭 整理券作成ツール',
         language_button_label: '言語を切り替える（現在：日本語）',
@@ -386,12 +389,12 @@ window.translations = {
     }
 };
 
-window.t = function(key, variables = {}) {
-    const language = window.translations[window.currentLang]
-        ? window.currentLang
+export function t(key, variables = {}) {
+    const language = translations[currentLang]
+        ? currentLang
         : 'jp';
-    const fallback = window.translations.jp[key] || key;
-    let value = window.translations[language][key] || fallback;
+    const fallback = translations.jp[key] || key;
+    let value = translations[language][key] || fallback;
 
     Object.entries(variables).forEach(([name, replacement]) => {
         value = value.replaceAll(`{${name}}`, String(replacement));
@@ -400,7 +403,7 @@ window.t = function(key, variables = {}) {
     return value;
 };
 
-window.refreshTranslatedFileNames = function() {
+export function refreshTranslatedFileNames() {
     [
         ['bg-upload', 'bg-upload-name'],
         ['mascot-upload', 'mascot-upload-name']
@@ -412,11 +415,11 @@ window.refreshTranslatedFileNames = function() {
 
         status.textContent = input.files && input.files[0]
             ? input.files[0].name
-            : window.t('no_file_selected');
+            : t('no_file_selected');
     });
 };
 
-window.applyTranslations = function() {
+export function applyTranslations() {
     const textElementIds = [
         'preview_title',
         'mobile_print_text',
@@ -557,27 +560,27 @@ window.applyTranslations = function() {
             ? 'choose_file'
             : id;
 
-        if (element) element.textContent = window.t(key);
+        if (element) element.textContent = t(key);
     });
 
     const presetNameInput = document.getElementById('save-preset-name');
     if (presetNameInput) {
-        presetNameInput.placeholder = window.t('save_preset_placeholder');
+        presetNameInput.placeholder = t('save_preset_placeholder');
     }
 
-    if (window.PresetManager && typeof window.PresetManager.renderUI === 'function') {
-        window.PresetManager.renderUI();
+    if (typeof PresetManager !== 'undefined' && typeof PresetManager.renderUI === 'function') {
+        PresetManager.renderUI();
     }
 
     const handleStatusEl = document.getElementById('handle_status_text');
     if (handleStatusEl) {
         const isExp = document.getElementById('controls-sidebar')?.classList.contains('sheet-expanded');
-        handleStatusEl.textContent = window.t(isExp ? 'handle_expanded' : 'handle_compact');
+        handleStatusEl.textContent = t(isExp ? 'handle_expanded' : 'handle_compact');
     }
 
     document.documentElement.lang =
-        window.currentLang === 'jp' ? 'ja' : 'vi';
-    document.title = window.t('document_title');
+        currentLang === 'jp' ? 'ja' : 'vi';
+    document.title = t('document_title');
 
     const headerCoreLabel =
         document.getElementById('core_size_label_header');
@@ -585,7 +588,7 @@ window.applyTranslations = function() {
         document.getElementById('header-core-size');
 
     if (headerCoreLabel) {
-        headerCoreLabel.textContent = window.t('core_size_label');
+        headerCoreLabel.textContent = t('core_size_label');
     }
 
     if (headerCoreSize) {
@@ -604,19 +607,19 @@ window.applyTranslations = function() {
 
     const customInput = document.getElementById('print-custom');
     if (customInput) {
-        customInput.placeholder = window.t('custom_placeholder');
+        customInput.placeholder = t('custom_placeholder');
     }
 
     const mascotImage = document.getElementById('mascot-preview');
     if (mascotImage) {
-        mascotImage.alt = window.t('mascot_alt');
+        mascotImage.alt = t('mascot_alt');
     }
 
     ['lang-toggle-btn', 'mobile-lang-toggle-btn'].forEach((id) => {
         const button = document.getElementById(id);
 
         if (button) {
-            const label = window.t('language_button_label');
+            const label = t('language_button_label');
             button.setAttribute('aria-label', label);
             button.title = label;
         }
@@ -631,7 +634,7 @@ window.applyTranslations = function() {
         const button = document.getElementById(id);
 
         if (button) {
-            const label = window.t(key);
+            const label = t(key);
             button.setAttribute('aria-label', label);
             button.title = label;
         }
@@ -641,30 +644,32 @@ window.applyTranslations = function() {
     if (closeButton) {
         closeButton.setAttribute(
             'aria-label',
-            window.t('close_export_label')
+            t('close_export_label')
         );
     }
 
     const settingsBackButton =
         document.getElementById('settings-back-btn');
     if (settingsBackButton) {
-        const backLabel = window.t('settings_back_label');
+        const backLabel = t('settings_back_label');
 
         settingsBackButton.setAttribute('aria-label', backLabel);
         settingsBackButton.title = backLabel;
     }
 
-    window.refreshTranslatedFileNames();
+    refreshTranslatedFileNames();
 
-    if (window.calculateAILayout) {
-        window.calculateAILayout();
-    }
+    calculateAILayout();
+
+    // Các module khác (kéo thả, bản nháp) nghe sự kiện này để vẽ lại
+    // nhãn theo ngôn ngữ mới — thay cơ chế bọc hàm trước đây (R1).
+    document.dispatchEvent(new CustomEvent('rairaitei:language-changed'));
 };
 
-window.setLanguage = function(language) {
+export function setLanguage(language) {
     if (language !== 'jp' && language !== 'vn') return;
 
-    window.currentLang = language;
+    currentLang = language;
 
     try {
         localStorage.setItem('rairaitei-language', language);
@@ -672,7 +677,7 @@ window.setLanguage = function(language) {
         // The language still changes when browser storage is unavailable.
     }
 
-    window.applyTranslations();
+    applyTranslations();
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -685,10 +690,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (input) {
             input.addEventListener(
                 'change',
-                window.refreshTranslatedFileNames
+                refreshTranslatedFileNames
             );
         }
     });
 
-    window.applyTranslations();
+    applyTranslations();
 });

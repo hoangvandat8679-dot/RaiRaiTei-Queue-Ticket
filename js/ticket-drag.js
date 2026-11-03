@@ -1,3 +1,14 @@
+import { currentLang } from './i18n.js';
+import { ticketStore } from './core/store.js';
+
+// ticketDrag cần trạng thái trong DOMContentLoaded — export wrapper ổn định,
+// triển khai thật được gán khi DOM sẵn sàng (cùng mẫu với controls.js).
+let ticketDragImpl = { resetAll() {}, select() {} };
+export const ticketDrag = {
+    resetAll: (...args) => ticketDragImpl.resetAll(...args),
+    select: (...args) => ticketDragImpl.select(...args)
+};
+
 /* ============================================================ */
 /* FILE: js/ticket-drag.js                                      */
 /* Kéo thả các mục trên vé: linh vật, khung số, lời nhắn,       */
@@ -43,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const tr = (key) => {
-        const lang = window.currentLang === 'vn' ? 'vn' : 'jp';
+        const lang = currentLang === 'vn' ? 'vn' : 'jp';
         return TEXT[lang][key] || TEXT.jp[key] || key;
     };
 
@@ -294,8 +305,8 @@ document.addEventListener('DOMContentLoaded', () => {
         applyVars(drag.item, x, y);
 
         // Đồng bộ thời gian thực với Central TicketStore
-        if (window.ticketStore && window.ticketStore.actions) {
-            window.ticketStore.actions.setElementOffset(drag.item.key, x, y);
+        if (ticketStore && ticketStore.actions) {
+            ticketStore.actions.setElementOffset(drag.item.key, x, y);
         }
 
         showGuide(snapped);
@@ -441,14 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetButton.addEventListener('click', resetAll);
 
     /* ---------- Ngôn ngữ ---------- */
-    if (typeof window.applyTranslations === 'function') {
-        const originalApply = window.applyTranslations;
-        window.applyTranslations = function (...args) {
-            const result = originalApply.apply(this, args);
-            refreshTexts();
-            return result;
-        };
-    }
+    document.addEventListener('rairaitei:language-changed', refreshTexts);
 
     // Khởi tạo
     items.forEach((item) => {
@@ -458,5 +462,5 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshTexts();
     updateResetState();
 
-    window.ticketDrag = { resetAll, select: (key) => select(items.find((i) => i.key === key) || null) };
+    ticketDragImpl = { resetAll, select: (key) => select(items.find((i) => i.key === key) || null) };
 });

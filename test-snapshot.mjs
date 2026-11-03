@@ -43,7 +43,7 @@ function snapState() {
         branch: cs('.branch-name'),
         number: cs('.ticket-number'),
         selected: [...d.querySelectorAll('[data-template]')].map(b => [b.dataset.template, b.classList.contains('is-selected')]),
-        activeTpl: window.TemplateRegistry ? window.TemplateRegistry.getActiveId() : null
+        activeTpl: window.RaiRaiTeiApp.TemplateRegistry ? window.RaiRaiTeiApp.TemplateRegistry.getActiveId() : null
     };
 }
 const stateSnap = {};
