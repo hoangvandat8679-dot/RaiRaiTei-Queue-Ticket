@@ -143,7 +143,7 @@ check('hàm xuất PNG đơn đã được nối (không phải null)', typeof w
 let pngThrew = '';
 try { await window.RaiRaiTeiApp.exportTicketPng(1); } catch (e) { pngThrew = String(e && e.message || e); }
 check('gọi xuất PNG không văng lỗi "is not a function"', !/is not a function/.test(pngThrew), pngThrew.slice(0, 120));
-check('nút xem trước in nhiệt có trong trang', !!d.getElementById('thermal-preview-toggle-btn'));
+check('không còn nút xem trước in nhiệt (đã gỡ theo phạm vi sản phẩm)', !d.getElementById('thermal-preview-toggle-btn'));
 // I) Ô chữ của thiết kế (tên quán + thông điệp) phải đi trọn vòng
 // thu thập -> áp dụng (ghim lỗi 4/11: collectDesign bỏ sót branch-input
 // và msg-input nên preset, bản nháp và hoàn tác đều mất hai chữ này).
@@ -166,11 +166,12 @@ check('apply khôi phục được tên quán', window.RaiRaiTeiApp.designHistor
 check('apply khôi phục được thông điệp', msgEl.value === 'Thông điệp kiểm tra');
 check('chữ trên vé cập nhật theo apply', d.getElementById('display-branch').textContent === 'Tên Quán Kiểm Tra');
 
-d.getElementById('mobile-print-btn').click();
-check('bấm nút in (mobile) mở được hộp thoại xuất bản in', !d.getElementById('export-modal').classList.contains('hidden'));
+check('không còn nút in ở header (đã gộp về tab In)', !d.getElementById('mobile-print-btn') && !d.getElementById('pc-top-print-btn'));
+check('không còn pop-up xuất bản in (export-modal đã gỡ)', !d.getElementById('export-modal'));
+d.querySelector('.cat-btn[data-group="print"]').click();
+check('bấm tab In mở được panel in', d.getElementById('panel-print').classList.contains('active-panel'));
+check('panel in có nút xác nhận in duy nhất', !!d.getElementById('generate-pdf-btn'));
 check('mở hộp thoại in có chạy kiểm tra trước in (preflight hiện diện)', !!d.getElementById('preflight-status'));
-d.getElementById('close-export-modal').click();
-check('đóng hộp thoại in được', d.getElementById('export-modal').classList.contains('hidden'));
 
 console.log('\n==================================================');
 process.exit(summary() > 0 ? 1 : 0);

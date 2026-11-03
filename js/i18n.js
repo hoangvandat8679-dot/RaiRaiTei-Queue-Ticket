@@ -21,11 +21,9 @@ export const translations = {
         document_title: '来来亭 整理券作成ツール',
         language_button_label: '言語を切り替える（現在：日本語）',
         preview_title: 'プレビュー',
-        mobile_print_text: '印刷 / PDF保存',
         history_undo_label: '元に戻す',
         history_redo_label: 'やり直す',
         text_collapse: '全画面表示',
-        text_thermal_mode: '熱転写',
         export_png_text: '単一チケット画像（PNG）を保存',
         control_panel_title: '設定パネル',
         core_size_label: '本体',
@@ -126,6 +124,7 @@ export const translations = {
         history_clear_label: '履歴を消去',
         nav_settings: '設定',
         nav_saved: '保存済み',
+        nav_print: '印刷',
         settings_back_label: '戻る',
         print_loading_title: '印刷データを準備しています…',
         print_loading_desc: 'ブラウザが印刷またはPDF保存画面を開きます。このタブを閉じないでください。',
@@ -145,7 +144,6 @@ export const translations = {
         info_per_page_label: '1ページあたり:',
         info_total_label: 'A4の合計ページ数:',
         generate_pdf_text: '印刷 / 保存を確定',
-        close_export_label: 'PDF出力設定を閉じる',
         mascot_alt: 'マスコット画像',
         paper_portrait: 'A4 縦',
         paper_landscape: 'A4 横',
@@ -212,11 +210,9 @@ export const translations = {
         document_title: 'Công cụ tạo phiếu thứ tự RaiRaiTei',
         language_button_label: 'Đổi ngôn ngữ (hiện tại: Tiếng Việt)',
         preview_title: 'Xem trước',
-        mobile_print_text: 'In / Lưu PDF',
         history_undo_label: 'Hoàn tác',
         history_redo_label: 'Làm lại',
         text_collapse: 'Toàn màn hình',
-        text_thermal_mode: 'In nhiệt',
         export_png_text: 'Tải ảnh vé đơn (PNG)',
         control_panel_title: 'Bảng điều khiển',
         core_size_label: 'Lõi vé',
@@ -317,6 +313,7 @@ export const translations = {
         history_clear_label: 'Xóa lịch sử',
         nav_settings: 'Thiết lập',
         nav_saved: 'Đã lưu',
+        nav_print: 'In ấn',
         settings_back_label: 'Quay lại',
         print_loading_title: 'Đang chuẩn bị dữ liệu in…',
         print_loading_desc: 'Trình duyệt sẽ mở màn hình in hoặc lưu PDF. Vui lòng không đóng thẻ này.',
@@ -336,7 +333,6 @@ export const translations = {
         info_per_page_label: 'Số vé trên một trang:',
         info_total_label: 'Tổng số trang A4:',
         generate_pdf_text: 'Xác nhận in / lưu',
-        close_export_label: 'Đóng tùy chọn xuất PDF',
         mascot_alt: 'Ảnh biểu tượng',
         paper_portrait: 'A4 dọc',
         paper_landscape: 'A4 ngang',
@@ -434,7 +430,6 @@ export function refreshTranslatedFileNames() {
 export function applyTranslations() {
     const textElementIds = [
         'preview_title',
-        'mobile_print_text',
         'text_collapse',
         'control_panel_title',
         'nav_template',
@@ -528,6 +523,7 @@ export function applyTranslations() {
         'history_clear_label',
         'nav_settings',
         'nav_saved',
+        'nav_print',
         'print_loading_title',
         'print_loading_desc',
         'force_close_text',
@@ -545,7 +541,6 @@ export function applyTranslations() {
         'generate_pdf_text',
         'print_test_text',
         'export_png_text',
-        'text_thermal_mode',
         'chip_all',
         'chip_size',
         'chip_border',
@@ -634,8 +629,6 @@ export function applyTranslations() {
     });
 
     [
-        ['pc-top-print-btn', 'mobile_print_text'],
-        ['mobile-print-btn', 'mobile_print_text'],
         ['history-undo', 'history_undo_label'],
         ['history-redo', 'history_redo_label']
     ].forEach(([id, key]) => {
@@ -648,13 +641,6 @@ export function applyTranslations() {
         }
     });
 
-    const closeButton = document.getElementById('close-export-modal');
-    if (closeButton) {
-        closeButton.setAttribute(
-            'aria-label',
-            t('close_export_label')
-        );
-    }
 
     const settingsBackButton =
         document.getElementById('settings-back-btn');

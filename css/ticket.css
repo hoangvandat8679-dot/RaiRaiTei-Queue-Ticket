@@ -61,22 +61,3 @@
 .japanese-text { display: var(--message-display, block); position: absolute; bottom: var(--msg-y); left: 50%; transform: translate(calc(-50% + var(--msg-dx, 0mm)), var(--msg-dy, 0mm)); font-family: var(--msg-font); font-weight: var(--msg-weight); font-style: var(--msg-style); font-size: var(--msg-size); color: var(--msg-color); text-align: center; line-height: 1.2; width: calc(100% - (var(--content-padding-x) * 2) + 2%); letter-spacing: -0.1px; -webkit-text-stroke: var(--msg-stroke-w) var(--msg-stroke-c); }
 .branch-name { display: var(--branch-display, block); position: absolute; bottom: var(--branch-y); left: 50%; transform: translate(calc(-50% + var(--branch-dx, 0mm)), var(--branch-dy, 0mm)); font-family: var(--branch-font); font-weight: var(--branch-weight); font-style: var(--branch-style); font-size: var(--branch-size); color: var(--branch-color); background-color: var(--branch-bg); text-align: center; width: var(--branch-width); max-width: calc(100% - (var(--content-padding-x) * 2)); padding: var(--branch-pad-y) 0; border-radius: var(--branch-radius); -webkit-text-stroke: var(--branch-stroke-w) var(--branch-stroke-c); -webkit-print-color-adjust: exact !important; }
 
-/* ============================================================ */
-/* THERMAL PRINTER PREVIEW SIMULATION (Monochrome / Dither Mode)*/
-/* ============================================================ */
-body.thermal-simulation-mode #ticket-preview-wrapper {
-    filter: grayscale(100%) contrast(165%) brightness(95%);
-    transition: filter 0.25s ease;
-}
-
-body.thermal-simulation-mode #ticket-preview-wrapper * {
-    text-shadow: none !important;
-    box-shadow: none !important;
-}
-
-body.thermal-simulation-mode #thermal-preview-toggle-btn {
-    background-color: var(--studio-accent-yellow, #facc15) !important;
-    color: #000000 !important;
-    border-color: rgba(250, 204, 21, 0.8) !important;
-    box-shadow: 0 0 12px rgba(250, 204, 21, 0.4) !important;
-}

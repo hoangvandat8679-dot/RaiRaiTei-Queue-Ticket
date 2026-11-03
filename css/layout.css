@@ -89,14 +89,6 @@ html, body { overflow: hidden !important; overscroll-behavior: none; }
 .toolbar-icon-btn:active:not(:disabled) { transform: scale(0.94); box-shadow: 0 1px 4px rgba(0,0,0,0.5); }
 .toolbar-icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-#mobile-print-btn {
-    background: linear-gradient(135deg, #d4ff4e 0%, #a8e81e 100%) !important;
-    border: 1px solid rgba(203, 251, 69, 0.8) !important;
-    color: #0b0f17 !important;
-    box-shadow:
-        0 4px 16px rgba(203, 251, 69, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-}
 
 @media (max-width: 767px) {
     #preview-header {
@@ -309,7 +301,7 @@ html, body { overflow: hidden !important; overscroll-behavior: none; }
     #mobile-category-bar { display: none !important; }
 
     /* Pill undo/redo nổi trên khung xem; chỉ hiện ở chế độ Cài đặt */
-    #design-toolbar, #design-print-btn { pointer-events: auto; }
+    #design-toolbar { pointer-events: auto; }
     #preview-area { position: relative; }
 
     #controls-sidebar {

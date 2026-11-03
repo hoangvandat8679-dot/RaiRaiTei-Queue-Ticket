@@ -856,7 +856,7 @@
     "dis": true
    },
    "mascot-tool-toggle": {
-    "v": false,
+    "v": true,
     "dis": false
    },
    "mascot-upload": {
@@ -1117,8 +1117,8 @@
   "bgImage": "url('../assets/templates/summer.svg')",
   "branchBgVar": "#db0010",
   "branch": {
-   "bg": "var(--branch-bg)",
-   "color": "rgb(255, 255, 255)",
+   "bg": "rgba(0, 0, 0, 0)",
+   "color": "var(--branch-color)",
    "fs": "var(--branch-size)"
   },
   "number": null,
@@ -1241,7 +1241,7 @@
     "dis": true
    },
    "mascot-tool-toggle": {
-    "v": false,
+    "v": true,
     "dis": false
    },
    "mascot-upload": {
@@ -1502,8 +1502,8 @@
   "bgImage": "url('../assets/templates/autumn.svg')",
   "branchBgVar": "#d0010a",
   "branch": {
-   "bg": "var(--branch-bg)",
-   "color": "rgb(255, 255, 255)",
+   "bg": "rgba(0, 0, 0, 0)",
+   "color": "var(--branch-color)",
    "fs": "var(--branch-size)"
   },
   "number": null,
@@ -1626,7 +1626,7 @@
     "dis": true
    },
    "mascot-tool-toggle": {
-    "v": false,
+    "v": true,
     "dis": false
    },
    "mascot-upload": {
@@ -1887,8 +1887,8 @@
   "bgImage": "url('../assets/templates/winter.svg')",
   "branchBgVar": "#d40009",
   "branch": {
-   "bg": "var(--branch-bg)",
-   "color": "rgb(255, 255, 255)",
+   "bg": "rgba(0, 0, 0, 0)",
+   "color": "var(--branch-color)",
    "fs": "var(--branch-size)"
   },
   "number": null,

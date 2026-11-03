@@ -20,7 +20,7 @@ import { designHistory } from './design-history.js';
 import { validateDesign, DESIGN_SCHEMA } from './state-schema.js';
 import { PresetManager } from './storage/preset-manager.js';
 import { DraftManager } from './storage/draft-manager.js';
-import { exportTicketPng, toggleThermalPreview, isCropMarksEnabled, drawPdfCropMarks, generateCropMarksSvg, isMobilePrintDevice } from './print/print.js';
+import { exportTicketPng, isCropMarksEnabled, drawPdfCropMarks, generateCropMarksSvg, isMobilePrintDevice } from './print/print.js';
 import { PrintCheck, runPrintPreflight, refreshPreflightUI, printTestPage } from './print/preflight.js';
 
 window.RaiRaiTeiApp = {
@@ -43,7 +43,6 @@ window.RaiRaiTeiApp = {
     PresetManager,
     DraftManager,
     exportTicketPng,
-    toggleThermalPreview,
     isCropMarksEnabled,
     drawPdfCropMarks,
     generateCropMarksSvg,
