@@ -33,11 +33,11 @@ test('2. Kiểm tra giá trị base: 1.0 cho cut-margin trong js/controls.js', (
     assert(content.includes("id: 'cut-margin-y'") && content.includes('base: 1.0'), 'cut-margin-y phải có base: 1.0');
 });
 
-// 3. Kiểm tra js/templates.js & spring.js
+// 3. Kiểm tra template configs trong registry (GĐ1: js/templates.js đã dỡ, registry là động cơ mẫu duy nhất)
 test('3. Kiểm tra giá trị cut-margin: 1.0 trong template configs', () => {
-    const templates = fs.readFileSync('js/templates.js', 'utf8');
+    const standard = fs.readFileSync('js/registry/templates/standard.js', 'utf8');
     const spring = fs.readFileSync('js/registry/templates/spring.js', 'utf8');
-    assert(templates.includes("'--cut-margin-x': '1.0mm'") || templates.includes('"cut-margin-x": 1.0') || templates.includes("'cut-margin-x': 1.0"), 'Template mặc định phải có cut-margin 1.0');
+    assert(standard.includes("'cut-margin-x': 1.0") && standard.includes("'cut-margin-y': 1.0"), 'Template mặc định phải có cut-margin 1.0');
     assert(spring.includes("'cut-margin-x': 1.0") && spring.includes("'cut-margin-y': 1.0"), 'Template Mùa Xuân phải có cut-margin 1.0');
 });
 
