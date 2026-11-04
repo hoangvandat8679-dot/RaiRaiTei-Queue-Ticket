@@ -126,6 +126,14 @@ const TemplateRegistry = {
       document.body.style.removeProperty('--bg-image');
     }
 
+    // 2a. Lớp viền họa tiết riêng của mẫu (viền chấm Thu/Đông, zíc-zắc Hạ —
+    // tách khỏi lớp nền như các lớp khung số/linh vật/ruy-băng).
+    if (tpl.borderImage) {
+      document.body.style.setProperty('--border-art-image', `url('../${tpl.borderImage}')`);
+    } else {
+      document.body.style.removeProperty('--border-art-image');
+    }
+
     // 2b. Khoảng cách dòng thông điệp riêng của mẫu (bản vẽ gốc nén dòng
     // chặt hơn mặc định 1.2; mẫu không khai báo thì trở về mặc định CSS).
     if (tpl.msgLineHeight) {

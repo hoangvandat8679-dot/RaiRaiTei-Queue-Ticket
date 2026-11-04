@@ -16,6 +16,7 @@ export const WinterTemplate = {
   datasetTemplate: 'winter',
   bgImage: "url('../assets/templates/winter.svg')",
   mascotImage: 'assets/images/templates/winter-mascot.png',
+  borderImage: 'assets/images/templates/winter-border.svg',
   msgLineHeight: 1.01,
 
   // Preset thông số phần tử chuẩn xác theo lớp vector
