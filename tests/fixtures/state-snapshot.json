@@ -428,47 +428,47 @@
    },
    "border-tool-toggle": {
     "v": false,
-    "dis": true
+    "dis": false
    },
    "border-width-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "border-width": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "mascot-tool-toggle": {
     "v": true,
@@ -812,48 +812,48 @@
     "dis": false
    },
    "border-tool-toggle": {
-    "v": true,
+    "v": false,
     "dis": false
    },
    "border-width-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "border-width": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "mascot-tool-toggle": {
     "v": true,
@@ -1197,48 +1197,48 @@
     "dis": false
    },
    "border-tool-toggle": {
-    "v": true,
+    "v": false,
     "dis": false
    },
    "border-width-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "border-width": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "mascot-tool-toggle": {
     "v": true,
@@ -1582,48 +1582,48 @@
     "dis": false
    },
    "border-tool-toggle": {
-    "v": true,
+    "v": false,
     "dis": false
    },
    "border-width-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "border-width": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "mascot-tool-toggle": {
     "v": true,
@@ -1968,47 +1968,47 @@
    },
    "border-tool-toggle": {
     "v": false,
-    "dis": true
+    "dis": false
    },
    "border-width-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "border-width": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-density": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-1": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-size-2": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset-val": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "dot-offset": {
     "v": "0",
-    "dis": true
+    "dis": false
    },
    "mascot-tool-toggle": {
     "v": true,
