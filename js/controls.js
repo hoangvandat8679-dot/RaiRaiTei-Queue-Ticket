@@ -66,26 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    // Khung viền đèn ở mẫu mùa: bật đèn thì họa tiết + nội dung thu vào
-    // trong (biến --art-sx/--art-sy) để khung đèn chiếm dải rìa riêng,
-    // không đè lên họa tiết. Dải đèn = độ dày viền + 0,6 mm khoảng hở.
-    function updateArtScale() {
-        const cs = getComputedStyle(document.body);
-        const bw = parseFloat(cs.getPropertyValue('--border-width')) || 2;
-        const cw = parseFloat(cs.getPropertyValue('--core-width')) || 43;
-        const ch = parseFloat(cs.getPropertyValue('--core-height')) || 78;
-        const band = Math.min(bw + 0.6, Math.min(cw, ch) / 4);
-        document.body.style.setProperty('--art-sx', String(Math.max(0.5, (cw - 2 * band) / cw)));
-        document.body.style.setProperty('--art-sy', String(Math.max(0.5, (ch - 2 * band) / ch)));
-    }
-
+    // Khung viền đèn ở mẫu mùa: gắn class marquee-on lên lõi vé để CSS cho
+    // lớp viền họa tiết nhường chỗ khi đèn bật (vé chỉ còn một khung).
     function syncMarqueeClass() {
         const toggle = document.getElementById('border-tool-toggle');
         const core = document.getElementById('master-ticket-inner');
         if (toggle && core) {
             core.classList.toggle('marquee-on', !!toggle.checked);
         }
-        updateArtScale();
     }
 
     toolToggles.forEach((definition) => {
@@ -110,10 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (borderToggleEl) {
         borderToggleEl.addEventListener('change', syncMarqueeClass);
     }
-    ['border-width', 'border-width-val'].forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', updateArtScale);
-    });
     syncMarqueeClass();
 
     /*
@@ -410,7 +394,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const w = Math.min(297, Math.max(1, parseFloat(coreWInput.value) || 43)); const h = Math.min(297, Math.max(1, parseFloat(coreHInput.value) || 78));
         coreWInput.value = w.toFixed(1); coreHInput.value = h.toFixed(1);
         document.body.style.setProperty('--core-width', w + 'mm'); document.body.style.setProperty('--core-height', h + 'mm');
-        updateArtScale();
         const headerCoreLabel = document.getElementById('core_size_label_header');
         if (headerCoreLabel) { headerCoreLabel.textContent = translations[currentLang]['core_size_label']; const headerTextNode = Array.from(document.getElementById('header-core-size').childNodes).find(node => node.nodeType === Node.TEXT_NODE); if (headerTextNode) headerTextNode.nodeValue = `: ${(w/10).toFixed(2)}x${(h/10).toFixed(2)}cm`; }
         calculateAILayout();
