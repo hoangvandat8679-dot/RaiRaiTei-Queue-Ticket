@@ -156,6 +156,11 @@ html, body { overflow: hidden !important; overscroll-behavior: none; }
     
     #controls-sidebar.sheet-open { transform: translateY(0); visibility: visible; }
 
+    /* Panel v2: trên mobile wrapper cuộn trong suốt (sheet tự cuộn như cũ),
+       thanh hành động ẩn — mobile đã có thanh tab dưới chứa In/Lưu. */
+    #panel-scroll { display: contents; }
+    #panel-action-bar { display: none; }
+
     /* Nấc mở rộng cho Drawer */
     #controls-sidebar.sheet-expanded {
         height: 56dvh;
@@ -321,6 +326,42 @@ html, body { overflow: hidden !important; overscroll-behavior: none; }
         visibility: visible;
     }
     #controls-sidebar::before { display: none; }
+
+    /* Panel v2 (PC): sidebar thành cột dọc — vùng mục cuộn riêng ở trên,
+       thanh hành động In/Lưu cố định ở đáy, ngoài vùng cuộn. */
+    #controls-sidebar {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 0;
+    }
+    #panel-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.25rem;
+    }
+    #panel-action-bar {
+        flex: none;
+        display: flex;
+        gap: 10px;
+        padding: 12px 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.09);
+        background: #0d1117;
+    }
+    #panel-action-bar button {
+        flex: 1;
+        min-height: 48px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 800;
+    }
+    #pv2-print-btn { background: #cbfb45; color: #10130a; }
+    #pv2-save-btn {
+        background: rgba(255, 255, 255, 0.07);
+        color: #e5e7eb;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        flex: 0 0 40%;
+    }
     
     /* Nút ngôn ngữ mobile: to hơn, bo nổi */
     .mobile-lang-button {
