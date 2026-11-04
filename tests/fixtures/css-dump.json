@@ -752,7 +752,7 @@
    "-webkit-user-select": "none",
    "transition": "filter 0.15s ease"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -812,7 +812,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -821,11 +821,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -857,13 +857,14 @@
    "border-left-style": "solid",
    "border-left-color": "rgba(255, 255, 255, 0.3)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/spring.webp\")",
    "background-position-x": "50%",
-   "background-position-y": "50%",
+   "background-position-y": "0%",
    "background-size": "cover",
    "background-repeat": "no-repeat",
    "background-origin": "padding-box",
@@ -872,7 +873,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -932,7 +933,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -941,11 +942,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -977,10 +978,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(249, 115, 22)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/summer.webp\"), linear-gradient(145deg, rgb(255, 243, 224), rgb(249, 115, 22))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -992,7 +994,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -1052,7 +1054,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -1061,11 +1063,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -1097,10 +1099,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(217, 119, 6)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/autumn.webp\"), linear-gradient(145deg, rgb(255, 245, 235), rgb(180, 83, 9))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -1112,7 +1115,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -1172,7 +1175,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -1181,11 +1184,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -1217,10 +1220,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(2, 132, 199)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/winter.webp\"), linear-gradient(145deg, rgb(240, 249, 255), rgb(2, 132, 199))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -1232,7 +1236,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -2072,7 +2076,7 @@
    "-webkit-user-select": "none",
    "transition": "filter 0.15s ease"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -2132,7 +2136,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -2141,14 +2145,14 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px",
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px",
    "box-shadow": "0 0 0 1px rgba(244, 114, 182, .35), 0 8px 20px rgba(244, 114, 182, .18)",
    "outline": "none",
    "transform": "translateY(-1px)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -2180,13 +2184,14 @@
    "border-left-style": "solid",
    "border-left-color": "rgba(255, 255, 255, 0.3)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/spring.webp\")",
    "background-position-x": "50%",
-   "background-position-y": "50%",
+   "background-position-y": "0%",
    "background-size": "cover",
    "background-repeat": "no-repeat",
    "background-origin": "padding-box",
@@ -2195,7 +2200,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -2255,7 +2260,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -2264,11 +2269,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -2300,10 +2305,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(249, 115, 22)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/summer.webp\"), linear-gradient(145deg, rgb(255, 243, 224), rgb(249, 115, 22))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -2315,7 +2321,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -2375,7 +2381,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -2384,11 +2390,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -2420,10 +2426,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(217, 119, 6)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/autumn.webp\"), linear-gradient(145deg, rgb(255, 245, 235), rgb(180, 83, 9))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -2435,7 +2442,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -2495,7 +2502,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -2504,11 +2511,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -2540,10 +2547,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(2, 132, 199)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/winter.webp\"), linear-gradient(145deg, rgb(240, 249, 255), rgb(2, 132, 199))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -2555,7 +2563,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -3396,7 +3404,7 @@
    "-webkit-user-select": "none",
    "transition": "filter 0.15s ease"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -3456,7 +3464,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -3465,11 +3473,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -3501,13 +3509,14 @@
    "border-left-style": "solid",
    "border-left-color": "rgba(255, 255, 255, 0.3)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/spring.webp\")",
    "background-position-x": "50%",
-   "background-position-y": "50%",
+   "background-position-y": "0%",
    "background-size": "cover",
    "background-repeat": "no-repeat",
    "background-origin": "padding-box",
@@ -3516,7 +3525,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -3576,7 +3585,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -3585,14 +3594,14 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px",
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px",
    "box-shadow": "0 0 0 1px rgba(249, 115, 22, .4), 0 8px 20px rgba(249, 115, 22, .2)",
    "outline": "none",
    "transform": "translateY(-1px)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -3624,10 +3633,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(249, 115, 22)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/summer.webp\"), linear-gradient(145deg, rgb(255, 243, 224), rgb(249, 115, 22))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -3639,7 +3649,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -3699,7 +3709,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -3708,11 +3718,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -3744,10 +3754,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(217, 119, 6)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/autumn.webp\"), linear-gradient(145deg, rgb(255, 245, 235), rgb(180, 83, 9))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -3759,7 +3770,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -3819,7 +3830,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -3828,11 +3839,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -3864,10 +3875,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(2, 132, 199)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/winter.webp\"), linear-gradient(145deg, rgb(240, 249, 255), rgb(2, 132, 199))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -3879,7 +3891,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -4720,7 +4732,7 @@
    "-webkit-user-select": "none",
    "transition": "filter 0.15s ease"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -4780,7 +4792,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -4789,11 +4801,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -4825,13 +4837,14 @@
    "border-left-style": "solid",
    "border-left-color": "rgba(255, 255, 255, 0.3)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/spring.webp\")",
    "background-position-x": "50%",
-   "background-position-y": "50%",
+   "background-position-y": "0%",
    "background-size": "cover",
    "background-repeat": "no-repeat",
    "background-origin": "padding-box",
@@ -4840,7 +4853,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -4900,7 +4913,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -4909,11 +4922,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -4945,10 +4958,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(249, 115, 22)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/summer.webp\"), linear-gradient(145deg, rgb(255, 243, 224), rgb(249, 115, 22))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -4960,7 +4974,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -5020,7 +5034,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -5029,14 +5043,14 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px",
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px",
    "box-shadow": "0 0 0 1px rgba(217, 119, 6, .4), 0 8px 20px rgba(217, 119, 6, .2)",
    "outline": "none",
    "transform": "translateY(-1px)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -5068,10 +5082,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(217, 119, 6)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/autumn.webp\"), linear-gradient(145deg, rgb(255, 245, 235), rgb(180, 83, 9))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -5083,7 +5098,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -5143,7 +5158,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -5152,11 +5167,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -5188,10 +5203,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(2, 132, 199)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/winter.webp\"), linear-gradient(145deg, rgb(240, 249, 255), rgb(2, 132, 199))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -5203,7 +5219,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -6044,7 +6060,7 @@
    "-webkit-user-select": "none",
    "transition": "filter 0.15s ease"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -6104,7 +6120,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -6113,11 +6129,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#spring-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -6149,13 +6165,14 @@
    "border-left-style": "solid",
    "border-left-color": "rgba(255, 255, 255, 0.3)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/spring.webp\")",
    "background-position-x": "50%",
-   "background-position-y": "50%",
+   "background-position-y": "0%",
    "background-size": "cover",
    "background-repeat": "no-repeat",
    "background-origin": "padding-box",
@@ -6164,7 +6181,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -6224,7 +6241,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -6233,11 +6250,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#summer-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -6269,10 +6286,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(249, 115, 22)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/summer.webp\"), linear-gradient(145deg, rgb(255, 243, 224), rgb(249, 115, 22))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -6284,7 +6302,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -6344,7 +6362,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -6353,11 +6371,11 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px"
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#autumn-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -6389,10 +6407,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(217, 119, 6)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/autumn.webp\"), linear-gradient(145deg, rgb(255, 245, 235), rgb(180, 83, 9))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -6404,7 +6423,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",
@@ -6464,7 +6483,7 @@
    "background-image": "none",
    "cursor": "pointer",
    "width": "100%",
-   "border-radius": "10px",
+   "border-radius": "14px",
    "background-position-x": "0%",
    "background-position-y": "0%",
    "background-size": "auto",
@@ -6473,14 +6492,14 @@
    "background-clip": "border-box",
    "background-attachment": "scroll",
    "transition": "border-color .2s cubic-bezier(0.32, 0.72, 0, 1), box-shadow .2s ease, transform .2s ease",
-   "grid-template-columns": "46px minmax(0, 1fr)",
-   "grid-template-rows": "auto auto",
-   "column-gap": "10px",
+   "grid-template-columns": "1fr",
+   "grid-template-rows": "auto auto auto",
+   "row-gap": "4px",
    "box-shadow": "0 0 0 1px rgba(2, 132, 199, .4), 0 8px 20px rgba(2, 132, 199, .2)",
    "outline": "none",
    "transform": "translateY(-1px)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>section.template-folder>div.template-grid>button#winter-template-btn>span.template-card-preview": {
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
    "--tw-translate-x": "0",
@@ -6512,10 +6531,11 @@
    "border-left-style": "solid",
    "border-left-color": "rgb(2, 132, 199)",
    "border-image": "none",
-   "grid-row": "1 / span 2",
-   "width": "46px",
-   "height": "62px",
-   "border-radius": "6px",
+   "grid-row": "auto",
+   "width": "100%",
+   "height": "auto",
+   "aspect-ratio": "4 / 5",
+   "border-radius": "8px",
    "background-image": "url(\"../assets/images/templates/thumbs/winter.webp\"), linear-gradient(145deg, rgb(240, 249, 255), rgb(2, 132, 199))",
    "background-position-x": "50%, 0%",
    "background-position-y": "50%, 0%",
@@ -6527,7 +6547,7 @@
    "background-color": "rgba(0, 0, 0, 0)",
    "box-shadow": "0 2px 8px rgba(0, 0, 0, 0.35)"
   },
-  "div#app-wrapper>div#controls-sidebar>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
+  "div#app-wrapper>div#controls-sidebar>div#panel-scroll>details#panel-template>div.mt-4.cursor-auto>button#standard-template-btn": {
    "letter-spacing": "-0.16px",
    "word-spacing": "normal",
    "line-height": "1.5",

@@ -363,30 +363,34 @@ input[type="color"]::-webkit-color-swatch {
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
 }
 
-/* Định dạng toàn diện cho Bảng Điều Khiển (Sidebar) */
+/* Định dạng toàn diện cho Bảng Điều Khiển (Sidebar) — v2: các mục PHẲNG,
+   cách nhau bằng đường kẻ mảnh kiểu panel thuộc tính (Figma/Canva),
+   thay cho hộp-trong-hộp trước đây. */
 #controls-sidebar details.mobile-panel,
 #controls-sidebar details {
-    background: rgba(22, 27, 34, 0.72) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    margin-bottom: 12px !important;
-    padding: 12px 14px !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
+    padding: 6px 2px 20px !important;
 }
-#controls-sidebar details[open] {
-    border-color: rgba(255, 255, 255, 0.14) !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
+#controls-sidebar div.mobile-panel {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    padding: 6px 2px 20px;
+    margin-bottom: 0;
 }
 #controls-sidebar details summary {
     cursor: pointer;
     user-select: none;
     transition: color 0.15s ease;
-    font-size: 11.5px !important;
-    letter-spacing: 0.04em !important;
+    font-size: 14px !important;
+    letter-spacing: 0.02em !important;
     font-weight: 700 !important;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 #controls-sidebar details summary:hover {
     color: #ffffff !important;
@@ -563,7 +567,6 @@ label[for="mascot-upload"]:hover {
 
 @media (max-width: 767px) {
     .template-folder { padding: 10px; }
-    .template-card-preview { width: 42px; height: 57px; }
 }
 
 /* ============================================================ */
@@ -582,10 +585,10 @@ label[for="mascot-upload"]:hover {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 12px;
-    height: 32px;
+    padding: 0 14px;
+    height: 38px;
     border-radius: 999px;
-    font-size: 11px;
+    font-size: 12.5px;
     font-weight: 700;
     color: #94a3b8;
     background: rgba(255, 255, 255, 0.05);
@@ -612,6 +615,28 @@ label[for="mascot-upload"]:hover {
     border-color: #cbfb45;
     font-weight: 800;
     box-shadow: 0 0 14px rgba(203, 251, 69, 0.35);
+}
+
+@media (max-width: 767px) {
+    .subtab-chip { height: 40px; font-size: 13px; }
+    #controls-sidebar details summary { min-height: 48px; }
+}
+
+/* Hàng điều khiển trong panel v2: ô nhập cao tối thiểu 40px, thanh trượt có màu nhấn */
+#controls-sidebar input[type="text"],
+#controls-sidebar input[type="number"],
+#controls-sidebar select,
+#controls-sidebar textarea {
+    min-height: 40px;
+    font-size: 13px;
+    border-radius: 10px;
+}
+#controls-sidebar input[type="range"] {
+    accent-color: #cbfb45;
+    height: 28px;
+}
+#controls-sidebar label {
+    font-size: 12.5px;
 }
 
 .subtab-chip .chip-dot {

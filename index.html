@@ -111,6 +111,7 @@
 
         <!-- BẢNG ĐIỀU KHIỂN (Cả PC và Điện thoại) -->
         <div id="controls-sidebar" class="custom-scrollbar">
+          <div id="panel-scroll" class="custom-scrollbar">
             <!-- DRAG / TOGGLE HANDLE (Mobile Drawer Height Switcher) -->
             <div id="sheet-drag-handle" class="sheet-drag-handle md:hidden" title="タップしてパネルの高さを切替 / Chuyển đổi kích thước bảng">
                 <span class="handle-bar"></span>
@@ -511,6 +512,11 @@
                 </div>
             </div>
 
+          </div>
+            <div id="panel-action-bar">
+                <button id="pv2-save-btn" type="button">💾 保存</button>
+                <button id="pv2-print-btn" type="button">🖨 印刷する</button>
+            </div>
         </div>
     </div>
 
@@ -566,6 +572,26 @@
           if (document.visibilityState === 'visible') reg.update().catch(function () {});
         });
       }).catch(function (err) { console.warn('[SW] Đăng ký thất bại:', err); });
+    })();
+    </script>
+    <script>
+    (function () {
+        var printBtn = document.getElementById('pv2-print-btn');
+        var saveBtn = document.getElementById('pv2-save-btn');
+        if (printBtn) printBtn.addEventListener('click', function () {
+            var tab = document.querySelector('.cat-btn[data-group="print"]');
+            if (tab) tab.click();
+            var panel = document.getElementById('panel-print');
+            if (panel) setTimeout(function () { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+        });
+        if (saveBtn) saveBtn.addEventListener('click', function () {
+            var tab = document.querySelector('.cat-btn[data-group="saved"]');
+            if (tab) tab.click();
+            var panel = document.getElementById('panel-saved');
+            if (panel) setTimeout(function () { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+            var name = document.getElementById('save-preset-name');
+            if (name) setTimeout(function () { name.focus(); }, 350);
+        });
     })();
     </script>
 </body>

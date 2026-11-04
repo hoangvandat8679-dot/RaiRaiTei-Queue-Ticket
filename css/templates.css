@@ -24,8 +24,8 @@
 }
 .template-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 .template-card,
 .template-reset-button {
@@ -39,10 +39,11 @@
 }
 .template-card {
     display: grid;
-    grid-template-columns: 46px minmax(0, 1fr);
-    grid-template-rows: auto auto;
-    column-gap: 10px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    row-gap: 4px;
     padding: 8px;
+    border-radius: 14px;
     cursor: pointer;
 }
 .template-card:hover,
@@ -65,18 +66,20 @@
     transform: scale(.98);
 }
 .template-card-preview {
-    grid-row: 1 / span 2;
-    width: 46px;
-    height: 62px;
-    border-radius: 6px;
+    grid-row: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    border-radius: 8px;
     border: 1px solid rgba(255,255,255,.3);
-    background: center / cover no-repeat url('../assets/images/templates/thumbs/spring.webp');
+    background: center top / cover no-repeat url('../assets/images/templates/thumbs/spring.webp');
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 .template-card-name {
-    align-self: end;
+    align-self: auto;
     color: #fce7f3;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 700;
     font-weight: 800;
 }
 .template-card-description {
