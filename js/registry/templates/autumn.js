@@ -69,7 +69,7 @@ export const AutumnTemplate = {
   // Trạng thái bật/tắt các công cụ (Tool Toggles)
   tools: {
     'background-tool-toggle': { checked: true, disabled: false },
-    'border-tool-toggle': { checked: true, disabled: false },
+    'border-tool-toggle': { checked: false, disabled: false },
     'mascot-tool-toggle': { checked: true, disabled: false },
     'frame-tool-toggle': { checked: true, disabled: false },
     'number-tool-toggle': { checked: true, disabled: false },
@@ -79,7 +79,7 @@ export const AutumnTemplate = {
 
   // Các điều khiển bị khóa
   locks: {
-    borderControls: true,
+    borderControls: false,
     staticArtControls: false
   }
 };

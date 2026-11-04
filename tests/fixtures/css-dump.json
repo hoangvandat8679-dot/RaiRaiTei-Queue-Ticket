@@ -195,7 +195,7 @@
    "pointer-events": "none"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.ticket-border-art": {
-   "display": "var(--border-display, block)",
+   "display": "block",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -1502,7 +1502,7 @@
    "pointer-events": "none"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.ticket-border-art": {
-   "display": "var(--border-display, block)",
+   "display": "block",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -1549,7 +1549,7 @@
    "z-index": "2"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.marquee-border": {
-   "display": "none",
+   "display": "var(--border-display, block)",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -1591,7 +1591,7 @@
    "z-index": "10"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.marquee-dots": {
-   "display": "none",
+   "display": "var(--border-display, block)",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -2682,7 +2682,7 @@
    "--branch-bg": "#db0010",
    "--branch-stroke-c": "#000000",
    "--background-layer-display": "block",
-   "--border-display": "block",
+   "--border-display": "none",
    "--mascot-display": "block",
    "--frame-display": "block",
    "--number-display": "block",
@@ -2823,7 +2823,7 @@
    "pointer-events": "none"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.ticket-border-art": {
-   "display": "var(--border-display, block)",
+   "display": "block",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -2870,7 +2870,7 @@
    "z-index": "2"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.marquee-border": {
-   "display": "none",
+   "display": "var(--border-display, block)",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -2912,7 +2912,7 @@
    "z-index": "10"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.marquee-dots": {
-   "display": "none",
+   "display": "var(--border-display, block)",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -4004,7 +4004,7 @@
    "--branch-bg": "#d0010a",
    "--branch-stroke-c": "#000000",
    "--background-layer-display": "block",
-   "--border-display": "block",
+   "--border-display": "none",
    "--mascot-display": "block",
    "--frame-display": "block",
    "--number-display": "block",
@@ -4145,7 +4145,7 @@
    "pointer-events": "none"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.ticket-border-art": {
-   "display": "var(--border-display, block)",
+   "display": "block",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -4192,7 +4192,7 @@
    "z-index": "2"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.marquee-border": {
-   "display": "none",
+   "display": "var(--border-display, block)",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -4234,7 +4234,7 @@
    "z-index": "10"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.marquee-dots": {
-   "display": "none",
+   "display": "var(--border-display, block)",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -5326,7 +5326,7 @@
    "--branch-bg": "#d40009",
    "--branch-stroke-c": "#000000",
    "--background-layer-display": "block",
-   "--border-display": "block",
+   "--border-display": "none",
    "--mascot-display": "block",
    "--frame-display": "block",
    "--number-display": "block",
@@ -5467,7 +5467,7 @@
    "pointer-events": "none"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.ticket-border-art": {
-   "display": "var(--border-display, block)",
+   "display": "block",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -5514,7 +5514,7 @@
    "z-index": "2"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.marquee-border": {
-   "display": "none",
+   "display": "var(--border-display, block)",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",
@@ -5556,7 +5556,7 @@
    "z-index": "10"
   },
   "div#app-wrapper>div#app-container>div#preview-area>div.preview-scale-wrapper.custom-scrollbar>div#ticket-preview-wrapper>div#master-ticket>div#master-ticket-inner>div.marquee-dots": {
-   "display": "none",
+   "display": "var(--border-display, block)",
    "unicode-bidi": "isolate",
    "--tw-border-spacing-x": "0",
    "--tw-border-spacing-y": "0",

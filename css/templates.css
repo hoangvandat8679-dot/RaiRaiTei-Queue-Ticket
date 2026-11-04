@@ -151,16 +151,6 @@
     display: block;
     opacity: 1;
 }
-.ticket-core.spring-template .marquee-border,
-.ticket-core.spring-template .marquee-dots,
-.ticket-core.summer-template .marquee-border,
-.ticket-core.summer-template .marquee-dots,
-.ticket-core.autumn-template .marquee-border,
-.ticket-core.autumn-template .marquee-dots,
-.ticket-core.winter-template .marquee-border,
-.ticket-core.winter-template .marquee-dots {
-    display: none;
-}
 .ticket-core.spring-template .number-frame {
     border: none;
     border-radius: 0;
