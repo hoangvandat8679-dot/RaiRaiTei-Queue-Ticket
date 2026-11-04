@@ -347,7 +347,7 @@
    }
   },
   "bodyTemplate": null,
-  "coreClass": "ticket-core",
+  "coreClass": "ticket-core marquee-on",
   "bgImage": null,
   "branchBgVar": "#e60012",
   "branch": {
@@ -2653,7 +2653,7 @@
    }
   },
   "bodyTemplate": null,
-  "coreClass": "ticket-core",
+  "coreClass": "ticket-core marquee-on",
   "bgImage": null,
   "branchBgVar": "#e60012",
   "branch": {
