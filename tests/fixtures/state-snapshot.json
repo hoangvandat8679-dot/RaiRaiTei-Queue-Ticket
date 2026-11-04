@@ -812,8 +812,8 @@
     "dis": false
    },
    "border-tool-toggle": {
-    "v": false,
-    "dis": true
+    "v": true,
+    "dis": false
    },
    "border-width-val": {
     "v": "0",
@@ -1197,8 +1197,8 @@
     "dis": false
    },
    "border-tool-toggle": {
-    "v": false,
-    "dis": true
+    "v": true,
+    "dis": false
    },
    "border-width-val": {
     "v": "0",
@@ -1582,8 +1582,8 @@
     "dis": false
    },
    "border-tool-toggle": {
-    "v": false,
-    "dis": true
+    "v": true,
+    "dis": false
    },
    "border-width-val": {
     "v": "0",

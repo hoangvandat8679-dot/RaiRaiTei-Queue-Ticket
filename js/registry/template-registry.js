@@ -18,7 +18,6 @@ const templates = new Map();
 let activeTemplateId = 'standard';
 
 const borderControlIds = [
-  'border-tool-toggle',
   'border-width',
   'dot-density',
   'dot-size-1',
