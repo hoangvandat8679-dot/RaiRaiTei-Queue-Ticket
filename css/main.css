@@ -720,3 +720,12 @@ input[type="range"]::-webkit-slider-thumb {
     #controls-sidebar label { font-size: 12px; }
 }
 
+
+/* Khối con trong mục Lưu cũng phẳng như các mục chính (v2): bỏ hộp, giữ lề */
+#controls-sidebar .panel-flat-block {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
