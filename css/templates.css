@@ -224,3 +224,25 @@
 .ticket-core.winter-template .branch-name {
     background-image: url('../assets/images/templates/winter-branch-ribbon.png');
 }
+
+/* Khung viền đèn theo màu chuẩn của từng mẫu (đo từ file gốc) + tách lớp:
+   khi bật đèn ở mẫu mùa, họa tiết và nội dung thu vào trong để khung đèn
+   chiếm dải rìa riêng, không đè lên họa tiết. */
+.ticket-core.spring-template { --marquee-frame-color: #F75783; --marquee-dot-color: #FFF9F2; }
+.ticket-core.summer-template { --marquee-frame-color: #E3000C; --marquee-dot-color: #FFFFFF; }
+.ticket-core.autumn-template { --marquee-frame-color: #CF0001; --marquee-dot-color: #FF971F; }
+.ticket-core.winter-template { --marquee-frame-color: #3470AE; --marquee-dot-color: #FFFFFF; }
+.ticket-core.spring-template.marquee-on .ticket-bg-layer,
+.ticket-core.spring-template.marquee-on .ticket-border-art,
+.ticket-core.spring-template.marquee-on .ticket-content,
+.ticket-core.summer-template.marquee-on .ticket-bg-layer,
+.ticket-core.summer-template.marquee-on .ticket-border-art,
+.ticket-core.summer-template.marquee-on .ticket-content,
+.ticket-core.autumn-template.marquee-on .ticket-bg-layer,
+.ticket-core.autumn-template.marquee-on .ticket-border-art,
+.ticket-core.autumn-template.marquee-on .ticket-content,
+.ticket-core.winter-template.marquee-on .ticket-bg-layer,
+.ticket-core.winter-template.marquee-on .ticket-border-art,
+.ticket-core.winter-template.marquee-on .ticket-content {
+    transform: scale(var(--art-sx, 1), var(--art-sy, 1));
+}

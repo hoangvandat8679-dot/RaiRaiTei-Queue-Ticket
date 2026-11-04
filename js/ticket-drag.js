@@ -288,8 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('td-dragging');
         }
 
-        let x = clamp(drag.start.x + deltaPxX / drag.k, drag.minX, drag.maxX);
-        const y = clamp(drag.start.y + deltaPxY / drag.k, drag.minY, drag.maxY);
+        let x = clamp(drag.start.x + deltaPxX / drag.kx, drag.minX, drag.maxX);
+        const y = clamp(drag.start.y + deltaPxY / drag.ky, drag.minY, drag.maxY);
 
         // Smart Snapping: Bắt dính vào tâm vé (centerX) hoặc mốc 0mm (giữ Alt để tắt)
         const snapToCenter = !event.altKey && Math.abs(x - drag.centerX) < SNAP_MM;
@@ -331,16 +331,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const start = getOffset(item);
         const k = pxPerMm();
+        // Khi khung đèn bật ở mẫu mùa, lớp nội dung bị thu nhỏ (transform
+        // scale) — hệ số kéo phải nhân thêm tỉ lệ này để phần tử bám đúng
+        // con trỏ theo từng trục.
+        let artSx = 1;
+        let artSy = 1;
+        const contentLayer = ticket.querySelector('.ticket-content');
+        if (contentLayer) {
+            const m = new DOMMatrixReadOnly(getComputedStyle(contentLayer).transform);
+            if (Number.isFinite(m.a) && m.a > 0) artSx = m.a;
+            if (Number.isFinite(m.d) && m.d > 0) artSy = m.d;
+        }
+        const kx = k * artSx;
+        const ky = k * artSy;
         const elRect = item.el.getBoundingClientRect();
         const coreRect = ticket.getBoundingClientRect();
 
         const limitX = [
-            start.x + (coreRect.left - elRect.left) / k,
-            start.x + (coreRect.right - elRect.right) / k
+            start.x + (coreRect.left - elRect.left) / kx,
+            start.x + (coreRect.right - elRect.right) / kx
         ];
         const limitY = [
-            start.y + (coreRect.top - elRect.top) / k,
-            start.y + (coreRect.bottom - elRect.bottom) / k
+            start.y + (coreRect.top - elRect.top) / ky,
+            start.y + (coreRect.bottom - elRect.bottom) / ky
         ];
 
         drag = {
@@ -349,7 +362,8 @@ document.addEventListener('DOMContentLoaded', () => {
             startClientX: event.clientX,
             startClientY: event.clientY,
             start,
-            k,
+            kx,
+            ky,
             moved: false,
             x: start.x,
             y: start.y,
@@ -360,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
             centerX:
                 start.x -
                 (elRect.left + elRect.width / 2 -
-                    (coreRect.left + coreRect.width / 2)) / k
+                    (coreRect.left + coreRect.width / 2)) / kx
         };
 
         try {
