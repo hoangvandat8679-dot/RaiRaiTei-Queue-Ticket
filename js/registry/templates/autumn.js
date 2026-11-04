@@ -16,6 +16,7 @@ export const AutumnTemplate = {
   datasetTemplate: 'autumn',
   bgImage: "url('../assets/templates/autumn.svg')",
   mascotImage: 'assets/images/templates/autumn-mascot.png',
+  borderImage: 'assets/images/templates/autumn-border.svg',
   msgLineHeight: 0.98,
 
   // Preset thông số phần tử chuẩn xác theo lớp vector

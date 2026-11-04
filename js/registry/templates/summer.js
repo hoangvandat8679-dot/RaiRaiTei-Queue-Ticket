@@ -16,6 +16,7 @@ export const SummerTemplate = {
   datasetTemplate: 'summer',
   bgImage: "url('../assets/templates/summer.svg')",
   mascotImage: 'assets/images/templates/summer-mascot.png',
+  borderImage: 'assets/images/templates/summer-border.svg',
   msgLineHeight: 1.16,
 
   // Preset thông số phần tử chuẩn xác theo lớp vector
